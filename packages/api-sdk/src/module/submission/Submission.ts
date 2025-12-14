@@ -57,10 +57,10 @@ export namespace Submission {
   }
 
   export namespace Payload {
-    export type Submit = {
+    export type Submit<ATTACHMENT = any> = {
       workspaceId: WorkspaceId
       formId: FormId
-      attachments: any[]
+      attachments: ATTACHMENT[]
       answers: object
       geolocation?: Geolocation
     }

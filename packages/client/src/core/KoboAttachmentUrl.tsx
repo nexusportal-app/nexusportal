@@ -24,23 +24,27 @@ export const getKoboAttachmentUrl = ({
   attachments,
   conf = appConfig,
   formId,
+  isKoboSubmission,
   submissionId,
 }: {
+  isKoboSubmission?: boolean
   formId: Api.FormId
   submissionId: Api.SubmissionId
   fileName?: string
   attachments: Kobo.Submission.Attachment[]
   conf?: AppConfig
 }) => {
-  const attachment = getAttachment({fileName, attachments})
-  if (attachment)
-    return KoboApiSdk.getAttachmentUrl({
-      formId,
-      answerId: submissionId,
-      // Seems Kobo change .id to .uid. Update SDK
-      attachmentId: attachment.uid,
-      baseUrl: conf.apiURL,
-    })
+  if (isKoboSubmission) {
+    const attachment = getAttachment({fileName, attachments})
+    if (attachment)
+      return KoboApiSdk.getAttachmentUrl({
+        formId,
+        answerId: submissionId,
+        attachmentId: attachment.uid,
+        baseUrl: conf.apiURL,
+      })
+  }
+  return 'TODO'
 }
 
 export const KoboAttachedImg = ({

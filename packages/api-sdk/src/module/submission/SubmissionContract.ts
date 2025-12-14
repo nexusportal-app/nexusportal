@@ -223,5 +223,10 @@ export const submissionClient = (client: TsRestClient, baseUrl: string) => {
         })
         .then(map200)
     },
+
+  getAttachmentUrl : ({formId, submissionId, attachmentName}: {formId: Api.FormId, submissionId: Api.SubmissionId, attachmentName: string}) => {
+    return `${baseUrl}/attachments/${formId}/attachments/${attachmentName}`
   }
+  }
+
 }

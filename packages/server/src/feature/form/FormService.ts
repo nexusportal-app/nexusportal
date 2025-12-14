@@ -5,6 +5,7 @@ import {FormAccessService} from './access/FormAccessService.js'
 import {prismaMapper} from '../../core/prismaMapper/PrismaMapper.js'
 import {Kobo} from 'kobo-sdk'
 import {seq} from '@axanc/ts-utils'
+import {SubmissionAttachmentsService} from './submission/SubmissionAttachmentsService'
 
 export type FormServiceCreatePayload = Api.Form.Payload.Create & {
   kobo?: {
@@ -23,7 +24,9 @@ export class FormService {
     private formVersion = new FormVersionService(prisma),
     private access = new FormAccessService(prisma),
     private formAccess = new FormAccessService(prisma),
-  ) {}
+    private attachements = new SubmissionAttachmentsService(prisma),
+  ) {
+  }
 
   readonly create = async ({
     name,
@@ -47,8 +50,8 @@ export class FormService {
         workspaceId,
         kobo: kobo
           ? {
-              create: kobo,
-            }
+            create: kobo,
+          }
           : undefined,
       },
     })
@@ -115,13 +118,16 @@ export class FormService {
   }
 
   readonly remove = async (id: Api.FormId): Promise<void> => {
-    await Promise.any([
+    // await Promise.any([
+    //   this.prisma.formSubmission.deleteMany({where: {formId: id}}),
+    //   this.prisma.formVersion.deleteMany({where: {formId: id}}),
+    //   this.prisma.formAccess.deleteMany({where: {formId: id}}),
+    // ])
+    await Promise.all([
       this.prisma.databaseView.deleteMany({where: {databaseId: id}}),
-      this.prisma.formSubmission.deleteMany({where: {formId: id}}),
-      this.prisma.formVersion.deleteMany({where: {formId: id}}),
-      this.prisma.formAccess.deleteMany({where: {formId: id}}),
+      this.prisma.form.delete({where: {id}}),
+      this.attachements.removeForForm({formId: id}),
     ])
-    await this.prisma.form.delete({where: {id}})
   }
 
   readonly getByUser = async ({

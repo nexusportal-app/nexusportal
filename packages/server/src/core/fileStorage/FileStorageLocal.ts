@@ -2,11 +2,13 @@ import {promises as fs} from 'fs'
 import * as path from 'path'
 import {FileStorageInterface} from './FileStorage.js'
 import {appConf} from '../AppConf.js'
+import {app} from '../../index'
 
 export class FileStorageLocal implements FileStorageInterface {
   constructor(
     private conf = appConf,
     private root = conf.rootProjectDir + '/.file-storage',
+    private log = app.logger('FileStorageLocal'),
   ) {
     console.log(conf.rootProjectDir + '/.file-storage')
   }
@@ -25,8 +27,13 @@ export class FileStorageLocal implements FileStorageInterface {
     return fs.readFile(this.fullPath(filePath))
   }
 
-  async delete({filePath}: Parameters<FileStorageInterface['delete']>[0]) {
-    return fs.unlink(this.fullPath(filePath)).catch(() => {})
+  async remove({filePath}: Parameters<FileStorageInterface['remove']>[0]) {
+    await fs.rm(p, {
+      recursive: true,
+      force: true,
+    }).catch((e) => {
+      this.log.error(e.message)
+    })
   }
 
   url({filePath}: Parameters<FileStorageInterface['url']>[0]) {
