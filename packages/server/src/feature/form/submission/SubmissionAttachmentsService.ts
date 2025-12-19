@@ -97,6 +97,9 @@ export class SubmissionAttachmentsService {
     )
   }
 
+  private static readonly parseKoboFileName = (fileName?: string) =>
+    fileName ? fileName.replaceAll(' ', '_').replaceAll(/[^0-9a-zA-Z-_.\u0400-\u04FF]/g, '') : undefined
+
   readonly getUrl = async ({
     workspaceId,
     formId,
@@ -108,6 +111,7 @@ export class SubmissionAttachmentsService {
     submissionId: Api.SubmissionId
     attachmentName: string
   }) => {
+    const parsedAttachmentName = SubmissionAttachmentsService.parseKoboFileName(attachmentName)
     const submission = await this.prisma.formSubmission
       .findFirst({
         select: {originId: true, attachments: true},
@@ -116,14 +120,14 @@ export class SubmissionAttachmentsService {
       .then(HttpError.throwNotFoundIfUndefined(`Cannot find Submission ${submissionId}`))
 
     const attachment = (submission.attachments as Api.Submission.Attachment[]).find(
-      _ => _.media_file_basename === attachmentName,
+      _ => _.media_file_basename === parsedAttachmentName,
     )
-    if (!attachment) throw new HttpError.NotFound(`Could not find ${attachmentName} in submission ${submissionId}.`)
+    if (!attachment) throw new HttpError.NotFound(`Could not find ${attachmentName} in Submission ${submissionId}.`)
 
     if (submission.originId && attachment.source !== 'internal') {
       const koboFormId = await this.koboFormIndex
         .getByFormId(formId)
-        .then(HttpError.throwNotFoundIfUndefined('Cannot find KoboFormId for FormId ${formId}'))
+        .then(HttpError.throwNotFoundIfUndefined('Cannot find KoboFormId for Form ${formId}'))
 
       return ControllerKoboApi.getAttachmentPath({
         koboFormId,

@@ -25,7 +25,6 @@ import {
 } from '@/features/Form/Database/DatabaseLeftPanel/DatabaseLeftPanel.js'
 import {useAsync} from '@axanc/react-hooks'
 import {buildDbColumns, OnRepeatGroupClick} from '@infoportal/database-column'
-import {getKoboAttachmentUrl} from '@/core/KoboAttachmentUrl.js'
 import {useFormContext} from '@/features/Form/Form'
 import {SelectLangIndex} from '@/shared/customInput/SelectLangIndex'
 import {DatabaseSelectedColumnAction} from '@/features/Form/Database/DatabaseSelectedColumnAction'
