@@ -4,7 +4,7 @@ import {Link} from '@tanstack/react-router'
 import {SidebarItem} from '@/shared/Layout/Sidebar/index.js'
 import {Asset, AssetIcon} from '@/shared/Asset.js'
 import {Core} from '@/shared'
-import {ReactElement} from 'react'
+import {ReactElement, ReactNode} from 'react'
 import {Api} from '@infoportal/api-sdk'
 import {SidebarItemProps} from '@/shared/Layout/Sidebar/SidebarItem.js'
 import {DeploymentStatusIcon} from '@/shared/DeploymentStatus.js'
@@ -21,7 +21,7 @@ export const AppSidebarAsset = ({
   const t = useTheme()
   return (
     <Tooltip asset={asset}>
-      <Link to="/$workspaceId/form/$formId" params={{workspaceId, formId: asset.id}}>
+      <AssetLink workspaceId={workspaceId} asset={asset}>
         {({isActive}) => (
           <SidebarItem
             size={formItemSize}
@@ -54,8 +54,31 @@ export const AppSidebarAsset = ({
             </Core.Txt>
           </SidebarItem>
         )}
-      </Link>
+      </AssetLink>
     </Tooltip>
+  )
+}
+
+const AssetLink = ({
+  asset,
+  workspaceId,
+  children,
+}: {
+  workspaceId: Api.WorkspaceId
+  asset: Asset
+  children: (_: {isActive: boolean}) => ReactNode
+}) => {
+  if (asset.type === 'dashboard') {
+    return (
+      <Link to="/$workspaceId/dashboard/$dashboardId/edit" params={{workspaceId, dashboardId: asset.id}}>
+        {children}
+      </Link>
+    )
+  }
+  return (
+    <Link to="/$workspaceId/form/$formId" params={{workspaceId, formId: asset.id}}>
+      {children}
+    </Link>
   )
 }
 

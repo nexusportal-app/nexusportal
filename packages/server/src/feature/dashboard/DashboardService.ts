@@ -232,7 +232,7 @@ export class DashboardService {
 
   private readonly getUniqSlug = async (name: string) => {
     const baseSlug = slugify(name)
-    const existingSlugs = await this.prisma.workspace
+    const existingSlugs = await this.prisma.dashboard
       .findMany({
         select: {slug: true},
         where: {

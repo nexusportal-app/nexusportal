@@ -4,6 +4,7 @@ import React from 'react'
 import {useQueryKoboAccount} from '@/core/query/useQueryKoboAccounts'
 import {Api} from '@infoportal/api-sdk'
 import {Core} from '@/shared'
+import {useAppSettings} from '@/core/context/ConfigContext'
 
 const Button = ({href, label, icon, sx, ...props}: {href: string; label: string; icon: string} & ButtonBaseProps) => {
   const t = useTheme()
@@ -34,6 +35,7 @@ const Button = ({href, label, icon, sx, ...props}: {href: string; label: string;
 }
 export const FormBuilderKoboFender = ({workspaceId, form}: {workspaceId: Api.WorkspaceId; form: Api.Form}) => {
   const {m} = useI18n()
+  const {conf} = useAppSettings()
   const queryServer = useQueryKoboAccount({workspaceId, serverId: form.kobo!.accountId!}).get
 
   return (
@@ -52,7 +54,7 @@ export const FormBuilderKoboFender = ({workspaceId, form}: {workspaceId: Api.Wor
             sx={{mr: 2}}
             icon="assistant_on_hub"
             label={m.viewInKobo}
-            href={queryServer.data.url + `/#/forms/${form.kobo!.koboId}/landing`}
+            href={conf.kobo.getFormSettingsUrl(queryServer.data.url, form.kobo!.koboId)}
           />
           {form.kobo?.enketoUrl && <Button icon="ballot" href={form.kobo?.enketoUrl} label={m.fillForm} />}
         </Core.PanelBody>

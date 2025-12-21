@@ -12,8 +12,8 @@
   },
   "scripts": {
     "build": "tsc",
-    "migrate": "npx prisma migrate dev",
-    "migrate-f": "prisma db push",
-    "generate": "prisma generate"
+    "migrate": "npx prisma migrate dev && npm run build",
+    "migrate-f": "prisma db push && npm run build",
+    "generate": "prisma generate && npm run build"
   }
 }

@@ -10,29 +10,14 @@ import {SidebarItemProps} from '@/shared/Layout/Sidebar/SidebarItem.js'
 import {AppSidebarFilters} from '@/core/layout/AppSidebarFilters.js'
 import {AppSidebarAsset} from '@/core/layout/AppSidebarAsset.js'
 import {Asset, AssetType} from '@/shared/Asset.js'
+import {UseQueryAssets} from '@/core/query/useQueryAssets'
 
 export const AppSidebarAssets = ({workspaceId}: {workspaceId: Api.WorkspaceId}) => {
   const {m} = useI18n()
   const t = useTheme()
 
-  const queryForm = UseQueryForm.getAccessibles(workspaceId)
-  // const querySmartDb = UseQuerySmartDb.getAll(workspaceId)
-
-  const assets: Seq<Asset> = useMemo(() => {
-    if (!queryForm.data) return seq()
-    return seq(
-      queryForm.data.map(_ => {
-        return {
-          id: _.id,
-          type: _.type as AssetType,
-          category: _.category,
-          createdAt: _.createdAt,
-          name: _.name,
-          deploymentStatus: _.deploymentStatus,
-        }
-      }),
-    )
-  }, [queryForm.data])
+  const queryAssets = UseQueryAssets.getAll(workspaceId)
+  const assets = useMemo(() => seq(queryAssets.data ?? []), [queryAssets.data])
 
   const [filteredAssets, setFilteredAssets] = useState<Asset[]>(assets)
 
@@ -40,14 +25,14 @@ export const AppSidebarAssets = ({workspaceId}: {workspaceId: Api.WorkspaceId}) 
 
   return (
     <>
-      <AppSidebarFilters assets={assets} onFilterChanges={setFilteredAssets} sx={{mx: 0.5, mb: 1, mt: 0}} />
-      {queryForm.isLoading ? (
+      <AppSidebarFilters assets={assets} onFilterChanges={setFilteredAssets} sx={{mx: 0.5, mb: .5, mt: 0}} />
+      {queryAssets.isLoading ? (
         mapFor(4, i => (
           <SidebarItem key={i} size={formItemSize}>
             <Skeleton sx={{width: 160, height: 30}} />
           </SidebarItem>
         ))
-      ) : queryForm.data?.length === 0 ? (
+      ) : queryAssets.data?.length === 0 ? (
         <Core.Fender
           type="empty"
           size="small"

@@ -54,7 +54,7 @@ export const OverviewFiltersBar = ({
       <DashboardFilterLabel
         icon="category"
         active={!!filters.formTypes}
-        label={<DashboardFilterValue label={m.forms} values={filters.formTypes.map(_ => m.formSource_[_])} />}
+        label={<DashboardFilterValue label={m.forms} values={filters.formTypes.map(_ => m.assetsName_[_])} />}
       >
         {() => (
           <Box sx={{p: 1}}>
@@ -68,7 +68,7 @@ export const OverviewFiltersBar = ({
                   hideRadio
                   key={_}
                   value={_}
-                  title={m.formSource_[_]}
+                  title={m.assetsName_[_]}
                   icon={<AssetIcon fontSize="small" type={_ as AssetType} />}
                 />
               ))}

@@ -1,5 +1,5 @@
 import {useI18n} from '@infoportal/client-i18n'
-import {Box, CircularProgress, DialogActions} from '@mui/material'
+import {Box, CircularProgress} from '@mui/material'
 import React, {RefObject, useEffect, useRef, useState} from 'react'
 import {useAppSettings} from '@/core/context/ConfigContext'
 import {Controller, useForm, UseFormReturn} from 'react-hook-form'
@@ -11,10 +11,12 @@ import {Api} from '@infoportal/api-sdk'
 import {UseQueryWorkspace} from '@/core/query/workspace/useQueryWorkspace'
 import {SwitchBox} from '@/shared/customInput/SwitchBox'
 import {SelectFormInput} from '@/shared/customInput/SelectFormInput'
+import {SelectFormCategory} from '@/shared/customInput/SelectFormCategory'
 
 type Form = {
   slug: string
   name: string
+  category?: string
   sourceFormId: Api.FormId
   isPublic: boolean
 }
@@ -22,14 +24,22 @@ type Form = {
 type Context = {
   form: UseFormReturn<Form>
   stepperRef: RefObject<Core.StepperHandle | null>
-  onClose: () => void
+  onClose?: () => void
   workspaceId: Api.WorkspaceId
 }
 
 const Context = React.createContext<Context>({} as Context)
 const useContext = () => React.useContext(Context)
 
-export const DashboardCreate = ({workspaceId, onClose}: {workspaceId: Api.WorkspaceId; onClose: () => void}) => {
+export const DashboardCreate = ({
+  workspaceId,
+  onSubmitted,
+  onClose,
+}: {
+  workspaceId: Api.WorkspaceId
+  onSubmitted?: (_: Api.Dashboard) => void
+  onClose?: () => void
+}) => {
   const {toastHttpError} = useIpToast()
   const {m} = useI18n()
 
@@ -42,9 +52,10 @@ export const DashboardCreate = ({workspaceId, onClose}: {workspaceId: Api.Worksp
 
   const submit = async (values: Form) => {
     try {
-      await queryDashboardCreate.mutate(values)
+      const newDashboard = await queryDashboardCreate.mutateAsync(values)
       form.reset()
       onClose?.()
+      onSubmitted?.(newDashboard)
     } catch (e) {
       toastHttpError(e)
     }
@@ -59,24 +70,21 @@ export const DashboardCreate = ({workspaceId, onClose}: {workspaceId: Api.Worksp
         workspaceId,
       }}
     >
-      <Box sx={{width: 500}}>
-        <Core.Stepper
-          ref={stepperRef}
-          onComplete={() => submit(form.getValues())}
-          steps={[
-            {
-              name: 'info',
-              label: m.details,
-              component: () => <SelectInfoInfo />,
-            },
-            {
-              name: 'source',
-              label: m.dataSource,
-              component: () => <SelectSource />,
-            },
-          ]}
-        />
-      </Box>
+      <form onSubmit={form.handleSubmit(submit)}>
+        <Core.Panel>
+          <Core.PanelHead>{m.details}</Core.PanelHead>
+          <Core.PanelBody>
+            <SelectInfoInfo />
+            <Core.PanelTitle sx={{mt: 4, mb: 2}}>{m.dataSource}</Core.PanelTitle>
+            <SelectSource />
+          </Core.PanelBody>
+          <Core.PanelFoot>
+            <Core.Btn disabled={!form.formState.isValid} variant="contained" type="submit">
+              {m.create}
+            </Core.Btn>
+          </Core.PanelFoot>
+        </Core.Panel>
+      </form>
     </Context.Provider>
   )
 }
@@ -123,9 +131,6 @@ function SelectInfoInfo() {
     }
   }, [watch.name])
 
-  const fields: Array<keyof Form> = ['name', 'slug']
-  const isValid = fields.every(name => !form.getFieldState(name).invalid)
-
   return (
     <>
       <Controller
@@ -134,7 +139,7 @@ function SelectInfoInfo() {
           required: true,
         }}
         name="name"
-        render={({field}) => <Core.Input sx={{mt: 2}} required label={m.name} {...field} />}
+        render={({field}) => <Core.Input required label={m.name} {...field} />}
       />
       <Controller
         control={form.control}
@@ -170,8 +175,20 @@ function SelectInfoInfo() {
           value={new URL(Api.Dashboard.buildPath(queryWorkspace.data, watch), conf.baseURL).toString()}
         />
       )}
+      <Controller
+        name="category"
+        control={form.control}
+        render={({field}) => (
+          <SelectFormCategory
+            {...field}
+            workspaceId={workspaceId}
+            value={field.value}
+            onChange={(e, value) => field.onChange(value)}
+            onInputChange={(_, value) => field.onChange(value)}
+          />
+        )}
+      />
       <SwitchBox {...form.register('isPublic')} size="small" label={m.public} icon="public" />
-      <StepperActions disableNext={!isValid} />
     </>
   )
 }
@@ -188,21 +205,6 @@ function SelectSource() {
         }}
         render={({field}) => <SelectFormInput {...field} workspaceId={workspaceId} />}
       />
-      <StepperActions disableNext={!form.watch('sourceFormId')} />
     </>
-  )
-}
-
-function StepperActions({disableNext}: {disableNext?: boolean}) {
-  const {m} = useI18n()
-  const {onClose} = useContext()
-  return (
-    <DialogActions sx={{mt: 1, pb: 0}}>
-      <Core.Btn sx={{marginRight: 'auto'}} onClick={onClose}>
-        {m.close}
-      </Core.Btn>
-      <Core.StepperBtnPrevious sx={{m: 0}} />
-      <Core.StepperBtnNext disabled={disableNext} sx={{m: 0}} />
-    </DialogActions>
   )
 }

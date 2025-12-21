@@ -28,13 +28,6 @@ export const AppSidebar = ({workspaceId}: {workspaceId: Api.WorkspaceId}) => {
           </SidebarItem>
         )}
       </Link>
-      <Link to="/$workspaceId/dashboard" params={{workspaceId}}>
-        {({isActive}) => (
-          <SidebarItem icon={appConfig.icons.dashboard} active={isActive}>
-            {m.dashboard}
-          </SidebarItem>
-        )}
-      </Link>
       {/*<Link to="/$workspaceId/new-form" params={{workspaceId}}>*/}
       {/*  {({isActive}) => (*/}
       {/*    <SidebarItem icon="add" active={isActive}>*/}
@@ -47,7 +40,7 @@ export const AppSidebar = ({workspaceId}: {workspaceId: Api.WorkspaceId}) => {
         <Link style={{flex: 1}} to="/$workspaceId/form/list" params={{workspaceId}}>
           {({isActive}) => (
             <SidebarItem active={isActive} icon={appConfig.icons.database}>
-              {m.forms}
+              {m.library}
             </SidebarItem>
           )}
         </Link>

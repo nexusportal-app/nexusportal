@@ -14,6 +14,7 @@ export type Form = Prisma.Form & {
   kobo?: Kobo.Form.Info
   category?: string
   deploymentStatus?: string
+  updatedAt?: Date
 }
 
 export namespace Form {

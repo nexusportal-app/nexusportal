@@ -253,7 +253,7 @@ export function DashboardSettings() {
                 onConfirm={async (e, close) => {
                   await queryRemove.mutateAsync({id: dashboard.id})
                   close()
-                  navigate({to: '/$workspaceId/dashboard', params: {workspaceId}})
+                  navigate({to: '/$workspaceId/form', params: {workspaceId}})
                 }}
               >
                 <Core.Btn variant="outlined" icon="delete" color="error" children={m.delete} />
