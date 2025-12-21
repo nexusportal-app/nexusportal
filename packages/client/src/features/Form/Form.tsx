@@ -20,6 +20,7 @@ import {TabLink, TabsLayout} from '@/shared/Tab/Tabs'
 import {ErrorContent} from '@/shared/PageError'
 import {createContext, useContextSelector} from 'use-context-selector'
 import {UseQuerySchema} from '@/core/query/form/useQuerySchema'
+import {TabContent} from '@/shared/Tab/TabContent'
 
 export const formRootRoute = createRoute({
   getParentRoute: () => workspaceRoute,
@@ -112,8 +113,8 @@ function Form() {
   })
 
   const outlet = useMemo(() => {
-    if (queryForm.isLoading || queryPermission.isLoading) {
-      return <Page width="full" loading={true} />
+    if (queryForm.isPending || queryPermission.isPending) {
+      return <TabContent width="full" loading={true} />
     }
     if (!queryForm.data || !queryPermission.data) {
       return <ErrorContent variant="internal">Cannot load Form.</ErrorContent>
@@ -135,7 +136,16 @@ function Form() {
         <Outlet />
       </Context.Provider>
     )
-  }, [queryForm.data, querySchema.data, querySchemaXml.data, formId, queryPermission.data, workspaceId])
+  }, [
+    queryForm.isPending,
+    queryPermission.isPending,
+    queryForm.data,
+    querySchema.data,
+    querySchemaXml.data,
+    formId,
+    queryPermission.data,
+    workspaceId,
+  ])
 
   return (
     <Page width="full" fullHeight>

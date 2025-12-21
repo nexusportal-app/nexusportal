@@ -67,24 +67,25 @@ const DatabaseTable = ({
 
   return (
     <>
-      {queryAnswers.isPending && (
+      {queryAnswers.isPending ? (
         <>
           <Skeleton sx={{mx: 1, height: 54}} />
           <Datatable.Skeleton />
         </>
-      )}
-      {inspector && (
-        <DatabaseKoboTableProvider
-          form={form}
-          dataFilter={dataFilter}
-          refetch={refetch}
-          loading={queryAnswers.isPending}
-          data={queryAnswers.data?.data}
-          inspector={inspector}
-          permission={permission}
-        >
-          <DatabaseTableContent onFiltersChange={onFiltersChange} onDataChange={onDataChange} />
-        </DatabaseKoboTableProvider>
+      ) : (
+        inspector && (
+          <DatabaseKoboTableProvider
+            form={form}
+            dataFilter={dataFilter}
+            refetch={refetch}
+            loading={queryAnswers.isPending}
+            data={queryAnswers.data?.data}
+            inspector={inspector}
+            permission={permission}
+          >
+            <DatabaseTableContent onFiltersChange={onFiltersChange} onDataChange={onDataChange} />
+          </DatabaseKoboTableProvider>
+        )
       )}
     </>
   )
