@@ -1,4 +1,5 @@
 import {bool, defaultValue, env, required} from '@axanc/ts-utils'
+import {Kobo} from 'kobo-sdk'
 
 enum Env {
   VITE_SENTRY_DNS = 'VITE_SENTRY_DNS',
@@ -39,6 +40,9 @@ export const appConfig = {
     apiKey: e(required)(Env.VITE_GOOGLE_MAPS_API_KEY),
     mapId: e(required)(Env.VITE_GOOGLE_MAPS_ID),
   },
+  kobo: {
+    getFormSettingsUrl: (serverUrl: string, koboFormId: Kobo.FormId) => serverUrl + `/#/forms/${koboFormId}/landing`,
+  },
   microsoft: {
     // To find it go to https://developer.microsoft.com/en-us/graph/graph-explorer,
     // Login and inspect Network
@@ -49,6 +53,7 @@ export const appConfig = {
   chatGptApiKey: e()(Env.VITE_CHATGPT_APIKEY),
   appOff: e(bool, defaultValue(false))(Env.VITE_APP_OFF),
   icons: {
+    assetTag: 'sell',
     koboAppLogo: 'select_check_box',
     koboForm: 'fact_check',
     workspace: 'workspaces',

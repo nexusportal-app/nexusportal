@@ -10,6 +10,9 @@ export const mapForm = <
     deploymentStatus?: Api.Form.DeploymentStatus | null
     serverId?: string | null
     id?: string
+    uploadedBy?: string | null
+    updatedAt?: Date | null
+    updatedBy?: string | null
   },
 >(
   _: T,
@@ -20,19 +23,33 @@ export const mapForm = <
     category?: string
     deploymentStatus?: string
     kobo?: Api.Kobo.Form.Info
+    uploadedBy?: string
+    updatedAt?: Date
+    updatedBy?: string
   }
-> => _ as any
+> => {
+  if (_.kobo) _.kobo = mapKoboInfo(_.kobo)
+  return _ as any
+}
 
 export const mapKoboInfo = <
   T extends {
     accountId: string | null
     koboId: string | null
+    formId: string | null
+    enketoUrl?: string | null
+    deletedAt?: Date | null
+    deletedBy?: string | null
   },
 >(
   _: T,
 ): Defined<T> & {
   accountId?: Api.Kobo.AccountId
   koboId?: Kobo.FormId
+  formId?: Api.FormId
+  enketoUrl?: string
+  deletedAt?: Date
+  deletedBy?: string
 } => _ as any
 
 export const mapFormActionReport = <T extends {startedBy: string}>(

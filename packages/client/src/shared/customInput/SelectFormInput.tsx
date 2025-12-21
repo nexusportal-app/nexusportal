@@ -16,16 +16,17 @@ export function SelectFormInput({
   onChange: (_: Api.FormId) => void
 }) {
   const queryForms = UseQueryForm.getAccessibles(workspaceId)
+
   const assets = useMemo(() => {
     if (!queryForms.data) return []
-    return queryForms.data.map(_ => ({..._, type: _.kobo ? AssetType.kobo : AssetType.internal}))
+    return queryForms.data as Asset[]
   }, [queryForms.data])
 
   const [filteredAsset, setFilteredAsset] = useState<Asset[]>(assets)
   return (
     <>
       {assets.length > 10 && <AppSidebarFilters assets={assets} onFilterChanges={setFilteredAsset} sx={{mb: 1}} />}
-      <Core.RadioGroup<Api.FormId> dense sx={{height: 300, overflowY: 'scroll'}} value={value} onChange={onChange}>
+      <Core.RadioGroup<Api.FormId> dense sx={{height: 500, overflowY: 'scroll'}} value={value} onChange={onChange}>
         {filteredAsset.map(_ => (
           <Core.RadioGroupItem
             hideRadio

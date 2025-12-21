@@ -13,7 +13,7 @@ export class FormSchemaService {
   ) {}
 
   readonly get = async ({formId}: {formId: Api.FormId}): Promise<undefined | Api.Form.Schema> => {
-    const form = await this.getForm(formId)
+    const form = await this.getKoboInfo(formId)
     if (!form) return
     return Api.Form.isConnectedToKobo(form)
       ? this.koboSchemaCache.get({refreshCacheIfMissing: true, formId}).then(_ => (_ ? _.content : undefined))
@@ -21,7 +21,7 @@ export class FormSchemaService {
   }
 
   readonly getXml = async ({formId}: {formId: Api.FormId}): Promise<undefined | Api.Form.SchemaXml> => {
-    const form = await this.getForm(formId)
+    const form = await this.getKoboInfo(formId)
     if (!form) return
     if (Api.Form.isConnectedToKobo(form)) {
       const sdk = await this.koboSdk.getBy.formId(formId)
@@ -104,9 +104,10 @@ export class FormSchemaService {
       .then(_ => _?.schemaJson as any)
   }
 
-  private readonly getForm = async (formId: Api.FormId) => {
+  private readonly getKoboInfo = async (
+    formId: Api.FormId,
+  ): Promise<{id: Api.FormId; kobo: Api.Kobo.Form.Info} | undefined> => {
     const form = await this.prisma.form.findFirst({select: {id: true, kobo: true}, where: {id: formId}})
-    if (form) return {...form, kobo: form.kobo ? prismaMapper.form.mapKoboInfo(form.kobo) : form.kobo}
-    return form
+    if (form) return prismaMapper.form.mapForm(form)
   }
 }

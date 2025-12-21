@@ -2,11 +2,9 @@ import {SchemaInspector} from '@infoportal/form-helper'
 import {mapFor} from '@axanc/ts-utils'
 import {Messages} from '@infoportal/client-i18n'
 import {Theme} from '@mui/material'
-import {Api, ApiClient} from '@infoportal/api-sdk'
+import {Api} from '@infoportal/api-sdk'
 import {Datatable} from '@/shared'
 import {buildDbColumns, colorRepeatedQuestionHeader, OnRepeatGroupClick} from '@infoportal/database-column'
-import {getKoboAttachmentUrl} from '@/core/KoboAttachmentUrl.js'
-import {ApiSdk} from '@/core/sdk/server/ApiSdk'
 import {ColumnQuestionProps} from '@infoportal/database-column/dist/columns/type'
 
 export type DatabaseDisplay = {

@@ -8,6 +8,7 @@ export const mapDashboard = <
     start: Date | null
     end: Date | null
     filters: any | null
+    category?: string | null
     enableChartFullSize: boolean | null
     enableChartDownload: boolean | null
     periodComparisonDelta: number | null
@@ -24,6 +25,7 @@ export const mapDashboard = <
     workspaceId: Api.WorkspaceId
     sourceFormId: Api.FormId
     description?: string
+    category?: string
     createdBy: Api.User.Email
     start?: Date
     end?: Date

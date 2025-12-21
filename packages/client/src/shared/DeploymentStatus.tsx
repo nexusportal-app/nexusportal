@@ -9,9 +9,9 @@ export const deploymentStatusIcon = {
 }
 
 export const deploymentStatusColor = (t: Theme) => ({
-  [Api.Form.DeploymentStatus.deployed]: t.palette.success.main,
-  [Api.Form.DeploymentStatus.archived]: t.palette.text.disabled,
-  [Api.Form.DeploymentStatus.draft]: t.palette.text.disabled,
+  [Api.Form.DeploymentStatus.deployed]: t.vars.palette.success.main,
+  [Api.Form.DeploymentStatus.archived]: t.vars.palette.error.light,
+  [Api.Form.DeploymentStatus.draft]: t.vars.palette.text.disabled,
 })
 
 export const DeploymentStatusIcon = ({

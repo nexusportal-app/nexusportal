@@ -38,10 +38,10 @@ export const useDefaultTabRedirect = ({
   workspaceId,
   formId,
   isLoading,
-  isResolved,
+  hasSchema,
 }: {
   isLoading?: boolean
-  isResolved?: boolean
+  hasSchema?: boolean
   currentFullPath: string
   workspaceId: Api.WorkspaceId
   formId: Api.FormId
@@ -52,7 +52,7 @@ export const useDefaultTabRedirect = ({
   useEffect(() => {
     if (isLoading) return
     if (currentFullPath == formRoute.fullPath) {
-      if (isResolved) {
+      if (hasSchema) {
         navigate({to: '/$workspaceId/form/$formId/submissions', params: {workspaceId, formId}})
       } else {
         navigate({to: '/$workspaceId/form/$formId/formCreator', params: {workspaceId, formId}})
@@ -107,7 +107,7 @@ function Form() {
     workspaceId,
     formId,
     currentFullPath,
-    isResolved: !!querySchema.data,
+    hasSchema: !!querySchema.data,
     isLoading: querySchema.isLoading,
   })
 

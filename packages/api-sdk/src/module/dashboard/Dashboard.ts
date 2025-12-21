@@ -11,6 +11,7 @@ export type Dashboard = {
   name: string
   createdAt: Date
   isPublished?: boolean
+  category?: string
   createdBy: User.Email
   sourceFormId: FormId
   description?: string
@@ -70,6 +71,7 @@ export namespace Dashboard {
       workspaceId: WorkspaceId
       name: string
       slug: string
+      category?: string
       sourceFormId: FormId
       isPublic: boolean
     }

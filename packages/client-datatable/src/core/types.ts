@@ -65,7 +65,7 @@ export interface Props<T extends Row, K extends string = string> {
 
   // Layout
   rowHeight?: number
-  rowStyle?: (_: T) => CSSProperties
+  rowStyle?: (_: T) => SxProps
   header?: null | ReactNode | ((_: HeaderParams<T>) => ReactNode)
   contentProps?: BoxProps
   renderEmptyState?: ReactNode

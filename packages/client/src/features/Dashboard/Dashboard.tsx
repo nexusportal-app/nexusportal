@@ -13,9 +13,9 @@ import {PopoverShareLink} from '@/shared/PopoverShareLink'
 import {useEffectFn} from '@axanc/react-hooks'
 import {useI18n} from '@infoportal/client-i18n'
 import {Box, Collapse, Icon, useTheme} from '@mui/material'
-import {createRoute, Link, Outlet, useNavigate} from '@tanstack/react-router'
+import {createRoute, Link, Outlet, useMatches, useNavigate, useRouterState} from '@tanstack/react-router'
 import {Api} from '@infoportal/api-sdk'
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import 'react-grid-layout/css/styles.css'
 import {DashboardTheme} from './DashboardTheme'
 import {useIpToast} from '@/core/useToast'
@@ -27,6 +27,40 @@ export const dashboardRoute = createRoute({
   path: 'dashboard/$dashboardId/edit',
   component: Dashboard,
 })
+
+export const useDefaultTabRedirect = ({
+  workspaceId,
+  isLoading,
+  sectionId,
+  dashboardId,
+}: {
+  isLoading?: boolean
+  workspaceId: Api.WorkspaceId
+  sectionId?: Api.Dashboard.SectionId
+  dashboardId: Api.DashboardId
+}) => {
+  const navigate = useNavigate()
+  const currentFullPath = useMatches().slice(-1)[0].fullPath
+
+  useEffect(() => {
+    if (isLoading) return
+    if (currentFullPath !== dashboardRoute.fullPath) return
+
+    if (sectionId) {
+      navigate({
+        to: '/$workspaceId/dashboard/$dashboardId/edit/s/$sectionId',
+        params: {workspaceId, dashboardId, sectionId},
+        replace: true,
+      })
+    } else {
+      navigate({
+        to: '/$workspaceId/dashboard/$dashboardId/edit/settings',
+        params: {workspaceId, dashboardId},
+        replace: true,
+      })
+    }
+  }, [currentFullPath, sectionId, isLoading])
+}
 
 export function Dashboard() {
   const t = useTheme()
@@ -52,6 +86,13 @@ export function Dashboard() {
   const isLoading = [queryDashboard, queryDashboardSection, querySchema, querySubmissions, queryWidgets].some(
     _ => _.isLoading,
   )
+
+  useDefaultTabRedirect({
+    workspaceId,
+    dashboardId,
+    sectionId: queryDashboardSection.data?.[0]?.id,
+    isLoading: isLoading,
+  })
 
   const {setTitle} = useLayoutContext()
   const [newSectionName, setNewSectionName] = useState('')

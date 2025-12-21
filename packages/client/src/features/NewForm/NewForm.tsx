@@ -13,7 +13,8 @@ import {workspaceRoute} from '@/features/Workspace/Workspace'
 import {createRoute, useNavigate} from '@tanstack/react-router'
 import {Api} from '@infoportal/api-sdk'
 import {UseQueryForm} from '@/core/query/form/useQueryForm'
-import {Asset, assetStyle} from '@/shared/Asset.js'
+import {Asset, assetStyle, AssetType} from '@/shared/Asset.js'
+import {DashboardCreate} from '@/features/Dashboard/DashboardCreate'
 
 export const newFormRoute = createRoute({
   getParentRoute: () => workspaceRoute,
@@ -37,7 +38,7 @@ function NewForm() {
   const dialog = useDialogs()
   const navigate = useNavigate()
 
-  const [type, setType] = useState<Api.Form.Type>()
+  const [type, setType] = useState<AssetType>()
   const [selectedServerId, setSelectedServerId] = useState<Api.Kobo.AccountId>()
 
   const queryForm = UseQueryForm.create(workspaceId)
@@ -53,25 +54,28 @@ function NewForm() {
 
   return (
     <Page width="xs" sx={{minHeight: undefined}}>
-      <Core.PanelWBody title={m.newForm}>
-        <Core.RadioGroup value={type} sx={{flex: 1}} inline onChange={setType}>
-          {Obj.keys(Api.Form.Type).map(asset => (
-            <Core.RadioGroupItem
-              key={asset}
-              hideRadio
-              value={asset}
-              title={
-                <OptionBody
-                  color={assetStyle.color[asset]}
-                  icon={assetStyle.icon[asset]}
-                  label={m.formSourceCreate_[asset]}
-                />
-              }
-              sx={{flex: 1}}
-            />
-          ))}
-        </Core.RadioGroup>
-      </Core.PanelWBody>
+      <Core.Panel>
+        <Core.PanelHead icon="add">{m.new}</Core.PanelHead>
+        <Core.PanelBody>
+          <Core.RadioGroup value={type} sx={{flex: 1}} onChange={setType}>
+            {Obj.keys(AssetType).map(asset => (
+              <Core.RadioGroupItem
+                key={asset}
+                hideRadio
+                value={asset}
+                before={
+                  <Icon fontSize="large" sx={{alignSelf: 'center', mr: 2, color: assetStyle.color[asset]}}>
+                    {assetStyle.icon[asset]}
+                  </Icon>
+                }
+                title={m.assetsName_[asset]}
+                description={m.formSourceCreate_[asset]}
+                sx={{flex: 1}}
+              />
+            ))}
+          </Core.RadioGroup>
+        </Core.PanelBody>
+      </Core.Panel>
       {type &&
         (() => {
           switch (type) {
@@ -81,7 +85,7 @@ function NewForm() {
                 <NewFormCreateInternal
                   workspaceId={workspaceId}
                   loading={queryForm.isPending}
-                  btnLabel={m.create + ' ' + m.formSource_[type].toLowerCase()}
+                  btnLabel={m.create + ' ' + m.assetsName_[type].toLowerCase()}
                   onSubmit={async form => {
                     const newForm = await queryForm.mutateAsync({...form, type})
                     navigate({to: '/$workspaceId/form/$formId', params: {workspaceId, formId: newForm.id}})
@@ -128,6 +132,19 @@ function NewForm() {
                     />
                   </Collapse>
                 </>
+              )
+            }
+            case 'dashboard': {
+              return (
+                <DashboardCreate
+                  workspaceId={workspaceId}
+                  onSubmitted={_ =>
+                    navigate({
+                      to: '/$workspaceId/dashboard/$dashboardId/edit/settings',
+                      params: {workspaceId, dashboardId: _.id},
+                    })
+                  }
+                />
               )
             }
           }

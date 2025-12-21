@@ -5,10 +5,12 @@ import {Core} from '@/shared'
 import {TabContent} from '@/shared/Tab/TabContent.js'
 import {Box, Chip, CircularProgress, Icon, Switch, useTheme} from '@mui/material'
 import {createRoute, useNavigate} from '@tanstack/react-router'
-import {ReactNode} from 'react'
+import {ReactNode, useMemo} from 'react'
 import {assetStyle, Asset, AssetType, AssetIcon} from '@/shared/Asset.js'
 import {SelectFormCategory} from '@/shared/customInput/SelectFormCategory.js'
 import {Api} from '@infoportal/api-sdk'
+import {useQueryKoboAccounts} from '@/core/query/useQueryKoboAccounts'
+import {useAppSettings} from '@/core/context/ConfigContext'
 
 export const formSettingsRoute = createRoute({
   getParentRoute: () => formRoute,
@@ -120,7 +122,12 @@ function FormSettings() {
             <SettingsRow
               icon={assetStyle.icon[AssetType.kobo]}
               label={m._settings.connectedToKobo}
-              desc={m._settings.connectedToKoboDesc}
+              desc={
+                <>
+                  {m._settings.connectedToKoboDesc}
+                  <KoboServerInfo workspaceId={workspaceId} form={form} />
+                </>
+              }
               action={
                 <>
                   {queryUpdateKoboConnexion.isPending && <CircularProgress size={24} />}
@@ -219,5 +226,24 @@ function FormSettings() {
         </Core.PanelBody>
       </Core.Panel>
     </TabContent>
+  )
+}
+
+const KoboServerInfo = ({workspaceId, form}: {workspaceId: Api.WorkspaceId; form: Api.Form}) => {
+  const queryKoboAccount = useQueryKoboAccounts(workspaceId).getAll
+  const {conf} = useAppSettings()
+  const url = useMemo(() => {
+    const serverUrl = queryKoboAccount.data?.find(_ => _.id === form.kobo?.accountId)?.url
+    if (!serverUrl) return
+    return conf.kobo.getFormSettingsUrl(serverUrl, form.kobo!.koboId)
+  }, [queryKoboAccount.data])
+  if (!url) return
+  return (
+    <Box>
+      <a className="link" href={url} target="_blank">
+        <Icon fontSize="inherit">open_in_new</Icon>&nbsp;
+        {url.replace(/https?:\/\//, '')}
+      </a>
+    </Box>
   )
 }

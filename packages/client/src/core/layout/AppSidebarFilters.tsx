@@ -9,6 +9,7 @@ import Fuse from 'fuse.js'
 import {Asset, AssetIcon, AssetType} from '@/shared/Asset.js'
 import {DeploymentStatusIcon} from '@/shared/DeploymentStatus.js'
 import {usePersistentState} from '@axanc/react-hooks'
+import {appConfig} from '@/conf/AppConfig'
 
 const SearchInput = forwardRef(
   (
@@ -92,11 +93,6 @@ export const AppSidebarFilters = ({
   const searchForm = useForm<FilterForm>()
   const values = useWatch({control: searchForm.control})
   const [moreFilters, setMoreFilters] = usePersistentState(false, {storageKey: 'app-filter-more-filter'})
-  // useFormPersist('appsidebar-form-filters', {
-  //   watch: searchForm.watch,
-  //   setValue: searchForm.setValue,
-  //   storage: window.localStorage,
-  // })
 
   const fuse = useMemo(() => {
     return new Fuse(assets, {
@@ -146,68 +142,67 @@ export const AppSidebarFilters = ({
         )}
       />
       <Collapse in={moreFilters}>
-        <>
+        <Box sx={{mt: 0.5, display: 'flex', gap: 0.5, flexWrap: 'wrap', just: 'center', justifyContent: 'stretch'}}>
           <Controller
             name="category"
             control={searchForm.control}
             render={({field}) => (
               <Core.SelectMultiple
                 {...field}
-                placeholder={m.folders}
+                placeholder={m.assetTag}
                 InputProps={{
                   startAdornment: (
                     <Icon sx={{mr: 1}} color="disabled">
-                      folder
+                      {appConfig.icons.assetTag}
                     </Icon>
                   ),
                 }}
                 options={formCategories.get()}
-                sx={{mt: 0.5}}
+                sx={{flex: 1, minWidth: 140}}
               />
             )}
           />
-          <Box sx={{mt: 0.5, display: 'flex'}}>
-            <Controller
-              name="assetType"
-              control={searchForm.control}
-              render={({field}) => (
-                <Core.RadioGroup<AssetType>
-                  value={field.value}
-                  onChange={_ => field.onChange(_)}
-                  multiple
-                  inline
-                  dense
-                  sx={{flex: 1, mr: 0.25}}
-                >
-                  {Obj.values(AssetType).map(_ => (
-                    <Core.RadioGroupItem hideRadio key={_} value={_} title={<AssetIcon fontSize="small" type={_} />} />
-                  ))}
-                </Core.RadioGroup>
-              )}
-            />
-            <Controller
-              name="status"
-              control={searchForm.control}
-              render={({field}) => (
-                <Core.RadioGroup<Api.Form.DeploymentStatus>
-                  value={field.value}
-                  onChange={_ => field.onChange(_)}
-                  multiple
-                  inline
-                  dense
-                  sx={{flex: 1, ml: 0.25}}
-                >
-                  {Obj.values(Api.Form.DeploymentStatus).map(_ => (
-                    <Core.RadioGroupItem
-                      hideRadio
-                      key={_}
-                      value={_}
-                      sx={{display: 'flex', alignItems: 'center'}}
-                      title={<DeploymentStatusIcon fontSize="small" status={_} />}
-                    />
-                  ))}
-                </Core.RadioGroup>
-                /* <Core.SelectMultiple
+          <Controller
+            name="assetType"
+            control={searchForm.control}
+            render={({field}) => (
+              <Core.RadioGroup<AssetType>
+                value={field.value}
+                onChange={_ => field.onChange(_)}
+                multiple
+                inline
+                dense
+                sx={{flex: 1}}
+              >
+                {Obj.values(AssetType).map(_ => (
+                  <Core.RadioGroupItem hideRadio key={_} value={_} title={<AssetIcon fontSize="small" type={_} />} />
+                ))}
+              </Core.RadioGroup>
+            )}
+          />
+          <Controller
+            name="status"
+            control={searchForm.control}
+            render={({field}) => (
+              <Core.RadioGroup<Api.Form.DeploymentStatus>
+                value={field.value}
+                onChange={_ => field.onChange(_)}
+                multiple
+                inline
+                dense
+                sx={{flex: 1}}
+              >
+                {Obj.values(Api.Form.DeploymentStatus).map(_ => (
+                  <Core.RadioGroupItem
+                    hideRadio
+                    key={_}
+                    value={_}
+                    sx={{display: 'flex', alignItems: 'center'}}
+                    title={<DeploymentStatusIcon fontSize="small" status={_} />}
+                  />
+                ))}
+              </Core.RadioGroup>
+              /* <Core.SelectMultiple
               {...field}
               options={Obj.keys(Api.Form.DeploymentStatus).map(_ => {
                 return {
@@ -218,10 +213,9 @@ export const AppSidebarFilters = ({
               label={m.status}
               sx={{ml: 0.5}}
             />*/
-              )}
-            />
-          </Box>
-        </>
+            )}
+          />
+        </Box>
       </Collapse>
     </Box>
   )

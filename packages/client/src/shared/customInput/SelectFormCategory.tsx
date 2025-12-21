@@ -1,9 +1,10 @@
-import {Autocomplete, AutocompleteProps, CircularProgress} from '@mui/material'
+import {Autocomplete, AutocompleteProps, CircularProgress, Icon} from '@mui/material'
 import {Api} from '@infoportal/api-sdk'
 import {UseQueryForm} from '@/core/query/form/useQueryForm.js'
 import {useI18n} from '@infoportal/client-i18n'
 import {Core} from '../index'
 import {useState} from 'react'
+import {appConfig} from '@/conf/AppConfig'
 
 export function SelectFormCategory({
   workspaceId,
@@ -36,7 +37,7 @@ export function SelectFormCategory({
         <Core.Input
           {...params.InputProps}
           inputProps={params.inputProps}
-          helperText={null}
+          startAdornment={<Icon>{appConfig.icons.assetTag}</Icon>}
           label={m.category}
           ref={params.InputProps.ref}
           endAdornment={

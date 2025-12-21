@@ -432,6 +432,7 @@ model Dashboard {
   createdAt        DateTime           @default(now())
   createdBy        String
   slug             String             @unique
+  category         String?
   description      String?
   sections         DashboardSection[]
   sourceform       Form               @relation(fields: [sourceFormId], references: [id])

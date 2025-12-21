@@ -14,6 +14,7 @@ import {appConfig} from '@/conf/AppConfig.js'
 import {DeploymentStatusIcon} from '@/shared/DeploymentStatus'
 import {AssetIcon} from '@/shared/Asset.js'
 import {UseQueryPermission} from '@/core/query/useQueryPermission.js'
+import {UseQueryAssets} from '@/core/query/useQueryAssets'
 
 export const formsRoute = createRoute({
   getParentRoute: () => formRootRoute,
@@ -21,16 +22,18 @@ export const formsRoute = createRoute({
   component: Forms,
 })
 
+const emptyColumnValue = {value: undefined, label: ''}
+
 function Forms() {
   const {workspaceId} = formsRoute.useParams() as {workspaceId: Api.WorkspaceId}
   const {formatDate, m} = useI18n()
   const t = useTheme()
   const {setTitle} = useLayoutContext()
   const queryKoboAccount = useQueryKoboAccounts(workspaceId)
-  const queryForm = UseQueryForm.getAccessibles(workspaceId)
   const permissionWorkspace = UseQueryPermission.workspace({workspaceId})
+  const assets = UseQueryAssets.getAll(workspaceId)
 
-  const indexServers: Record<Api.Kobo.AccountId, Api.Kobo.Account> = useMemo(() => {
+  const indexKoboAcc: Record<Api.Kobo.AccountId, Api.Kobo.Account> = useMemo(() => {
     return seq(queryKoboAccount.getAll.data).groupByFirst(_ => _.id)
   }, [queryKoboAccount.getAll.data])
 
@@ -45,6 +48,10 @@ function Forms() {
         <Datatable.Component
           getRowKey={_ => _.id}
           // showExportBtn
+          rowStyle={() => ({
+            transition: t.transitions.create('background'),
+            '&:hover': {background: t.vars.palette.action.hover},
+          })}
           header={
             permissionWorkspace.data?.form_canCreate && (
               <Link to="/$workspaceId/new-form" params={{workspaceId}}>
@@ -55,7 +62,7 @@ function Forms() {
             )
           }
           id="kobo-index"
-          data={queryForm.data}
+          data={assets.data}
           columns={[
             {
               id: 'type',
@@ -73,31 +80,15 @@ function Forms() {
               },
             },
             {
-              id: 'linkedToKobo',
-              type: 'select_one',
-              width: 65,
-              head: m.connectedToKobo,
-              align: 'center',
-              render: _ => {
-                const isKobo = Api.Form.isKobo(_)
-                const connected = Api.Form.isConnectedToKobo(_)
-                return {
-                  label: isKobo ? !connected && <Icon color="error" children="block" /> : undefined,
-                  value: isKobo ? '' + connected : undefined,
-                  export: isKobo ? '' + connected : undefined,
-                  option: isKobo ? '' + connected : undefined,
-                }
-              },
-            },
-            {
               id: 'status',
               type: 'select_one',
               width: 65,
               head: m.status,
               align: 'center',
               render: _ => {
+                if (!_.form) return emptyColumnValue
                 return {
-                  label: <DeploymentStatusIcon status={_.deploymentStatus} />,
+                  label: <DeploymentStatusIcon status={_.form.deploymentStatus} />,
                   value: _.deploymentStatus,
                   export: _.deploymentStatus,
                   option: _.deploymentStatus,
@@ -119,7 +110,7 @@ function Forms() {
             {
               id: 'category',
               type: 'select_one',
-              head: m.category,
+              head: m.assetTag,
               render: _ => {
                 return {
                   label: _.category,
@@ -140,11 +131,35 @@ function Forms() {
             //   renderQuick: _ => _.kobo?.accountId,
             // },
             {
+              id: 'linkedToKobo',
+              type: 'select_one',
+              width: 85,
+              head: m.connectedToKobo,
+              align: 'center',
+              render: _ => {
+                if (!_.form) return emptyColumnValue
+                const isKobo = Api.Form.isKobo(_.form)
+                const connected = Api.Form.isConnectedToKobo(_.form)
+                if (!isKobo) return emptyColumnValue
+                return {
+                  label: connected ? (
+                    <Icon color="success" sx={{transform: 'scale(0.9)'}} children="swap_vert" />
+                  ) : (
+                    <Icon color="error" children="mobiledata_off" />
+                  ),
+                  value: '' + connected,
+                  export: '' + connected,
+                  option: '' + connected,
+                }
+              },
+            },
+            {
               id: 'serverUrl',
               type: 'select_one',
               head: m.koboServer,
               render: _ => {
-                const url = _.kobo?.accountId ? indexServers[_.kobo?.accountId]?.url : undefined
+                if (!_.form) return emptyColumnValue
+                const url = _.form.kobo?.accountId ? indexKoboAcc[_.form.kobo?.accountId]?.url : undefined
                 if (url) {
                   return {
                     value: url,
@@ -201,13 +216,12 @@ function Forms() {
               align: 'center',
               type: 'string',
               render: _ => {
-                if (!_.kobo?.enketoUrl) return {label: '', value: undefined}
                 return {
-                  export: _.kobo.enketoUrl,
-                  tooltip: _.kobo.enketoUrl,
-                  value: _.kobo.enketoUrl,
+                  export: _.sharedLink,
+                  tooltip: _.sharedLink,
+                  value: _.sharedLink,
                   label: (
-                    <a href={_.kobo.enketoUrl} target="_blank" rel="noopener noreferrer">
+                    <a href={_.sharedLink} target="_blank" rel="noopener noreferrer">
                       <Core.IconBtn color="primary">{appConfig.icons.openFormLink}</Core.IconBtn>
                     </a>
                   ),
@@ -220,11 +234,16 @@ function Forms() {
               styleHead: {maxWidth: 0},
               align: 'right',
               head: '',
-              renderQuick: _ => (
-                <Link to="/$workspaceId/form/$formId" params={{workspaceId, formId: _.id}}>
-                  <Core.IconBtn color="primary" children="chevron_right" />
-                </Link>
-              ),
+              renderQuick: _ =>
+                _.form ? (
+                  <Link to="/$workspaceId/form/$formId" params={{workspaceId, formId: _.id}}>
+                    <Core.IconBtn color="primary" children="chevron_right" />
+                  </Link>
+                ) : _.dashboard ? (
+                  <Link to="/$workspaceId/dashboard/$dashboardId/edit" params={{workspaceId, dashboardId: _.id}}>
+                    <Core.IconBtn color="primary" children="chevron_right" />
+                  </Link>
+                ) : undefined,
             },
           ]}
         />

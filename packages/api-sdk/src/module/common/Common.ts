@@ -1,19 +1,5 @@
 import * as Prisma from '@infoportal/prisma'
 
-export type Nullable<T> = {
-  [P in keyof T]: T[P] | null
-}
-
-export type NullToOptional<T> = {
-  // keep required keys (no null)
-  [K in keyof T as null extends T[K] ? never : K]: T[K] extends object ? NullToOptional<T[K]> : T[K]
-} & {
-  // make nullable keys optional, remove null from their type
-  [K in keyof T as null extends T[K] ? K : never]?: Exclude<T[K], null> extends object
-    ? NullToOptional<Exclude<T[K], null>>
-    : Exclude<T[K], null>
-}
-
 export type Brand<K, T> = K & {
   /** @deprecated Should never be used: compile-time only trick to distinguish different ID types. */
   __brand: T
