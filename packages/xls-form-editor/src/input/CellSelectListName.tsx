@@ -5,6 +5,7 @@ import {CellPointer, useCell} from '../core/useCell'
 import {BoxProps, useTheme} from '@mui/material'
 import {seq} from '@axanc/ts-utils'
 import {useMemo} from 'react'
+import {cellSelectSx} from './CellSelectType'
 
 export const SelectListName = ({
   value,
@@ -45,11 +46,7 @@ export const CellSelectListName = ({
         },
       }}
       sx={{
-        borderRadius: 50,
-        background: t.vars.palette.action.selected,
-        verticalAlign: 'middle',
-        height: 'calc(100% - 4px)',
-        margin: '2px 8px',
+        ...cellSelectSx as any,
         ...sx,
       }}
       value={cell.value}

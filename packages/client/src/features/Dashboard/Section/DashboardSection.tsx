@@ -64,9 +64,12 @@ export function DashboardSection() {
     return widgets.find(_ => _.id === editingWidgetId)
   }, [widgets, editingWidgetId])
 
-  const updateWidget = useCallback((id: Api.Dashboard.WidgetId, values: WidgetUpdatePayload) => {
-    queryWidgetUpdate.mutateAsync({id, ...values})
-  }, [])
+  const updateWidget = useCallback(
+    (id: Api.Dashboard.WidgetId, values: WidgetUpdatePayload) => {
+      queryWidgetUpdate.mutateAsync({id, ...values})
+    },
+    [queryWidgetUpdate],
+  )
 
   const layout = useDashboardContext(_ => _.gridLayout)
 
@@ -125,7 +128,12 @@ export function DashboardSection() {
                 />
               )}
             </Core.DebouncedInput>
-            <SelectLangIndex inspector={schemaInspector} sx={{maxWidth: 128, mr: 1}} value={langIndex} onChange={setLangIndex} />
+            <SelectLangIndex
+              inspector={schemaInspector}
+              sx={{maxWidth: 128, mr: 1}}
+              value={langIndex}
+              onChange={setLangIndex}
+            />
             <Core.IconBtn children="filter_list_off" tooltip={m.clearFilter} onClick={() => filter.reset()} />
             <Box
               sx={{
@@ -142,6 +150,7 @@ export function DashboardSection() {
                 <GridLayout
                   onLayoutChange={layout => {
                     layout.forEach(({i, x, y, h, w}) => {
+                      if (w <= 0 || h <= 0) return
                       const widget = widgets?.find(_ => _.id === i)
                       if (!widget) return
                       const p = widget.position
@@ -160,6 +169,9 @@ export function DashboardSection() {
                         status={editingWidget?.id === widget.id ? 'editing' : 'selected'}
                         widget={widget}
                       />
+                      {/*<Box sx={{background: 'black', position: 'absolute', top: 0, left: 0}}>*/}
+                      {/*  DEBUG:: {widget.position.x}:{widget.position.y}*/}
+                      {/*</Box>*/}
                       <Icon
                         fontSize="small"
                         sx={{

@@ -36,27 +36,29 @@ export class UseQueryDashboardSecion {
     const {apiv2} = useAppSettings()
     const {toastHttpError} = useIpToast()
     const queryClient = useQueryClient()
-    return usePendingMutation<Api.Dashboard.Section, ApiError, Omit<Api.Dashboard.Section.Payload.Update, 'workspaceId'>>(
-      {
-        getId: _ => _.id,
-        mutationFn: variables => {
-          const query = apiv2.dashboard.section.update({workspaceId, ...variables})
-          const key = queryKeys.dashboardSection(workspaceId, dashboardId)
-          queryClient.setQueryData<Api.Dashboard.Section[]>(key, old => {
-            return old?.map(_ => {
-              if (_.id === variables.id) return {..._, ...variables}
-              return _
-            })
+    return usePendingMutation<
+      Api.Dashboard.Section,
+      ApiError,
+      Omit<Api.Dashboard.Section.Payload.Update, 'workspaceId'>
+    >({
+      getId: _ => _.id,
+      mutationFn: variables => {
+        const query = apiv2.dashboard.section.update({workspaceId, ...variables})
+        const key = queryKeys.dashboardSection(workspaceId, dashboardId)
+        queryClient.setQueryData<Api.Dashboard.Section[]>(key, old => {
+          return old?.map(_ => {
+            if (_.id === variables.id) return {..._, ...variables}
+            return _
           })
-          return query
-        },
-        onSuccess: (data, variables, context) => {},
-        onError: e => {
-          toastHttpError(e)
-          queryClient.invalidateQueries({queryKey: queryKeys.dashboardSection(workspaceId, dashboardId)})
-        },
+        })
+        return query
       },
-    )
+      onSuccess: (data, variables, context) => {},
+      onError: e => {
+        toastHttpError(e)
+        queryClient.invalidateQueries({queryKey: queryKeys.dashboardSection(workspaceId, dashboardId)})
+      },
+    })
   }
 
   static remove = ({workspaceId, dashboardId}: {workspaceId: Api.WorkspaceId; dashboardId: Api.DashboardId}) => {
@@ -68,6 +70,7 @@ export class UseQueryDashboardSecion {
       mutationFn: args => apiv2.dashboard.section.remove({workspaceId, ...args}),
       onSuccess: (data, variables) => {
         queryClient.invalidateQueries({queryKey: queryKeys.dashboardSection(workspaceId, dashboardId)})
+        queryClient.invalidateQueries({queryKey: queryKeys.dashboardWidget(workspaceId, dashboardId)})
       },
       onError: toastHttpError,
     })

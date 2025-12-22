@@ -5,6 +5,7 @@ import {SelectSingle} from '@infoportal/client-core'
 import {useMemo} from 'react'
 import {appearances} from '../core/settings'
 import {Api} from '@infoportal/api-sdk'
+import {cellSelectSx} from './CellSelectType'
 
 export const SelectAppearance = ({
   value,
@@ -53,11 +54,7 @@ export const CellSelectAppearance = ({
         },
       }}
       sx={{
-        borderRadius: 50,
-        background: t.vars.palette.action.selected,
-        verticalAlign: 'middle',
-        height: 'calc(100% - 4px)',
-        margin: '2px 8px',
+        ...cellSelectSx as any,
         ...sx,
       }}
       value={cell.value}

@@ -10,13 +10,17 @@ export function SelectFormCategory({
   workspaceId,
   loading: _loading,
   value,
+  hideIcon,
   onInputChange,
+  helperText,
   ...props
-}: Omit<AutocompleteProps<string, false, true, true>, 'renderInput' | 'options'> & {
-  InputProps?: Core.InputProps
-  loading?: boolean
-  workspaceId: Api.WorkspaceId
-}) {
+}: Omit<AutocompleteProps<string, false, true, true>, 'renderInput' | 'options'> &
+  Pick<Core.InputProps, 'helperText'> & {
+    hideIcon?: boolean
+    InputProps?: Core.InputProps
+    loading?: boolean
+    workspaceId: Api.WorkspaceId
+  }) {
   const categories = UseQueryForm.categories(workspaceId)
   const {m} = useI18n()
   const loading = !categories || _loading
@@ -37,9 +41,10 @@ export function SelectFormCategory({
         <Core.Input
           {...params.InputProps}
           inputProps={params.inputProps}
-          startAdornment={<Icon>{appConfig.icons.assetTag}</Icon>}
+          startAdornment={hideIcon ? undefined : <Icon>{appConfig.icons.assetTag}</Icon>}
           label={m.category}
           ref={params.InputProps.ref}
+          helperText={helperText}
           endAdornment={
             <>
               {loading && <CircularProgress size={20} />}

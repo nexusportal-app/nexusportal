@@ -16,7 +16,6 @@ export const useDashboardFormEdit = ({
   dashboard: Api.Dashboard
 }) => {
   const queryUpdate = UseQueryDashboard.update({workspaceId})
-  const t = useTheme()
 
   const form = useForm<Omit<Api.Dashboard.Payload.Update, 'id' | 'workspaceId'>>({
     defaultValues: {

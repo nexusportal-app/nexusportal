@@ -1,6 +1,6 @@
 import {skippedQuestionTypes} from '../core/useStore'
 import {CellPointer, useCell} from '../core/useCell'
-import {BoxProps, useTheme} from '@mui/material'
+import {BoxProps, SxProps, Theme, useTheme} from '@mui/material'
 import {Obj, Seq, seq} from '@axanc/ts-utils'
 import {Icon} from '@infoportal/client-datatable'
 import {Api} from '@infoportal/api-sdk'
@@ -63,6 +63,17 @@ export const SelectType = ({
   )
 }
 
+export const cellSelectSx: SxProps<Theme> = {
+  '& fieldset': {
+    border: 'none',
+  },
+  borderRadius: 50,
+  background: t => t.vars.palette.action.selected,
+  verticalAlign: 'middle',
+  height: 'calc(100% - 4px)',
+  margin: '2px 8px',
+}
+
 export const CellSelectType = ({
   cellPointer,
   sx,
@@ -83,11 +94,7 @@ export const CellSelectType = ({
         },
       }}
       sx={{
-        borderRadius: 50,
-        background: t.vars.palette.action.selected,
-        verticalAlign: 'middle',
-        height: 'calc(100% - 4px)',
-        margin: '2px 8px',
+        ...cellSelectSx,
         ...sx,
       }}
     />

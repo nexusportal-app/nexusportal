@@ -11,6 +11,7 @@ import {SelectFormCategory} from '@/shared/customInput/SelectFormCategory.js'
 import {Api} from '@infoportal/api-sdk'
 import {useQueryKoboAccounts} from '@/core/query/useQueryKoboAccounts'
 import {useAppSettings} from '@/core/context/ConfigContext'
+import {appConfig} from '@/conf/AppConfig'
 
 export const formSettingsRoute = createRoute({
   getParentRoute: () => formRoute,
@@ -101,11 +102,13 @@ function FormSettings() {
       <Core.Panel>
         <Core.PanelBody>
           <SettingsRow
-            icon="folder"
-            label={m.folder}
+            icon={appConfig.icons.assetTag}
+            label={m.assetTag}
             desc={m._settings.setCategoryDesc}
             action={
               <SelectFormCategory
+                hideIcon
+                helperText={null}
                 InputProps={{label: '', placeholder: '...'}}
                 sx={{minWidth: 150}}
                 workspaceId={workspaceId}
