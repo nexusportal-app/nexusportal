@@ -1,9 +1,9 @@
 import * as React from 'react'
-import {cloneElement, useRef, useState, ReactElement, useEffect, ReactNode} from 'react'
-import {Box, useTheme, SxProps, Modal} from '@mui/material'
-import html2canvas from 'html2canvas'
+import {cloneElement, ReactElement, ReactNode, useEffect, useRef, useState} from 'react'
+import {Box, Modal, SxProps, useTheme} from '@mui/material'
 import {IconBtn} from '../IconBtn.js'
 import {openCanvasInNewTab} from '../../core/utils.js'
+
 export interface PanelFeaturesProps {
   sx?: SxProps
   expendable?: boolean
@@ -23,6 +23,8 @@ export const PanelFeatures = ({children, expendable, savableAsImg, sx}: PanelFea
 
   const saveAsImg = async () => {
     if (!contentRef.current) return
+    const {default: html2canvas} = await import('html2canvas')
+
     const canvas = await html2canvas(contentRef.current, {
       useCORS: true,
       backgroundColor: t.palette.background.paper,
@@ -76,7 +78,7 @@ export const PanelFeatures = ({children, expendable, savableAsImg, sx}: PanelFea
     children: (
       <>
         {children.props.children}
-        {(!expanded && (expendable || savableAsImg)) && toolbar}
+        {!expanded && (expendable || savableAsImg) && toolbar}
       </>
     ),
   })

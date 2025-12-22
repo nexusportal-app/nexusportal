@@ -3,7 +3,7 @@ import xlsx from 'xlsx'
 import {PrismaClient} from '@infoportal/prisma'
 import {KoboSdkGenerator} from '../../kobo/KoboSdkGenerator.js'
 import {Obj, seq} from '@axanc/ts-utils'
-import lodash from 'lodash'
+import zipObject from 'lodash.zipobject'
 import {Kobo, KoboClient} from 'kobo-sdk'
 
 type KoboData = {_parent_index?: number; _index?: number} & Record<string, any>
@@ -43,7 +43,7 @@ export class SubmissionImportService {
         const headers = jsonData[0]
         const rows = jsonData.slice(1)
         sheetData[sheetName] = rows.map(row => {
-          return lodash.zipObject(headers, row)
+          return zipObject(headers, row)
         })
       }
     })

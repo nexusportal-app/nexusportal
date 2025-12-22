@@ -1,12 +1,14 @@
-import * as ExcelJS from 'exceljs'
 import {downloadBufferAsFile} from '@infoportal/client-core'
 import {SchemaInspector} from '@infoportal/form-helper'
 import {Api} from '@infoportal/api-sdk'
+import type {Worksheet} from 'exceljs'
 import Question = Api.Form.Question
 import Choice = Api.Form.Choice
 
 export const generateEmptyXlsTemplate = async (schemaInspector: SchemaInspector, fileName: string): Promise<void> => {
-  const workbook = new ExcelJS.Workbook()
+  const {Workbook} = await import('exceljs')
+
+  const workbook = new Workbook()
   const templateSheet = workbook.addWorksheet('Template')
   const optionsSheet = workbook.addWorksheet('Options')
 
@@ -50,7 +52,7 @@ export const generateEmptyXlsTemplate = async (schemaInspector: SchemaInspector,
 }
 
 const writeDropdownOptions = (
-  optionsSheet: ExcelJS.Worksheet,
+  optionsSheet: Worksheet,
   header: string,
   values: string[],
   columnIndex: number,

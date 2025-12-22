@@ -9,7 +9,7 @@
     "dev": "tsc --watch"
   },
   "dependencies": {
-    "@getodk/web-forms-wc": "github:alexandreannic/web-forms#webcomponent",
+    "@getodk/web-forms-wc": "github:alexandreannic/web-forms#e534a5ceeac9502b0cbf48a8705204b2186f3721",
     "@infoportal/api-sdk": "1.0.0",
     "@infoportal/form-helper": "1.0.0"
   },
@@ -17,5 +17,9 @@
     "@mui/material": "^7.3.5",
     "react": "19.1.0",
     "react-dom": "19.1.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^6.0.3",
+    "vite": "^7.3.0"
   }
 }

@@ -74,7 +74,7 @@ const ChartPieSetup = <T extends Record<string, number>>({
       )}
       <ResponsiveContainer width="100%" height="100%">
         <PieChart>
-          {!hideTooltip && <Tooltip formatter={_ => toPercent(+_)} />}
+          {!hideTooltip && <Tooltip formatter={_ => _ ? toPercent(+_) : undefined} />}
           {children}
           <Pie
             data={Obj.toArray(data).map(_ => {

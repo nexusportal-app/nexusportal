@@ -11,12 +11,12 @@ import {Submission} from '@/core/sdk/server/kobo/KoboMapper'
 import {Kobo} from 'kobo-sdk'
 import {SchemaInspector} from '@infoportal/form-helper'
 import {useAppSettings} from '@/core/context/ConfigContext'
-import * as csvToJson from 'csvtojson'
 import {map, Obj, seq} from '@axanc/ts-utils'
 import {UseDatabaseView, useDatabaseView} from '@/features/Form/Database/DatabaseView/useDatabaseView'
 import {DatabaseDisplay} from '@/features/Form/Database/DatabaseGroupDisplay/DatabaseKoboDisplay'
 import {Api} from '@infoportal/api-sdk'
 import {ExternalFilesChoices, KoboExternalFilesIndex} from '@infoportal/database-column'
+import Papa from 'papaparse'
 
 export interface DatabaseContext {
   refetch: (p?: FetchParams) => Promise<void>
@@ -68,9 +68,15 @@ export const DatabaseKoboTableProvider = (props: {
 
   useEffect(() => {
     fetcherExternalFiles.fetch().then(async res => {
-      const jsons: ExternalFilesChoices[][] = await Promise.all(
-        res.map(_ => csvToJson.default({delimiter: ';'}).fromString(_.csv)),
+      const jsons: ExternalFilesChoices[][] = res.map(
+        _ =>
+          Papa.parse<ExternalFilesChoices>(_.csv, {
+            header: true,
+            delimiter: ';',
+            skipEmptyLines: true,
+          }).data,
       )
+
       const indexed = jsons.map(_ => seq(_).groupByFirst(_ => _.name))
       const indexes = seq(res).map((_, i) => ({file: _.file, index: indexed[i]}))
       setIndexExternalFiles(

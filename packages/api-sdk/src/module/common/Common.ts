@@ -1,4 +1,4 @@
-import * as Prisma from '@infoportal/prisma'
+import type * as Prisma from '@infoportal/prisma'
 
 export type Brand<K, T> = K & {
   /** @deprecated Should never be used: compile-time only trick to distinguish different ID types. */

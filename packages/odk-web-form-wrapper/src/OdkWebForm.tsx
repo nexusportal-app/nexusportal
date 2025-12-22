@@ -1,6 +1,5 @@
 import {useCallback, useEffect, useMemo, useState} from 'react'
-import {Box, useTheme} from '@mui/material'
-import '@getodk/web-forms-wc'
+import {Box, Skeleton, useTheme} from '@mui/material'
 import {Api} from '@infoportal/api-sdk'
 import {SubmissionXmlToJson, SubmissionJsonToXml} from '@infoportal/form-helper'
 import {EditInstanceOptions} from './EditInstance.js'
@@ -42,6 +41,13 @@ export function OdkWebForm({
   const [keyIndexToRemount, setKeyIndexToRemount] = useState(0)
   const t = useTheme()
 
+  const [wcReady, setWcReady] = useState(false)
+
+  useEffect(() => {
+    // @ts-ignore
+    import('@getodk/web-forms-wc').then(() => setWcReady(true))
+  }, [])
+
   const editInstance: EditInstanceOptions | undefined = useMemo(() => {
     if (!submission) return
     const xml = new SubmissionJsonToXml(formId, questionIndex).convert(submission)
@@ -80,6 +86,7 @@ export function OdkWebForm({
     cb({answers: jsonSubmission, attachments}, e)
   }
 
+  if (!wcReady) return <Skeleton />
   return (
     <Box
       key={keyIndexToRemount}
