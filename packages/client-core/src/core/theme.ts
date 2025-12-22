@@ -15,7 +15,8 @@ export const darkenVar = (color: string, coef: number) =>
   `color-mix(in srgb, ${color} ${(1 - coef) * 100}%, black ${coef * 100}%)`
 
 // export const colorPrimary = 'purple'
-export const colorPrimary = '#0b57d0'
+// export const colorPrimary = '#0b57d0'
+export const colorPrimary = '#0083bc'
 
 const fadeShadow = ({
   color = '#000',
