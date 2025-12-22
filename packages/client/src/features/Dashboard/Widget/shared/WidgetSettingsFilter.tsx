@@ -54,7 +54,9 @@ export function WidgetSettingsFilterQuestion<T extends Record<string, any>>({
       sx={{
         ...Core.styleUtils(t).color.toolbar.default,
         p: 1,
-        borderRadius: t.vars.shape.borderRadius,
+        ml: -1,
+        mr: -1,
+        // borderRadius: t.vars.shape.borderRadius,
         ...sx,
       }}
       {...props}

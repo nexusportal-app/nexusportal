@@ -38,6 +38,20 @@ export function LineChartSettings() {
 
   return (
     <>
+      <WidgetSettingsSection title={m.global}>
+        <Box sx={{display: 'flex', alignItems: 'center', gap: 1}}>
+          <Controller
+            name="start"
+            control={form.control}
+            render={({field}) => <Core.Datepicker fullWidth label={m.start} {...field} />}
+          />
+          <Controller
+            name="end"
+            control={form.control}
+            render={({field}) => <Core.Datepicker fullWidth label={m.end} {...field} />}
+          />
+        </Box>
+      </WidgetSettingsSection>
       {fields.map((field, index) => (
         <WidgetSettingsSection
           title={m.line + ' ' + (index + 1)}

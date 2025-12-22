@@ -62,7 +62,8 @@ export const FormBuilderTabs = ({sx}: {sx?: SxProps<Theme>}) => {
       {/*</Link>*/}
       <PopoverShareLink label={m.copyResponderLink} url={absoluteUrl}>
         <Tab
-          sx={{flex: 1}}
+          color="primary"
+          sx={{opacity: 1, color: t.vars.palette.primary.main, flex: 1}}
           iconPosition="start"
           icon={<Icon>share</Icon>}
           label={m.share}

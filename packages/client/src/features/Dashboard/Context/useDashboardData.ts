@@ -141,7 +141,9 @@ export function filterToFunction<T extends Record<string, any> = Record<string, 
       return (_: T) => {
         const value = _[filter.questionName!]
         if (!isDate(value)) return false
-        return PeriodHelper.isDateIn({start: filterDate?.[0], end: filterDate?.[1]}, value)
+        const start = filterDate?.[0] ? new Date(filterDate?.[0]) : undefined
+        const end = filterDate?.[1] ? new Date(filterDate?.[1]) : undefined
+        return PeriodHelper.isDateIn({start, end}, value)
       }
     }
     if (filterNumber)

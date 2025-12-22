@@ -8,8 +8,17 @@ import {Box} from '@mui/material'
 import {Api} from '@infoportal/api-sdk'
 import {useMemo} from 'react'
 
+const legendOffset = 5
+
 export const LineChartWidget = ({widget}: {widget: Api.Dashboard.Widget}) => {
-  const config = widget.config as Api.Dashboard.Widget.Config['LineChart']
+  const config = useMemo(() => {
+    const configRow = widget.config as Api.Dashboard.Widget.Config['LineChart']
+    return {
+      ...configRow,
+      start: configRow.start ? new Date(configRow.start) : undefined,
+      end: configRow.end ? new Date(configRow.end) : undefined,
+    }
+  }, [widget.config])
 
   const getFilteredData = useDashboardContext(_ => _.data.getFilteredData)
   const filterFns = useDashboardContext(_ => _.data.filterFns)
@@ -25,8 +34,9 @@ export const LineChartWidget = ({widget}: {widget: Api.Dashboard.Widget}) => {
   }, [config.lines])
 
   if (!config.lines || config.lines.length === 0) return <WidgetCardPlaceholder type={widget.type} />
+
   return (
-    <Box sx={{p: 1, minHeight: 0, height: '100%'}}>
+    <Box sx={{p: 1, pb: legendOffset, minHeight: 0, height: '100%'}}>
       <WidgetTitle>{widget.i18n_title?.[langIndex]}</WidgetTitle>
       <Core.ChartLineByDateFiltered
         start={config.start}
