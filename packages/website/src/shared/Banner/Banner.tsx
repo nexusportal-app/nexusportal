@@ -1,11 +1,9 @@
 import style from './Banner.module.css'
 import {m} from '@/i18n'
-import {Box, Button} from '@mui/material'
-import {AnimatedText} from '@/shared/AnimatedText'
+import {Button} from '@mui/material'
 import {Pulse} from '@/shared/Pulse'
 import {AppTitle} from '@infoportal/client-core/server'
 import ArrowRight from '@mui/icons-material/ArrowForward'
-import Rocket from '@mui/icons-material/RocketLaunch'
 
 export const Banner = () => {
   return (
@@ -21,15 +19,21 @@ export const Banner = () => {
         {/*/>*/}
         <div className={style.content}>
           <div>
-            <AppTitle sx={{fontSize: '4.5rem', color: '#cdfffe'}} />
+            <AppTitle sx={{fontSize: '4.5rem'}} />
             <div className={style.desc}>{m.desc}</div>
 
             <div className={style.keys}>
-              <div className={style.key}>{m.key1}</div>
-              <ArrowRight className={style.arrow} />
-              <div className={style.key}>{m.key2}</div>
-              <ArrowRight className={style.arrow} />
-              <div className={style.key}>{m.key3}</div>
+              <div style={{animationDelay: '.2s'}} className={style.key}>
+                {m.key1}
+              </div>
+              <ArrowRight className={style.arrow} style={{animationDelay: '.4s'}} />
+              <div className={style.key} style={{animationDelay: '.6s'}}>
+                {m.key2}
+              </div>
+              <ArrowRight className={style.arrow} style={{animationDelay: '.8s'}} />
+              <div className={style.key} style={{animationDelay: '1s'}}>
+                {m.key3}
+              </div>
             </div>
             <Pulse>
               <Button

@@ -12,7 +12,7 @@ export default async function BlogPage() {
       <ul className={style.ul + ' ' + style.resetList}>
         {posts.map((post, i) => (
           <BlogListItemAnimator key={post.slug} position={i}>
-            <BlogListItem animate post={post} />
+            <BlogListItem post={post} />
           </BlogListItemAnimator>
         ))}
       </ul>

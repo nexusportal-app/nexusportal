@@ -17,7 +17,7 @@ export const theme = createTheme({
   // defaultColorScheme: 'light',
   spacing: 16,
   shape: {
-    borderRadius: 20,
+    borderRadius: 24,
   },
   colorSchemes: {
     light: {
@@ -25,7 +25,7 @@ export const theme = createTheme({
         primary: {main: colorPrimary},
         secondary: {main: colorPrimary},
         error: {main: '#d32f2f'},
-        // success: {main: '#2e7b32'},
+        success: {main: '#007c08'},
         action: {
           focus: alphaVar(colorPrimary, 0.1),
           focusOpacity: 0.1,

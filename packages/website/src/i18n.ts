@@ -7,9 +7,9 @@ import Schema from '@mui/icons-material/Schema'
 import DashboardCustomize from '@mui/icons-material/DashboardCustomize'
 import AccountTree from '@mui/icons-material/Route'
 
-const appTitle = 'InfoPortal'
+const appName = 'NexusPortal'
 export const m = {
-  title: appTitle,
+  title: appName,
   // desc: 'The next generation of data collection & management software.',
   desc: 'Turn data into decisions',
   key1: 'Collect & Import',
@@ -38,7 +38,35 @@ export const m = {
   },
   features: {},
   overviewTitle: 'Overview',
-  comparisonTitle: 'Where reporting tools fall short',
+  comparisonTitle: 'Where data workflows start to break down',
+  comparison2: {
+    sync: {
+      icon: SyncProblem,
+      title: 'It works… until forms change or data grows.',
+      problem: 'New fields, new form versions, or more data - and things start breaking.',
+      solution: 'Collection, transformations, and dashboards stay in sync, even as things evolve.',
+    },
+    scattered: {
+      icon: Hub,
+      title: 'Information is scattered across tools, and nothing fully matches.',
+      problem: 'Getting a global view takes manual work, and we don’t always get the same result twice.',
+      solution: 'Every figure is traceable, reproducible, and linked to its source and logic.',
+    },
+    access: {
+      icon: ManageAccounts,
+      title: 'People still see data they shouldn’t - or lose access randomly.',
+      problem: 'People change roles, but permissions don’t.',
+      solution: 'Access is defined per dataset or view and stays aligned over time.',
+    },
+    dashboard: {
+      icon: DashboardCustomize,
+      title: 'One dashboard becomes many.',
+      problem:
+        'Language or layout changes force us to duplicate dashboards and the design quickly becomes inconsistent.',
+      solution: 'Dashboards follow shared rules, adapt to screens, and support multiple languages.',
+    },
+  },
+
   comparison: {
     sync: {
       icon: SyncProblem,
@@ -114,7 +142,7 @@ export const m = {
 
   overview_: {
     xls: {title: 'Built on XLS Form', desc: 'The most flexible open standard to design surveys with complex logic.'},
-    database: {
+    db: {
       title: 'Full control of your data',
       desc: 'A powerful, intuitive interface to manage, clean, and organize your information.',
     },
@@ -135,7 +163,7 @@ export const m = {
       desc: `Keep your KoboToolbox surveys in sync while unlocking InfoPortal's full power.`,
     },
   },
-  faq: `FAQ`,
+  faq: `Questions? Answers.`,
   faq_: [
     {
       question: `How was InfoPortal created?`,

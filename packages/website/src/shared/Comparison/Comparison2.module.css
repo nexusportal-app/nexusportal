@@ -1,0 +1,105 @@
+.root {
+  padding: var(--section-padding);
+  max-width: 1100px;
+  margin: auto;
+}
+
+.container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.item {
+  text-align: center;
+  align-items: center;
+  padding: var(--mui-spacing);
+  display: flex;
+  flex-direction: column;
+  margin-bottom: var(--mui-spacing);
+}
+
+.item_logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 65px;
+  margin-bottom: var(--mui-spacing);
+  height: 65px;
+  border-radius: 65px;
+  /*background: var(--mui-palette-divider);*/
+  background: color-mix(in srgb, var(--mui-palette-warning-main) 20%, var(--mui-palette-background-default));
+  color: var(--mui-palette-warning-main);
+
+  animation: colorize 0.6s ease-out both;
+  animation-timeline: view();
+  animation-range: entry 100% cover 100%;
+  animation-delay: .1s;
+}
+
+@keyframes colorize {
+  to {
+    background: color-mix(in srgb, var(--mui-palette-success-main) 20%, var(--mui-palette-background-default));
+    color: var(--mui-palette-success-main);
+  }
+}
+
+.item_logo_icon {
+  font-size: 35px !important;
+}
+
+.item_title {
+  margin: 0;
+  font-size: 1.4rem;
+  margin-bottom: .2rem;
+}
+
+.item_problem {
+  font-size: 1.2rem;
+  color: var(--mui-palette-text-secondary);
+}
+
+.item_body {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--mui-spacing) * 2);
+}
+
+.item_solution {
+  font-weight: 500;
+  font-size: 1.2rem;
+  color: var(--mui-palette-success-main);
+}
+
+.item_solution_details {
+  color: var(--mui-palette-text-secondary);
+  /*color: var(--mui-palette-success-light);*/
+}
+
+
+.animate {
+  opacity: 0;
+  transform: translateX(-90px);
+  animation: reveal 0.6s ease-out both;
+  animation-timeline: view();
+  animation-range: entry 0% cover 40%;
+  animation-delay: 0s;
+}
+
+@keyframes reveal {
+  to {
+    opacity: 1;
+    transform: translate(0);
+  }
+}
+
+.animateLeft {
+  opacity: 0;
+  transform: translateX(90px);
+  animation: reveal 0.6s ease-out both;
+  animation-timeline: view();
+  animation-range: entry 20% cover 50%;
+  animation-delay: 0s;
+}
+

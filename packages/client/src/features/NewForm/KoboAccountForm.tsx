@@ -153,6 +153,7 @@ export const KoboAccountForm = ({
             <Core.Input
               // endAdornment={<Icon>key</Icon>}
               required
+              type="password"
               label={m.apiToken}
               error={fieldState.invalid}
               {...field}

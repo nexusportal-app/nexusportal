@@ -1,3 +1,4 @@
+'use client'
 import * as React from 'react'
 import {ReactNode} from 'react'
 import {useTheme} from '@mui/material'
@@ -30,11 +31,13 @@ export const Animate = ({children, delay}: AnimateProps) => {
 }
 
 export const AnimateList: React.FC<AnimateListProps> = ({children, delay = 0, initialDelay = 0}) => {
+  // console.log('---')
   return (
     <>
-      {React.Children.map(children, (child, index) =>
-        child ? <Animate delay={initialDelay + index * delay}>{child}</Animate> : null,
-      )}
+      {React.Children.map(children, (child, index) => {
+        // console.log(child)
+        return child ? <Animate delay={initialDelay + index * delay}>{child}</Animate> : null
+      })}
     </>
   )
 }

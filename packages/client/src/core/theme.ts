@@ -401,7 +401,7 @@ export const muiTheme = ({
       MuiDialog: {
         styleOverrides: {
           paper: ({theme}) => ({
-            background: alphaVar(theme.vars.palette.background.paper, 0.7),
+            background: alphaVar(theme.vars.palette.background.paper, 0.9),
           }),
         },
       },
