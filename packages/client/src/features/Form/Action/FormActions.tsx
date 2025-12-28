@@ -31,7 +31,7 @@ export function FormActions() {
   const params = formActionsRoute.useParams()
   const workspaceId = params.workspaceId as Api.WorkspaceId
   const formId = params.formId as Api.FormId
-  const queryActionGet = UseQueryFromAction.getByDbId(workspaceId, formId)
+  const queryActionGet = UseQueryFromAction.getByFormId(workspaceId, formId)
 
   return (
     <TabContent

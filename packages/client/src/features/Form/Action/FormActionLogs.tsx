@@ -41,7 +41,7 @@ export function FormActionLogs({
   const {m, formatDateTime} = useI18n()
   const t = useTheme()
   const queryLog = UseQueryFormActionLog.search({workspaceId, formId})
-  const queryActionGet = UseQueryFromAction.getByDbId(workspaceId, formId)
+  const queryActionGet = UseQueryFromAction.getByFormId(workspaceId, formId)
 
   const logs = useMemo(() => {
     if (!actionId) return queryLog.data?.data

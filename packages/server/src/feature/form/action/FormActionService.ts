@@ -25,6 +25,10 @@ export class FormActionService {
     return action
   }
 
+  readonly remove = async ({actionId}: {actionId: Api.Form.ActionId}) => {
+    await this.prisma.formAction.delete({where: {id: actionId}})
+  }
+
   readonly update = async ({
     workspaceId,
     id,
@@ -50,7 +54,7 @@ export class FormActionService {
       .then(_ => _.map(prismaMapper.form.mapFormAction))
   }
 
-  readonly getByForm = ({formId}: {formId: Api.FormId}): Promise<Api.Form.Action[]> => {
+  readonly getByFormId = ({formId}: {formId: Api.FormId}): Promise<Api.Form.Action[]> => {
     return this.prisma.formAction
       .findMany({orderBy: {createdAt: 'desc'}, where: {formId}})
       .then(_ => _.map(prismaMapper.form.mapFormAction))

@@ -7,13 +7,16 @@ import type * as monaco from 'monaco-editor'
 // @ts-ignore
 import {constrainedEditor} from 'constrained-editor-plugin'
 import {Core} from '@/shared'
+import {UseQueryFromAction} from '@/core/query/form/useQueryFromAction'
+import {Api} from '@infoportal/api-sdk'
+import {DeleteActionButton} from '@/features/Form/Action/Action/DeleteActionButton'
 
 const monacoBg = '#1e1e1e'
 
 type Props = BoxProps & {
-  actionId: string
-  saving?: boolean
-  onSave: (_: {body: string; bodyErrors: number; bodyWarnings: number}) => void
+  actionId: Api.Form.ActionId
+  workspaceId: Api.WorkspaceId
+  formId: Api.FormId
   body?: string
   inputType: string
   outputType: string
@@ -29,11 +32,11 @@ export function FormActionEditor(props: Props) {
 }
 
 function FormActionEditorWithMonaco({
-  body = getDefaultBody(),
-  saving,
-  onSave,
-  inputType,
+  workspaceId,
+  formId,
   actionId,
+  body = getDefaultBody(),
+  inputType,
   monaco,
   isReadOnly,
   outputType,
@@ -45,6 +48,7 @@ function FormActionEditorWithMonaco({
   const t = useTheme()
   const {m} = useI18n()
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null)
+  const queryActionUpdate = UseQueryFromAction.update(workspaceId, formId)
 
   const files = useMemo(() => {
     return {
@@ -79,7 +83,7 @@ function FormActionEditorWithMonaco({
     const warnings = markers.filter(
       _ => _.severity >= monaco.MarkerSeverity.Warning && _.severity < monaco.MarkerSeverity.Error,
     ).length
-    onSave({body: bodyChanges, bodyWarnings: warnings, bodyErrors: errors})
+    queryActionUpdate.mutateAsync({id: actionId, body: bodyChanges, bodyWarnings: warnings, bodyErrors: errors})
   }
 
   useCaptureCtrlS(handleSave)
@@ -137,16 +141,21 @@ function FormActionEditorWithMonaco({
           />
         ))}
         {!isReadOnly && (
-          <Core.Btn
-            loading={saving}
-            onClick={handleSave}
-            disabled={bodyChanges === body}
-            variant="contained"
-            size="small"
-            sx={{alignSelf: 'center', marginLeft: 'auto', mr: 1}}
-          >
-            {m.save}
-          </Core.Btn>
+          <>
+            <Core.Btn
+              loading={queryActionUpdate.isPending}
+              onClick={handleSave}
+              disabled={bodyChanges === body}
+              variant="contained"
+              size="small"
+              sx={{alignSelf: 'center', marginLeft: 'auto', mr: 1}}
+            >
+              {m.save}
+            </Core.Btn>
+            <DeleteActionButton actionId={actionId} formId={formId} workspaceId={workspaceId}>
+              <Core.IconBtn sx={{color: 'white'}}>delete</Core.IconBtn>
+            </DeleteActionButton>
+          </>
         )}
       </Tabs>
       <Editor

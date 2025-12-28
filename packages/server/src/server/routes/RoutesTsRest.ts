@@ -502,24 +502,24 @@ export class RoutesTsRest extends Router {
         action: {
           create: _ =>
             this.auth(_)
-              .then(({params, body, req}) =>
-                formAction.create({...params, ...body, createdBy: req.session.app.user.email}),
-              )
+              .then(({body, req}) => formAction.create({...body, createdBy: req.session.app.user.email}))
               .then(this.ok200),
           update: _ =>
             this.auth(_)
-              .then(({params, body, req}) =>
-                formAction.update({...params, ...body, createdBy: req.session.app.user.email}),
-              )
+              .then(({body, req}) => formAction.update({...body, createdBy: req.session.app.user.email}))
               .then(this.ok200),
-          getByDbId: _ =>
+          remove: _ =>
             this.auth(_)
-              .then(({params}) => formAction.getByForm(params))
+              .then(({body, req}) => formAction.remove({...body}))
+              .then(this.ok204),
+          getByFormId: _ =>
+            this.auth(_)
+              .then(({body}) => formAction.getByFormId(body))
               .then(this.ok200),
           runAllActionsByForm: _ =>
             this.auth(_)
-              .then(({params, req}) =>
-                formActionRunner.runAllActionByForm({...params, startedBy: req.session.app.user.email}),
+              .then(({body, req}) =>
+                formActionRunner.runAllActionByForm({...body, startedBy: req.session.app.user.email}),
               )
               .then(this.ok200),
           report: {

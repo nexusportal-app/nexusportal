@@ -8,13 +8,9 @@ const c = initContract()
 
 export const formActionContract = c.router({
   create: {
-    method: 'PUT',
-    path: `/:workspaceId/form/:formId/action`,
-    pathParams: z.object({
-      workspaceId: schema.workspaceId,
-      formId: schema.formId,
-    }),
-    body: c.type<Omit<Api.Form.Action.Payload.Create, 'formId' | 'workspaceId'>>(),
+    method: 'POST',
+    path: `/form/action/create`,
+    body: c.type<Api.Form.Action.Payload.Create>(),
     responses: {
       200: c.type<Api.Form.Action>(),
     },
@@ -26,12 +22,11 @@ export const formActionContract = c.router({
   },
   runAllActionsByForm: {
     method: 'POST',
-    path: `/:workspaceId/form/:formId/action/run`,
-    pathParams: z.object({
+    path: `/form/action/runAllActionsByForm`,
+    body: z.object({
       workspaceId: schema.workspaceId,
       formId: schema.formId,
     }),
-    body: c.type<undefined>(),
     responses: {
       200: c.type<Api.Form.Action.Report>(),
     },
@@ -42,14 +37,9 @@ export const formActionContract = c.router({
     }),
   },
   update: {
-    method: 'PATCH',
-    path: `/:workspaceId/form/:formId/action/:id`,
-    pathParams: z.object({
-      workspaceId: schema.workspaceId,
-      formId: schema.formId,
-      id: schema.formActionId,
-    }),
-    body: c.type<Omit<Api.Form.Action.Payload.Update, 'id' | 'formId' | 'workspaceId'>>(),
+    method: 'POST',
+    path: `/form/action/update`,
+    body: c.type<Api.Form.Action.Payload.Update>(),
     responses: {
       200: c.type<Api.Form.Action>(),
     },
@@ -59,10 +49,21 @@ export const formActionContract = c.router({
       },
     }),
   },
-  getByDbId: {
-    method: 'GET',
-    path: `/:workspaceId/form/:formId/action`,
-    pathParams: z.object({
+  remove: {
+    method: 'POST',
+    path: `/form/action/remove`,
+    body: c.type<Api.Form.Action.Payload.Remove>(),
+    responses: {204: schema.emptyResult},
+    metadata: makeMeta({
+      access: {
+        form: ['action_canUpdate'],
+      },
+    }),
+  },
+  getByFormId: {
+    method: 'POST',
+    path: `/form/action/getByFormId`,
+    body: z.object({
       workspaceId: schema.workspaceId,
       formId: schema.formId,
     }),
@@ -79,39 +80,23 @@ export const formActionContract = c.router({
 
 export const formActionClient = (client: TsRestClient) => {
   return {
-    getByDbId: ({workspaceId, formId}: {workspaceId: Api.WorkspaceId; formId: Api.FormId}): Promise<Api.Form.Action[]> => {
+    getByFormId: (body: {workspaceId: Api.WorkspaceId; formId: Api.FormId}): Promise<Api.Form.Action[]> => {
       return client.form.action
-        .getByDbId({
-          params: {workspaceId, formId: formId},
-        })
+        .getByFormId({body})
         .then(map200)
         .then(_ => _.map(Api.Form.Action.map))
     },
-    create: ({workspaceId, formId, ...body}: Api.Form.Action.Payload.Create): Promise<Api.Form.Action> => {
-      return client.form.action
-        .create({
-          params: {workspaceId, formId},
-          body,
-        })
-        .then(map200)
-        .then(Api.Form.Action.map)
+    create: (body: Api.Form.Action.Payload.Create): Promise<Api.Form.Action> => {
+      return client.form.action.create({body}).then(map200).then(Api.Form.Action.map)
     },
-    update: ({workspaceId, formId, id, ...body}: Api.Form.Action.Payload.Update): Promise<Api.Form.Action> => {
-      return client.form.action
-        .update({
-          params: {workspaceId, formId, id},
-          body,
-        })
-        .then(map200)
-        .then(Api.Form.Action.map)
+    update: (body: Api.Form.Action.Payload.Update): Promise<Api.Form.Action> => {
+      return client.form.action.update({body}).then(map200).then(Api.Form.Action.map)
     },
-    runAllActionsByForm: (params: Api.Form.Action.Payload.Run) => {
-      return client.form.action
-        .runAllActionsByForm({
-          params,
-        })
-        .then(map200)
-        .then(Api.Form.Action.Report.map)
+    runAllActionsByForm: (body: Api.Form.Action.Payload.Run) => {
+      return client.form.action.runAllActionsByForm({body}).then(map200).then(Api.Form.Action.Report.map)
+    },
+    remove: (body: Api.Form.Action.Payload.Remove) => {
+      return client.form.action.remove({body}).then(map200)
     },
   }
 }

@@ -123,6 +123,11 @@ export namespace Form {
         targetFormId: FormId
         type: Action.Type
       }
+      export type Remove = {
+        workspaceId: WorkspaceId
+        formId: FormId
+        actionId: ActionId
+      }
       export type Update = {
         formId: FormId
         id: ActionId

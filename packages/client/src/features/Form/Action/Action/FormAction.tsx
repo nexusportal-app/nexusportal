@@ -13,6 +13,7 @@ import {Box, BoxProps, Skeleton, useTheme} from '@mui/material'
 import {FormActionLogs} from '@/features/Form/Action/FormActionLogs.js'
 import {UseQueryPermission} from '@/core/query/useQueryPermission.js'
 import {UseQuerySchema} from '@/core/query/form/useQuerySchema'
+import {DeleteActionButton} from '@/features/Form/Action/Action/DeleteActionButton'
 
 export const formActionRoute = createRoute({
   getParentRoute: () => formActionsRoute,
@@ -54,7 +55,6 @@ export function FormAction({sx, ...props}: BoxProps) {
   const formId = params.formId as Api.FormId
   const actionId = params.actionId as Api.Form.ActionId
   const queryAction = UseQueryFromAction.getById(workspaceId, formId, actionId)
-  const queryActionUpdate = UseQueryFromAction.update(workspaceId, formId)
   const queryPermissionForm = UseQueryPermission.form({formId, workspaceId})
   const interfaceInput = useBuildInterface({name: 'Input', workspaceId, formId: queryAction.data?.targetFormId})
   const interfaceOutput = useBuildInterface({name: 'Output', workspaceId, formId: queryAction.data?.formId})
@@ -69,27 +69,34 @@ export function FormAction({sx, ...props}: BoxProps) {
             queryAction.data &&
             (interfaceInput.data && interfaceOutput.data ? (
               <FormActionEditor
+                workspaceId={workspaceId}
+                formId={formId}
+                actionId={actionId}
                 key={actionId}
                 isReadOnly={!queryPermissionForm.data || !queryPermissionForm.data.action_canUpdate}
-                actionId={actionId}
-                saving={queryActionUpdate.isPending}
                 inputType={interfaceInput.data}
                 outputType={interfaceOutput.data}
                 body={queryAction.data.body ?? undefined}
-                onSave={body => {
-                  queryActionUpdate.mutateAsync({id: queryAction.data!.id, ...body})
-                }}
               />
             ) : (
               <Core.Alert
                 severity="warning"
                 action={
-                  <Link
-                    to="/$workspaceId/form/$formId/formCreator"
-                    params={{workspaceId, formId: queryAction.data!.targetFormId}}
-                  >
-                    <Core.Btn color="inherit">{m.createShema}</Core.Btn>
-                  </Link>
+                  <>
+                    <DeleteActionButton actionId={actionId} formId={formId} workspaceId={workspaceId}>
+                      <Core.Btn color="error" icon="delete">
+                        {m._formAction.remove}
+                      </Core.Btn>
+                    </DeleteActionButton>
+                    <Link
+                      to="/$workspaceId/form/$formId/formCreator"
+                      params={{workspaceId, formId: queryAction.data!.targetFormId}}
+                    >
+                      <Core.Btn icon="add" color="inherit">
+                        {m.createShema}
+                      </Core.Btn>
+                    </Link>
+                  </>
                 }
               >
                 {m._formAction.thisActionTargetAFormWithoutSchema}

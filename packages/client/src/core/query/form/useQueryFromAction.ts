@@ -21,6 +21,21 @@ export class UseQueryFromAction {
     })
   }
 
+  static readonly remove = (workspaceId: Api.WorkspaceId, formId: Api.FormId) => {
+    const {apiv2} = useAppSettings()
+    const queryClient = useQueryClient()
+    const {toastHttpError} = useIpToast()
+
+    return usePendingMutation<void, ApiError, {actionId: Api.Form.ActionId}>({
+      getId: _ => _.actionId,
+      mutationFn: async args => {
+        await apiv2.form.action.remove({...args, formId, workspaceId})
+      },
+      onSuccess: () => queryClient.invalidateQueries({queryKey: queryKeys.formAction(workspaceId, formId)}),
+      onError: toastHttpError,
+    })
+  }
+
   static readonly runAllActionByForm = (workspaceId: Api.WorkspaceId, formId: Api.FormId) => {
     const {apiv2} = useAppSettings()
     const queryClient = useQueryClient()
@@ -44,7 +59,11 @@ export class UseQueryFromAction {
     const {apiv2} = useAppSettings()
     const queryClient = useQueryClient()
     const {toastHttpError} = useIpToast()
-    return usePendingMutation<Api.Form.Action, ApiError, Omit<Api.Form.Action.Payload.Update, 'formId' | 'workspaceId'>>({
+    return usePendingMutation<
+      Api.Form.Action,
+      ApiError,
+      Omit<Api.Form.Action.Payload.Update, 'formId' | 'workspaceId'>
+    >({
       getId: variables => variables.id,
       mutationFn: async args => {
         return apiv2.form.action.update({...args, formId, workspaceId})
@@ -54,18 +73,18 @@ export class UseQueryFromAction {
     })
   }
 
-  static readonly getByDbId = (workspaceId: Api.WorkspaceId, formId: Api.FormId) => {
+  static readonly getByFormId = (workspaceId: Api.WorkspaceId, formId: Api.FormId) => {
     const {apiv2} = useAppSettings()
     const {toastAndThrowHttpError} = useIpToast()
 
     return useQuery({
       queryKey: queryKeys.formAction(workspaceId, formId),
-      queryFn: () => apiv2.form.action.getByDbId({workspaceId, formId}).catch(toastAndThrowHttpError),
+      queryFn: () => apiv2.form.action.getByFormId({workspaceId, formId}).catch(toastAndThrowHttpError),
     })
   }
 
   static readonly getById = (workspaceId: Api.WorkspaceId, formId: Api.FormId, functionId: Api.Form.ActionId) => {
-    const all = this.getByDbId(workspaceId, formId)
+    const all = this.getByFormId(workspaceId, formId)
     return {
       ...all,
       data: all.data?.find(_ => _.id === functionId),

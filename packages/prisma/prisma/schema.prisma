@@ -418,7 +418,7 @@ model FormActionLog {
   title      String?
   details    String?
   submission Json?
-  action     FormAction        @relation(fields: [actionId], references: [id])
+  action     FormAction        @relation(fields: [actionId], references: [id], onDelete: Cascade)
   actionId   String
 }
 
