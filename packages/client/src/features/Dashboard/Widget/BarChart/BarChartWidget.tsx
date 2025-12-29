@@ -88,12 +88,13 @@ export function BarChartWidget({widget}: {widget: Api.Dashboard.Widget}) {
         checked={filter.questions[config.questionName]}
         onClickData={handleChoiceClick}
         compareBy={byPeriod}
+        minValue={config.minValue}
         multiple={multiple}
         hideValue={!config.showValue}
         data={filteredData}
         labels={labels}
         limit={config.limit}
-        skippedValues={hiddenChoices}
+        skippedKeys={hiddenChoices}
         by={by!}
       />
     </Box>

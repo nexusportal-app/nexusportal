@@ -86,7 +86,8 @@ const DatatableHeadTdBody = ({
       {column.typeIcon}
       {column.subHeader}
       {(() => {
-        switch (column.type) {
+        switch (column.type as Column.Type) {
+          case 'string':
           case 'select_one':
           case 'select_multiple':
           case 'date':

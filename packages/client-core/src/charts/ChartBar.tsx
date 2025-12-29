@@ -3,14 +3,20 @@ import {ReactNode, useMemo, useState} from 'react'
 import {Box, Checkbox, Icon, TooltipProps, useTheme} from '@mui/material'
 import {useTimeout} from '@axanc/react-hooks'
 import {Obj, seq} from '@axanc/ts-utils'
-import {PartialOnly, toPercent} from '@infoportal/common'
+import {toPercent} from '@infoportal/common'
 import {Txt} from '../ui/Txt.js'
 import {useI18n} from '@infoportal/client-i18n'
 import {alphaVar} from '../core/theme.js'
 import {LightTooltip, TooltipRow} from '../ui/LightTooltip.js'
 import {ComparativeValue} from './ComparativeValue.js'
-import {ChartValue} from './ChartBuilder.js'
-export interface BarChartData extends PartialOnly<ChartValue, 'base' | 'ratio'> {
+
+export type BarChartData = {
+  value: number
+  base?: number
+  ratio?: number
+  label?: string
+  desc?: string
+  delta?: number
   color?: string
   disabled?: boolean
 }
@@ -26,7 +32,7 @@ interface Props<K extends string> {
   icons?: Record<K, string>
   labels?: Record<K, ReactNode>
   descs?: Record<K, ReactNode>
-  data?: Record<K, BarChartData>
+  data?: [K, BarChartData][]
   barHeight?: number
 }
 
@@ -64,28 +70,35 @@ export const ChartBarContent = <K extends string>({
 }: Omit<Props<K>, 'data'> & {data: NonNullable<Props<K>['data']>}) => {
   const t = useTheme()
   const {values, maxRatio, maxValue, sumValue} = useMemo(() => {
-    const values = new Obj(data).mapValues((v, key) => ({...v, key})).values()
-    const sumValue = seq(values).sum(_ => _.value)
-    const safeValues = values.map(_ => {
-      const base = _.base ?? sumValue
-      const ratio = _.ratio ?? _.value / base
-      return {..._, base, ratio}
+    let sumValue = 0
+    let maxValue = 0
+    let maxRatio = 0
+    for (const [, v] of data) sumValue += v.value
+    const values = data.map(([key, v]) => {
+      const base = v.base ?? sumValue
+      const ratio = v.ratio ?? (base ? v.value / base : 0)
+      if (v.value > maxValue) maxValue = v.value
+      if (ratio > maxRatio) maxRatio = ratio
+      return {
+        key,
+        ...v,
+        base,
+        ratio,
+      }
     })
-    return {
-      values: safeValues,
-      sumValue,
-      maxValue: Math.max(...safeValues.map(_ => _.value)),
-      maxRatio: Math.max(...safeValues.map(_ => _.ratio)),
-    }
+    return {values, maxValue, maxRatio, sumValue}
   }, [data])
+
   const [appeared, setAppeared] = useState<boolean>(false)
   useTimeout(() => setAppeared(true), 200)
+
+  const checkedSet = useMemo(() => (checked ? new Set(checked) : null), [checked])
 
   const {m, formatLargeNumber} = useI18n()
 
   return (
     <Box sx={{overflow: 'hidden'}}>
-      {Obj.keys(data).length === 0 && (
+      {data.length === 0 && (
         <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
           <Icon color="disabled" sx={{fontSize: 40, mb: 1}}>
             block
@@ -96,9 +109,9 @@ export const ChartBarContent = <K extends string>({
         </Box>
       )}
       {values.map((item, i) => {
-        const percentOfMax = 100 * (item.base ? item.ratio / maxRatio : item.value / maxValue)
+        const percentOfMax = 100 * (item.ratio / maxRatio)
         const k = item.key
-        const isSelected = checked?.includes(k)
+        const isSelected = checkedSet?.has(k)
         return (
           <TooltipWrapper item={item} base={item.base ?? sumValue} sumValue={sumValue} key={i}>
             <Box sx={{display: 'flex', alignItems: 'center'}} onClick={() => onClickData?.(k, item)}>

@@ -1,14 +1,15 @@
-import {Obj} from '@axanc/ts-utils'
+import {Obj, seq} from '@axanc/ts-utils'
 import {ReactNode, useMemo} from 'react'
-import {ChartBar} from './ChartBar.js'
-import {ChartBuilder, ChartValue} from './ChartBuilder.js'
+import {BarChartData, ChartBar} from './ChartBar.js'
+import {ChartBuilder, ChartEntry, ChartValue} from './ChartBuilder.js'
 interface ChartBarBaseProps<D extends Record<string, any>, K extends string> {
   onClickData?: (_: K) => void
   checked?: K[]
   data: D[]
   limit?: number
   labels?: Record<K, ReactNode>
-  skippedValues?: K[]
+  skippedKeys?: K[]
+  minValue?: number
   compareBy?: (_: D) => boolean
   orderKeys?: K[]
   /** @deprecated */
@@ -43,31 +44,39 @@ export const ChartBarBy = <D extends Record<string, any>, K extends string>({
   checked,
   labels,
   hideValue,
-  skippedValues,
+  skippedKeys,
   orderKeys,
+  minValue,
   basedOn,
   multiple,
   dense,
 }: ChartBarByProps<D, K>) => {
-  const computed: Obj<K, ChartValue> = useMemo(() => {
+  const computed: ChartEntry<K>[] = useMemo(() => {
     if (multiple)
       return ChartBuilder.groupByMultiple({
         data,
         by,
-        skippedValues,
+        skippedKeys,
         basedOn,
+        minValue,
         compareBy,
       })
     return ChartBuilder.groupBySingle({
       data,
       by,
-      skippedValues,
+      skippedKeys,
       compareBy,
+      minValue,
     })
-  }, [data, by, multiple, basedOn, skippedValues, compareBy])
+  }, [data, by, minValue, multiple, basedOn, skippedKeys, compareBy])
 
   const result = useMemo(() => {
-    return computed.take(limit).sortManual(orderKeys).get()
+    const sliced = computed.slice(0, limit)
+    return orderKeys
+      ? seq(sliced)
+          .sortByManual(_ => _[0], orderKeys)
+          .get()
+      : sliced
   }, [limit, computed, orderKeys, labels])
 
   return (

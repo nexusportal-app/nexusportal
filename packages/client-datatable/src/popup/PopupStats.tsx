@@ -1,12 +1,13 @@
 import React, {ReactNode, useMemo} from 'react'
-import {Box, Popover, PopoverProps} from '@mui/material'
+import {Box, Popover, PopoverProps, useTheme} from '@mui/material'
 import {Btn, ChartBarBy, ChartLineByDateFiltered, PanelBody, PanelFoot, PanelHead, Txt} from '@infoportal/client-core'
 import {KeyOf} from '@infoportal/common'
-import {seq} from '@axanc/ts-utils'
+import {Obj, seq} from '@axanc/ts-utils'
 import {Popup} from '../core/reducer'
 import {useCtx} from '../core/DatatableContext'
 import {useConfig} from '../DatatableConfig'
-import {Option, Row} from '../core/types.js'
+import {Column, Option, Row} from '../core/types.js'
+import {useI18n} from '@infoportal/client-i18n'
 
 export const PopupStats = ({columnId, event}: Popup.StatsAgs) => {
   const dispatch = useCtx(_ => _.dispatch)
@@ -16,7 +17,17 @@ export const PopupStats = ({columnId, event}: Popup.StatsAgs) => {
   const column = columnsIndex[columnId]
   const close = () => dispatch({type: 'CLOSE_POPUP'})
 
-  switch (column.type) {
+  switch (column.type as Column.Type) {
+    case 'string':
+      return (
+        <TxtPopover
+          title={column.head ?? columnId}
+          anchorEl={event.target}
+          getValue={(_: any) => column.render(_).value as any}
+          data={dataFilteredAndSorted ?? []}
+          onClose={close}
+        />
+      )
     case 'number':
       return (
         <NumberChoicesPopover
@@ -75,14 +86,15 @@ export const NumberChoicesPopover = <T,>({
   anchorEl,
   onClose,
 }: {
-  mapValues?: (_: any, i: number) => any
+  mapValues?: (_: any) => any
   question: KeyOf<T>
   data: T[]
 } & Pick<PopoverProps, 'anchorEl' | 'onClose'>) => {
+  const getValue = (_: T) => (mapValues ? mapValues(_) : _[question])
   const {m, formatLargeNumber} = useConfig()
   const chart = useMemo(() => {
     const mapped = seq(data)
-      .map((_, i) => (mapValues ? mapValues(_, i) : _[question]))
+      .map(getValue)
       .filter(_ => _ !== undefined && _ !== '')
       .map(_ => +_)
     const min = Math.min(...mapped)
@@ -100,6 +112,7 @@ export const NumberChoicesPopover = <T,>({
         <RenderRow label={m.average} value={formatLargeNumber(chart.avg, {maximumFractionDigits: 2})} />
         <RenderRow label={m.min} value={formatLargeNumber(chart.min)} />
         <RenderRow label={m.max} value={formatLargeNumber(chart.max)} />
+        <Deduplication data={data} getValue={getValue} />
       </PanelBody>
       <PanelFoot alignEnd>
         <Btn color="primary" onClick={onClose as any}>
@@ -197,5 +210,70 @@ const DatesPopover = <T,>({
         </Btn>
       </PanelFoot>
     </Popover>
+  )
+}
+const TxtPopover = <T,>({
+  getValue,
+  data,
+  anchorEl,
+  onClose,
+  title,
+}: {
+  getValue: (_: T) => Date | undefined
+  data: T[]
+  title: string
+} & Pick<PopoverProps, 'anchorEl' | 'onClose'>) => {
+  const {m} = useConfig()
+  return (
+    <Popover open={!!anchorEl} anchorEl={anchorEl} onClose={onClose}>
+      <PanelHead>{title}</PanelHead>
+      <PanelBody sx={{maxHeight: '50vh', overflowY: 'auto'}}>
+        <Deduplication data={data} getValue={getValue} />
+      </PanelBody>
+      <PanelFoot alignEnd>
+        <Btn color="primary" onClick={onClose as any}>
+          {m.close}
+        </Btn>
+      </PanelFoot>
+    </Popover>
+  )
+}
+
+const Deduplication = <T,>({getValue, data}: {getValue: (_: T) => any; data: T[]}) => {
+  const {m} = useI18n()
+  const t = useTheme()
+  const compute = useMemo(() => {
+    const counter = seq(data).groupByAndApplyToMap(
+      _ => getValue(_)!,
+      _ => _.length,
+    )
+    return seq([...counter.entries()])
+      .filter(([k, v]) => k !== '')
+      .sortByNumber(([k, v]) => v, '9-0')
+  }, [])
+  return (
+    <div>
+      <Txt bold size="big" block sx={{mb: 1}}>
+        {m.occurrences}
+      </Txt>
+      <Box sx={{minWidth: 200, maxHeight: 400, overflowY: 'scroll'}}>
+        {compute.map(([value, count]) => (
+          <Box
+            sx={{
+              pb: 0.5,
+              mb: 0.5,
+              display: 'flex',
+              borderBottom: '1px solid ' + t.vars.palette.divider,
+              justifyContent: 'space-between',
+            }}
+          >
+            <Txt color="hint" sx={{mr: 2}}>
+              {value}
+            </Txt>
+            <div>{count}</div>
+          </Box>
+        ))}
+      </Box>
+    </div>
   )
 }

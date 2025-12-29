@@ -205,6 +205,7 @@ export namespace Dashboard {
         base?: 'percentOfTotalAnswers' | 'percentOfTotalChoices'
         labels?: Record<string, string>
         limit?: number
+        minValue?: number
         mapping?: Record<string, string[]>
         hiddenChoices?: string[]
         showValue?: boolean

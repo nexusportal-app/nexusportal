@@ -13,9 +13,10 @@ import {useEffectFn} from '@axanc/react-hooks'
 import {Txt} from '@infoportal/client-core'
 import {useI18n} from '@infoportal/client-i18n'
 import {Box, Icon, Switch, useTheme} from '@mui/material'
-import {createRoute, useNavigate} from '@tanstack/react-router'
+import {createRoute, Link, useNavigate} from '@tanstack/react-router'
 import {useState} from 'react'
 import {Controller} from 'react-hook-form'
+import {UseQueryForm} from '@/core/query/form/useQueryForm'
 
 export const dashboardSettingsRoute = createRoute({
   getParentRoute: () => dashboardRoute,
@@ -33,6 +34,7 @@ export function DashboardSettings() {
   const dashboard = useDashboardContext(_ => _.dashboard)
   const dataRange = useDashboardContext(_ => _.dataRange)
 
+  const queryForm = UseQueryForm.get({workspaceId, formId: dashboard.sourceFormId})
   const queryUpdate = UseQueryDashboard.update({workspaceId})
   const queryRemove = UseQueryDashboard.remove({workspaceId})
   const queryPermission = UseQueryPermission.workspace({workspaceId})
@@ -87,6 +89,18 @@ export function DashboardSettings() {
         </Core.PanelBody>
       </Core.Panel>
       <Core.PanelWBody outsideTitle={m.data}>
+        <SettingsRow
+          icon="line_start_circle"
+          label={m.source}
+          desc={queryForm.data?.name}
+          action={
+            <Link target="_blank" to="/$workspaceId/form/$formId" params={{workspaceId, formId: dashboard.sourceFormId}}>
+              <Core.IconBtn  color="primary">
+                open_in_new
+              </Core.IconBtn>
+            </Link>
+          }
+        />
         <Controller
           control={form.control}
           name="start"

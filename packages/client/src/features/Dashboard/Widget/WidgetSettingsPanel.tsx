@@ -33,7 +33,7 @@ export const useWidgetSettingsContext = () => React.useContext(Context)
 export const getQuestionTypeByWidget = (type: Api.Dashboard.Widget.Type): Kobo.Form.QuestionType[] => {
   switch (type) {
     case 'BarChart': {
-      return ['select_multiple', 'select_one', 'calculate']
+      return ['select_multiple', 'text', 'integer', 'calculate', 'decimal', 'select_one', 'calculate']
     }
     case 'LineChart': {
       return ['date', 'datetime', 'calculate']

@@ -81,9 +81,26 @@ export function BarChartSettings() {
                 if (choices && value === choices?.length) field.onChange(null)
                 else field.onChange(value)
               }}
-              disabled={!choices}
               defaultValue={choices?.length}
-              max={choices?.length ?? 1}
+              max={choices?.length}
+              sx={{mb: 1}}
+            />
+          )}
+        />
+        <Controller
+          name="minValue"
+          control={form.control}
+          render={({field, fieldState}) => (
+            <SliderNumberInput
+              {...field}
+              label={m._dashboard.minValue}
+              value={field.value ?? 2}
+              onChange={(e, value) => {
+                if (choices && value === choices?.length) field.onChange(null)
+                else field.onChange(value)
+              }}
+              defaultValue={choices?.length ?? 2}
+              min={1}
               sx={{mb: 1}}
             />
           )}

@@ -214,7 +214,7 @@ function Overview() {
           <ViewMoreDiv>
             <Core.ChartBar
               dense
-              data={data}
+              data={Obj.entries(data)}
               // checked={selectedFormsSet.toArray}
               // onClickData={_ => selectedFormsSet.toggle(_)}
             />
@@ -234,7 +234,7 @@ function Overview() {
     })
     return (
       <Core.PanelWBody title={m.submissionsByCategory}>
-        <Core.ChartBar dense data={data} />
+        <Core.ChartBar dense data={Obj.entries(data)} />
       </Core.PanelWBody>
     )
   }, [querySubmissionsByCategory.data])
@@ -306,7 +306,7 @@ function Overview() {
         </Core.PanelHead>
         <Core.PanelBody>
           <ViewMoreDiv>
-            <Core.ChartBar dense data={data} labels={labels} />
+            <Core.ChartBar dense data={Obj.entries(data)} labels={labels} />
           </ViewMoreDiv>
         </Core.PanelBody>
       </Core.Panel>

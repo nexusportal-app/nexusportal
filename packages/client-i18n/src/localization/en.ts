@@ -72,6 +72,8 @@ export const en = Object.freeze({
     updating: 'Updating',
     users: 'Users',
     link: 'Link',
+    duplications: 'Duplications',
+    occurrences: 'Occurrences',
     choices: 'Choices',
     edit: 'Edit',
     type: 'Type',
@@ -340,6 +342,7 @@ export const en = Object.freeze({
       restorePublishedVersionDesc: 'Revert the dashboard to the last published version',
       restorePublishedDone: 'Successfully restored published version',
       successfullyPublished: 'Successfully published!',
+      minValue: 'Minimum value',
       theme: {
         primaryColor: 'Color',
         borderRadius: 'Border Radius',
