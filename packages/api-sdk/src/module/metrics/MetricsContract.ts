@@ -11,13 +11,15 @@ const types: Api.Metrics.ByType[] = ['location', 'user', 'status', 'category', '
 export const metricsContract = c.router({
   getSubmissionsBy: {
     method: 'POST',
-    path: '/metrics/submissionBy',
+    path: '/metrics/submissionBy/:type',
+    pathParams: z.object({
+      type: z.enum(types),
+    }),
     body: z.object({
       workspaceId: schema.workspaceId,
       start: z.coerce.date().optional(),
       end: z.coerce.date().optional(),
       formIds: z.array(schema.formId).optional(),
-      type: z.enum(types),
     }),
     responses: {
       200: c.type<Api.Metrics.CountByKey>(),
@@ -52,7 +54,8 @@ export const metricsClient = (client: TsRestClient, baseUrl: string) => ({
   }: {type: Api.Metrics.ByType; workspaceId: Api.WorkspaceId} & Api.Metrics.Payload.Filter) => {
     return client.metrics
       .getSubmissionsBy({
-        body: {workspaceId, type, ...parseQsDate(query)},
+        params: {type},
+        body: {workspaceId, ...parseQsDate(query)},
       })
       .then(map200)
   },

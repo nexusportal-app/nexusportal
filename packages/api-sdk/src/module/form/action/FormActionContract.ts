@@ -2,7 +2,7 @@ import {initContract} from '@ts-rest/core'
 import {z} from 'zod'
 import {makeMeta, schema} from '../../../helper/Schema.js'
 import {Api} from '../../../Api.js'
-import {map200, TsRestClient} from '../../../ApiClient.js'
+import {map200, map204, TsRestClient} from '../../../ApiClient.js'
 
 const c = initContract()
 
@@ -96,7 +96,7 @@ export const formActionClient = (client: TsRestClient) => {
       return client.form.action.runAllActionsByForm({body}).then(map200).then(Api.Form.Action.Report.map)
     },
     remove: (body: Api.Form.Action.Payload.Remove) => {
-      return client.form.action.remove({body}).then(map200)
+      return client.form.action.remove({body}).then(map204)
     },
   }
 }

@@ -547,7 +547,7 @@ export class RoutesTsRest extends Router {
             .then(this.ok200),
         getSubmissionsBy: _ =>
           this.auth(_)
-            .then(({req, body}) => metrics.submissionsBy({user: req.session.app.user, ...body}))
+            .then(({req, params, body}) => metrics.submissionsBy({user: req.session.app.user, ...params, ...body}))
             .then(this.ok200),
       },
     })

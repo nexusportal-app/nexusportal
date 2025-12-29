@@ -322,18 +322,18 @@ function Overview() {
       />
       <Grid container>
         <Grid container size={{xs: 12}}>
-          <Grid size={{xs: 6, sm: 3}}>{widgetSubmissionsCount}</Grid>
-          <Grid size={{xs: 6, sm: 3}}>{formsCount}</Grid>
-          <Grid size={{xs: 6, sm: 3}}>{formsImportedFromKobo}</Grid>
-          <Grid size={{xs: 6, sm: 3}}>{formsLinkedToKobo}</Grid>
+          <Grid size={{xs: 6, sm: 6, md: 3}}>{widgetSubmissionsCount}</Grid>
+          <Grid size={{xs: 6, sm: 6, md: 3}}>{formsCount}</Grid>
+          <Grid size={{xs: 6, sm: 6, md: 3}}>{formsImportedFromKobo}</Grid>
+          <Grid size={{xs: 6, sm: 6, md: 3}}>{formsLinkedToKobo}</Grid>
         </Grid>
-        <Grid size={{xs: 12, sm: 6}}>
+        <Grid size={{xs: 12, sm: 12, md: 6}}>
           {pieChartValidation}
           {submissionByTime}
           {submissionsByForm}
           {submissionsByCategory}
         </Grid>
-        <Grid size={{xs: 12, sm: 6}}>
+        <Grid size={{xs: 12, sm: 12, md: 6}}>
           {map}
           {usersByDate}
           {submissionsByUser}

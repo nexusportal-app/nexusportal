@@ -39,7 +39,9 @@ export const OverviewFiltersBar = ({
   }, [forms, filters.formTypes, filters.folderNames])
 
   return (
-    <Box sx={{mb: 1, display: 'flex', alignItems: 'center', '& > *': {mr: 1}}}>
+    <Box
+      sx={{mb: 1, display: 'flex', whiteSpace: 'nowrap', overflow: 'scroll', alignItems: 'center', '& > *': {mr: 1}}}
+    >
       <Core.PeriodPicker
         sx={{mt: 0, mb: 0, mr: 1}}
         value={[filters.period.start, filters.period.end]}

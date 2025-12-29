@@ -3,7 +3,6 @@ import {Api} from '@infoportal/api-sdk'
 import {FormService} from './form/FormService.js'
 import {duration, fnSwitch, Seq, seq} from '@axanc/ts-utils'
 import {app, AppCacheKey} from '../index.js'
-import {UserService} from './user/UserService.js'
 
 type Filters = {
   workspaceId: Api.WorkspaceId
@@ -18,7 +17,6 @@ type FiltersForm = Filters & {
 export class MetricsService {
   constructor(
     private prisma: PrismaClient,
-    private user = UserService.getInstance(prisma),
     private form = new FormService(prisma),
   ) {}
 
@@ -64,8 +62,9 @@ export class MetricsService {
 
   readonly submissionsBy = async (props: FiltersForm & {type: Api.Metrics.ByType}): Promise<Api.Metrics.CountByKey> => {
     const {type, workspaceId, start, end, formIds} = props
-    const allowedFormIds = await this.getAllowedFormIds(props).then(_ =>
-      formIds && formIds.length > 0 && type !== 'form' ? seq(_).intersect(formIds) : _,
+    const effectiveFormIds = await this.getAllowedFormIds(props).then(
+      allowedFormIds => (formIds && formIds.length > 0 ? seq(allowedFormIds).intersect(formIds) : allowedFormIds),
+      // formIds && formIds.length > 0 && type !== 'form' ? seq(allowedFormIds).intersect(formIds) : allowedFormIds,
     )
     if (type === 'month') return this.submissionsByMonth(props)
     else if (type === 'category') return this.submissionsByCategory(props)
@@ -82,7 +81,7 @@ export class MetricsService {
           _all: true,
         },
         where: {
-          formId: {in: allowedFormIds},
+          formId: {in: effectiveFormIds},
           isoCode: dbColumn === 'isoCode' ? {not: null} : undefined,
           deletedAt: null,
           submissionTime: {gte: start, lte: end},

@@ -69,5 +69,10 @@ export const queryKeys = {
     resource?: string,
     aggregation?: string,
     params?: Api.Metrics.Payload.Filter,
-  ) => [...concat('metrics', workspaceId, resource, aggregation), params],
+  ) => [
+    ...concat('metrics', workspaceId, resource, aggregation),
+    params?.formIds?.join(','),
+    params?.start,
+    params?.end,
+  ],
 }
