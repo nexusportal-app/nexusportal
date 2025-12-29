@@ -86,8 +86,8 @@ const AppWithConfig = () => {
       <AppWithBaseContext />
       {!settings.conf.production && (
         <>
-          <TanStackRouterDevtools />
-          <ReactQueryDevtools initialIsOpen={false} />
+          {/*<TanStackRouterDevtools />*/}
+          {/*<ReactQueryDevtools initialIsOpen={false} />*/}
         </>
       )}
     </Core.Provide>

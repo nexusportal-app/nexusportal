@@ -50,11 +50,8 @@ export const ChartGeo = ({
   const {mode} = useColorScheme()
   const t = useTheme()
   const [selectedCountry, setSelectedCountry] = useState<CountryCode | null>(null)
+  const [autoSelected, setAutoSelected] = useState(false)
   const datalessRegionColor = selectedCountry ? 'transparent' : mode === 'dark' ? '#2b3c4f' : '#e0e0e0'
-
-  useEffect(() => {
-    if (country) setSelectedCountry(country)
-  }, [country])
 
   const {countries, regions} = useMemo(() => {
     const grouped = groupGeoData(data)
@@ -75,8 +72,18 @@ export const ChartGeo = ({
   }, [selectedCountry, data])
 
   useEffect(() => {
-    if (!country && countries.size === 1) setSelectedCountry([...countries.keys()][0])
-  }, [countries, country])
+    if (!country && countries.size === 1 && !autoSelected) {
+      setSelectedCountry([...countries.keys()][0])
+      setAutoSelected(true)
+    }
+  }, [countries, country, autoSelected])
+
+  useEffect(() => {
+    if (country) {
+      setSelectedCountry(country)
+      setAutoSelected(true)
+    }
+  }, [country])
 
   const formattedData = useMemo(() => {
     const source = selectedCountry ? regions.get(selectedCountry) : countries

@@ -172,12 +172,14 @@ function Overview() {
       </Core.PanelBody>
     </Core.Panel>
   )
+  const map = useMemo(() => {
+    return (
+      <Core.Panel title={m.submissionsByLocation}>
+        <Core.ChartGeo data={queryUsersByIsoCode.data?.map(_ => ({iso: _.key, count: _.count}))} />
+      </Core.Panel>
+    )
+  }, [queryUsersByIsoCode.data])
 
-  const map = (
-    <Core.Panel title={m.submissionsByLocation}>
-      <Core.ChartGeo data={queryUsersByIsoCode.data?.map(_ => ({iso: _.key, count: _.count}))} />
-    </Core.Panel>
-  )
   const submissionByTime = useMemo(() => {
     if (!querySubmissionByMonth.data) return
     const data = querySubmissionByMonth.data?.map(_ => {
