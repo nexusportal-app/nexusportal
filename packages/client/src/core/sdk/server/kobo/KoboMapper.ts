@@ -35,6 +35,11 @@ export class KoboMapper {
       const type = indexedSchema[question]?.type
       if (!type || !answer) return
       switch (type) {
+        case 'integer':
+        case 'decimal': {
+          res[question] = isNaN(answer) ? answer : +answer
+          break
+        }
         case 'today':
         case 'date': {
           res[question] = new Date(answer as Date)

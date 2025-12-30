@@ -54,6 +54,7 @@ const defaultConfig = {
     hidden: 'Hidden',
     visible: 'Visible',
     copied: 'Copied',
+    duplications: 'Duplications',
     group: 'Group',
     question: 'Question',
     sort: 'Sort',
@@ -89,8 +90,8 @@ const Context = React.createContext<DatatableConfigProps>(defaultConfig)
 
 export const DatatableConfig: React.FC<
   Partial<DatatableConfigProps> & {
-  children?: React.ReactNode
-}
+    children?: React.ReactNode
+  }
 > = ({defaultProps = {}, children, m, muiIcons, formatLargeNumber = defaultConfig.formatLargeNumber}) => {
   return (
     <Context.Provider
@@ -101,7 +102,7 @@ export const DatatableConfig: React.FC<
         formatLargeNumber,
       }}
     >
-      <DatatableGlobalStyles/>
+      <DatatableGlobalStyles />
       {children}
     </Context.Provider>
   )

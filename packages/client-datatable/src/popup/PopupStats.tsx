@@ -1,13 +1,12 @@
 import React, {ReactNode, useMemo} from 'react'
-import {Box, Popover, PopoverProps, useTheme} from '@mui/material'
+import {Box, Popover, PopoverProps} from '@mui/material'
 import {Btn, ChartBarBy, ChartLineByDateFiltered, PanelBody, PanelFoot, PanelHead, Txt} from '@infoportal/client-core'
 import {KeyOf} from '@infoportal/common'
-import {Obj, seq} from '@axanc/ts-utils'
+import {Seq, seq} from '@axanc/ts-utils'
 import {Popup} from '../core/reducer'
 import {useCtx} from '../core/DatatableContext'
 import {useConfig} from '../DatatableConfig'
 import {Column, Option, Row} from '../core/types.js'
-import {useI18n} from '@infoportal/client-i18n'
 
 export const PopupStats = ({columnId, event}: Popup.StatsAgs) => {
   const dispatch = useCtx(_ => _.dispatch)
@@ -18,19 +17,20 @@ export const PopupStats = ({columnId, event}: Popup.StatsAgs) => {
   const close = () => dispatch({type: 'CLOSE_POPUP'})
 
   switch (column.type as Column.Type) {
-    case 'string':
-      return (
-        <TxtPopover
-          title={column.head ?? columnId}
-          anchorEl={event.target}
-          getValue={(_: any) => column.render(_).value as any}
-          data={dataFilteredAndSorted ?? []}
-          onClose={close}
-        />
-      )
+    // case 'string':
+    //   return (
+    //     <TxtPopover
+    //       title={column.head ?? columnId}
+    //       anchorEl={event.target}
+    //       getValue={(_: any) => column.render(_).value as any}
+    //       data={dataFilteredAndSorted ?? []}
+    //       onClose={close}
+    //     />
+    //   )
     case 'number':
       return (
-        <NumberChoicesPopover
+        <NumberPopover
+          title={column.head ?? columnId}
           anchorEl={event.target}
           question={columnId}
           mapValues={(_: any) => column.render(_).value as any}
@@ -49,10 +49,12 @@ export const PopupStats = ({columnId, event}: Popup.StatsAgs) => {
         />
       )
     }
+    case 'string':
     case 'select_multiple':
     case 'select_one': {
       return (
         <MultipleChoicesPopover
+          minValue={column.type !== 'select_one' && column.type !== 'select_multiple' ? 2 : undefined}
           translations={getColumnOptions(columnId)}
           anchorEl={event.target}
           multiple={column.type === 'select_multiple'}
@@ -79,13 +81,15 @@ const RenderRow = ({label, value}: {label: ReactNode; value: ReactNode}) => {
   )
 }
 
-export const NumberChoicesPopover = <T,>({
+export const NumberPopover = <T extends Record<string, any>>({
   question,
   data,
+  title,
   mapValues,
   anchorEl,
   onClose,
 }: {
+  title?: string
   mapValues?: (_: any) => any
   question: KeyOf<T>
   data: T[]
@@ -93,10 +97,13 @@ export const NumberChoicesPopover = <T,>({
   const getValue = (_: T) => (mapValues ? mapValues(_) : _[question])
   const {m, formatLargeNumber} = useConfig()
   const chart = useMemo(() => {
-    const mapped = seq(data)
-      .map(getValue)
-      .filter(_ => _ !== undefined && _ !== '')
-      .map(_ => +_)
+    const mapped: Seq<number> = seq([])
+    for (let i = 0; i < data.length; i++) {
+      const v = getValue(data[i])
+      if (v === undefined || v === '') continue
+      const n = Number(v)
+      if (!Number.isNaN(n)) mapped.push(n)
+    }
     const min = Math.min(...mapped)
     const max = Math.max(...mapped)
     const sum = mapped.sum()
@@ -105,14 +112,15 @@ export const NumberChoicesPopover = <T,>({
   }, [data, question])
   return (
     <Popover open={!!anchorEl} anchorEl={anchorEl} onClose={onClose}>
-      <PanelHead>{question as string}</PanelHead>
+      <PanelHead>{title}</PanelHead>
       <PanelBody>
         <RenderRow label={m.count} value={formatLargeNumber(chart.mapped.length)} />
         <RenderRow label={m.sum} value={formatLargeNumber(chart.sum)} />
         <RenderRow label={m.average} value={formatLargeNumber(chart.avg, {maximumFractionDigits: 2})} />
         <RenderRow label={m.min} value={formatLargeNumber(chart.min)} />
         <RenderRow label={m.max} value={formatLargeNumber(chart.max)} />
-        <Deduplication data={data} getValue={getValue} />
+        <Txt bold>{m.duplications}</Txt>
+        <ChartBarBy minValue={2} data={data} by={_ => getValue(_) as any} />
       </PanelBody>
       <PanelFoot alignEnd>
         <Btn color="primary" onClick={onClose as any}>
@@ -131,7 +139,9 @@ const MultipleChoicesPopover = <T extends Row>({
   onClose,
   multiple,
   translations,
+  minValue,
 }: {
+  minValue?: number
   title?: ReactNode
   translations?: Option[]
   // multiple?: boolean
@@ -164,7 +174,7 @@ const MultipleChoicesPopover = <T extends Row>({
         <Txt truncate>{title}</Txt>
       </PanelHead>
       <PanelBody sx={{maxHeight: '50vh', overflowY: 'auto'}}>
-        <ChartBarBy data={data} by={_ => getValue(_) as any} multiple={multiple} labels={labels} />
+        <ChartBarBy minValue={minValue} data={data} by={_ => getValue(_) as any} multiple={multiple} labels={labels} />
       </PanelBody>
       <PanelFoot alignEnd>
         <Btn color="primary" onClick={onClose as any}>
@@ -210,70 +220,5 @@ const DatesPopover = <T,>({
         </Btn>
       </PanelFoot>
     </Popover>
-  )
-}
-const TxtPopover = <T,>({
-  getValue,
-  data,
-  anchorEl,
-  onClose,
-  title,
-}: {
-  getValue: (_: T) => Date | undefined
-  data: T[]
-  title: string
-} & Pick<PopoverProps, 'anchorEl' | 'onClose'>) => {
-  const {m} = useConfig()
-  return (
-    <Popover open={!!anchorEl} anchorEl={anchorEl} onClose={onClose}>
-      <PanelHead>{title}</PanelHead>
-      <PanelBody sx={{maxHeight: '50vh', overflowY: 'auto'}}>
-        <Deduplication data={data} getValue={getValue} />
-      </PanelBody>
-      <PanelFoot alignEnd>
-        <Btn color="primary" onClick={onClose as any}>
-          {m.close}
-        </Btn>
-      </PanelFoot>
-    </Popover>
-  )
-}
-
-const Deduplication = <T,>({getValue, data}: {getValue: (_: T) => any; data: T[]}) => {
-  const {m} = useI18n()
-  const t = useTheme()
-  const compute = useMemo(() => {
-    const counter = seq(data).groupByAndApplyToMap(
-      _ => getValue(_)!,
-      _ => _.length,
-    )
-    return seq([...counter.entries()])
-      .filter(([k, v]) => k !== '')
-      .sortByNumber(([k, v]) => v, '9-0')
-  }, [])
-  return (
-    <div>
-      <Txt bold size="big" block sx={{mb: 1}}>
-        {m.occurrences}
-      </Txt>
-      <Box sx={{minWidth: 200, maxHeight: 400, overflowY: 'scroll'}}>
-        {compute.map(([value, count]) => (
-          <Box
-            sx={{
-              pb: 0.5,
-              mb: 0.5,
-              display: 'flex',
-              borderBottom: '1px solid ' + t.vars.palette.divider,
-              justifyContent: 'space-between',
-            }}
-          >
-            <Txt color="hint" sx={{mr: 2}}>
-              {value}
-            </Txt>
-            <div>{count}</div>
-          </Box>
-        ))}
-      </Box>
-    </div>
   )
 }

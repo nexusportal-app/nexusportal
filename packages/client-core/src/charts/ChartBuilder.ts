@@ -47,7 +47,7 @@ export class ChartBuilder {
 
     const result: ChartEntry<K>[] = []
     for (const [key, v] of values) {
-      if (minValue && v.value <= minValue) continue
+      if (minValue && v.value < minValue) continue
 
       v.base = base
       v.ratio = base ? v.value / base : 0
@@ -147,7 +147,7 @@ export class ChartBuilder {
     }
     const result: ChartEntry<K>[] = []
     for (const [key, v] of values) {
-      if (minValue && v.value <= minValue) continue
+      if (minValue && v.value < minValue) continue
 
       v.base = base
       v.ratio = base ? v.value / base : 0

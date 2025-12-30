@@ -317,34 +317,34 @@ export const muiTheme = ({
           spacing: 1,
         },
       },
-      MuiSlider: {
-        styleOverrides: {
-          root: ({theme}) => ({
-            borderRadius: styleUtils(theme).color.input.default.borderRadius,
-            height: 22,
-            padding: 0,
-            //   '&:active .MuiSlider-thumb': {
-            //     width: 2,
-            //     height: 28,
-            //   },
-          }),
-          thumb: ({theme}) => ({
-            background: 'transparent',
-            '&:before': {
-              boxShadow: 'none',
-            },
-            // '&:active': {
-            //   width: 2,
-            //   height: 28,
-            // },
-            // transition: theme.transitions.create('height'),
-            // width: 5,
-            // height: 22,
-            // borderRadius: 4,
-            // WebkitMask: 'radial-gradient(circle 4px at center, transparent 99%, black 100%)',
-          }),
-        },
-      },
+      // MuiSlider: {
+      //   styleOverrides: {
+      //     root: ({theme}) => ({
+      //       borderRadius: styleUtils(theme).color.input.default.borderRadius,
+      //       height: 22,
+      //       padding: 0,
+      //       //   '&:active .MuiSlider-thumb': {
+      //       //     width: 2,
+      //       //     height: 28,
+      //       //   },
+      //     }),
+      //     thumb: ({theme}) => ({
+      //       background: 'transparent',
+      //       '&:before': {
+      //         boxShadow: 'none',
+      //       },
+      //       // '&:active': {
+      //       //   width: 2,
+      //       //   height: 28,
+      //       // },
+      //       // transition: theme.transitions.create('height'),
+      //       // width: 5,
+      //       // height: 22,
+      //       // borderRadius: 4,
+      //       // WebkitMask: 'radial-gradient(circle 4px at center, transparent 99%, black 100%)',
+      //     }),
+      //   },
+      // },
       MuiChip: {
         styleOverrides: {
           outlined: ({theme}) => ({
