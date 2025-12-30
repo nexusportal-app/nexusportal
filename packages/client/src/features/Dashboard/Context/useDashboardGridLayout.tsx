@@ -1,16 +1,16 @@
 import {Api} from '@infoportal/api-sdk'
 import {useMemo} from 'react'
-import {ResponsiveProps} from 'react-grid-layout'
+import {ReactGridLayoutProps, ResponsiveProps} from 'react-grid-layout'
 
-export type UseDashboardGridLayout = Pick<
+export type UseDashboardGridLayoutResponsive = Pick<
   ResponsiveProps,
   'layouts' | 'breakpoints' | 'cols' | 'margin' | 'rowHeight' | 'width'
 >
 
-export const useDashboardGridLayout = (
+export const useDashboardGridLayoutResponsive = (
   widgets: Api.Dashboard.Widget[],
   dashboard: Api.Dashboard,
-): UseDashboardGridLayout => {
+): UseDashboardGridLayoutResponsive => {
   const spacing = dashboard.theme.spacing ?? 8
 
   const layouts = useMemo(() => {
@@ -37,6 +37,30 @@ export const useDashboardGridLayout = (
     breakpoints: {lg: 1200, md: 769, sm: 768, xs: 480, xxs: 0},
     cols: {lg: 12, md: 12, sm: 6, xs: 6, xxs: 6},
     margin: [spacing, spacing],
+    rowHeight: 10,
+    width: 1200,
+  }
+}
+
+export type UseDashboardGridLayoutStatic = ReactGridLayoutProps
+
+export const useDashboardGridLayoutStatic = (
+  widgets: Api.Dashboard.Widget[],
+  dashboard: Api.Dashboard,
+): UseDashboardGridLayoutStatic => {
+  const spacing = dashboard.theme.spacing ?? 8
+
+  const layout = useMemo(() => {
+    return widgets.map(w => ({
+      i: w.id,
+      ...w.position,
+    }))
+  }, [widgets])
+
+  return {
+    layout,
+    cols: 12,
+    margin: [spacing, spacing] as [number, number],
     rowHeight: 10,
     width: 1200,
   }

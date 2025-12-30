@@ -162,6 +162,7 @@ const AppWithBaseContext = () => {
               sum: m.sum,
               average: m.average,
               min: m.min,
+              duplications: m.duplications,
               max: m.max,
               currentlyDisplayed: m._datatable.currentlyDisplayed,
               filter: m.filter,

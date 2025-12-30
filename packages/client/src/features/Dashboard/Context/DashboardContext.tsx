@@ -11,7 +11,12 @@ import {Dispatch, ReactNode, SetStateAction, useMemo, useState} from 'react'
 import {createContext, useContextSelector} from 'use-context-selector'
 import {UseDashboardFilteredDataCache, useDashboardFilteredDataCache} from './useDashboardData'
 import {UseDashboardFormEdit, useDashboardFormEdit} from './useDashboardFormEdit'
-import {UseDashboardGridLayout, useDashboardGridLayout} from '@/features/Dashboard/Context/useDashboardGridLayout'
+import {
+  UseDashboardGridLayoutResponsive,
+  useDashboardGridLayoutResponsive,
+  useDashboardGridLayoutStatic,
+  UseDashboardGridLayoutStatic,
+} from '@/features/Dashboard/Context/useDashboardGridLayout'
 
 // TODO this type could be globalized. It's maybe defined somewhere already
 export type Answers = Api.Submission.Meta & Record<string, any>
@@ -30,7 +35,8 @@ export type DashboardContext = {
   widgetsBySection: Map<Api.Dashboard.SectionId, Api.Dashboard.Widget[]>
   sections: Api.Dashboard.Section[]
   updateForm: UseDashboardFormEdit
-  gridLayout: UseDashboardGridLayout
+  gridLayoutResponsive: UseDashboardGridLayoutResponsive
+  gridLayoutStatic: UseDashboardGridLayoutStatic
 }
 
 const Context = createContext<DashboardContext>({} as DashboardContext)
@@ -99,11 +105,13 @@ export const DashboardProvider = ({
 
   const updateForm = useDashboardFormEdit({workspaceId, dashboard})
 
-  const gridLayout = useDashboardGridLayout(widgets, dashboard)
+  const gridLayoutResponsive = useDashboardGridLayoutResponsive(widgets, dashboard)
+  const gridLayoutStatic = useDashboardGridLayoutStatic(widgets, dashboard)
   return (
     <Context.Provider
       value={{
-        gridLayout,
+        gridLayoutResponsive,
+        gridLayoutStatic,
         updateForm,
         flattenRepeatGroupData,
         dataRange,
