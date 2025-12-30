@@ -14,12 +14,12 @@ import {Box, Collapse, Icon, Theme, ThemeProvider, useTheme} from '@mui/material
 import {createRoute} from '@tanstack/react-router'
 import {Api} from '@infoportal/api-sdk'
 import {useCallback, useMemo, useState} from 'react'
-import {Responsive, WidthProvider} from 'react-grid-layout'
+import GridLayout, {WidthProvider} from 'react-grid-layout'
 import 'react-grid-layout/css/styles.css'
 import {DeleteSectionBtn} from '@/features/Dashboard/Section/DashboardSectionBtnDelete'
 import {DashboardSectionBtnCreate} from '@/features/Dashboard/Section/DashboardSectionBtnCreate'
 
-const GridLayout = WidthProvider(Responsive)
+const FixedGridLayout = WidthProvider(GridLayout)
 
 export const dashboardSectionRoute = createRoute({
   getParentRoute: () => dashboardRoute,
@@ -71,7 +71,7 @@ export function DashboardSection() {
     [queryWidgetUpdate],
   )
 
-  const layout = useDashboardContext(_ => _.gridLayout)
+  const layout = useDashboardContext(_ => _.gridLayoutStatic)
 
   const theme: Theme = useMemo(() => {
     return muiTheme({
@@ -147,7 +147,7 @@ export function DashboardSection() {
             >
               <Box sx={{position: 'relative'}}>
                 <GridResponsiveDivider />
-                <GridLayout
+                <FixedGridLayout
                   onLayoutChange={layout => {
                     layout.forEach(({i, x, y, h, w}) => {
                       if (w <= 0 || h <= 0) return
@@ -186,7 +186,7 @@ export function DashboardSection() {
                       </Icon>
                     </Box>
                   ))}
-                </GridLayout>
+                </FixedGridLayout>
               </Box>
               <DashboardSectionBtnCreate
                 sectionId={sectionId}

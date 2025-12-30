@@ -149,7 +149,7 @@ function WithContext({snapshot}: {snapshot: Api.DashboardWithSnapshot['snapshot'
 }
 
 function Section({widgets, dashboard}: {dashboard: Api.Dashboard; widgets: Api.Dashboard.Widget[]}) {
-  const layout = useDashboardContext(_ => _.gridLayout)
+  const layout = useDashboardContext(_ => _.gridLayoutResponsive)
 
   return (
     <GridLayout
