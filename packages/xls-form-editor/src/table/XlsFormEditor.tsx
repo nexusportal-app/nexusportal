@@ -50,6 +50,7 @@ export const XlsFormEditorWithStore = ({value, saving, onChange, onCommit}: XlsF
   const past = useXlsFormState(_ => _.past)
   const future = useXlsFormState(_ => _.future)
 
+  const [lastSelectedRowKey, setLastSelectedRowKey] = useState<string | undefined>(undefined)
   const [rowsToAdd, setRowsToAdd] = useState(1)
   const [validationReport, setValidationReport] = useState<ErrorModalValue | undefined>()
   const [activeTab, setActiveTab] = useState<TableName>('survey')
@@ -95,6 +96,14 @@ export const XlsFormEditorWithStore = ({value, saving, onChange, onCommit}: XlsF
 
   const handleEvent = useCallback((action: Datatable.Action<Api.Form.Question | Api.Form.Choice>) => {
     switch (action.type) {
+      case 'CELL_SELECTION_SET_ROW_IDS': {
+        setLastSelectedRowKey(action.rowIds ? (action.rowIds[action.rowIds.length - 1] as string) : undefined)
+        break
+      }
+      case 'CELL_SELECTION_CLEAR': {
+        setLastSelectedRowKey(undefined)
+        break
+      }
       case 'REORDER_ROWS': {
         reorderRows({table: activeTab, ...action})
         break
@@ -169,7 +178,7 @@ export const XlsFormEditorWithStore = ({value, saving, onChange, onCommit}: XlsF
       <Box sx={{display: 'flex', alignItems: 'center', whiteSpace: 'nowrap', my: 0.5}}>
         <Core.Btn
           onClick={() => {
-            addSurveyRow({table: activeTab, count: rowsToAdd})
+            addSurveyRow({table: activeTab, count: rowsToAdd, atRowKey: lastSelectedRowKey})
             setTimeout(() => datatableHandle.current?.scrollBottom())
           }}
           icon="add"

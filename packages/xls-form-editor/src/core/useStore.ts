@@ -15,7 +15,7 @@ export interface XlsFormState {
   setTranslations: (translations: Api.Form.Schema['translations']) => void
   setSchema: (_: Api.Form.Schema) => void
   reorderRows: (_: {table: TableName; index: number; rowIds: string[]}) => void
-  addRows: (_: {table: TableName; count: number}) => void
+  addRows: (_: {table: TableName; count: number; atRowKey?: string}) => void
   deleteRows: (_: {table: TableName; rowIds: string[]}) => void
   updateCells: (_: {
     table: TableName
@@ -91,29 +91,34 @@ export const createXlsStore = (
           })
         },
 
-        addRows: ({table, count}) =>
+        addRows: ({table, count, atRowKey}) =>
           withHistory(draft => {
+            console.log(atRowKey)
             const t = draft.schema[table] ?? []
-            const start = t.length
-            const end = t.length + count
+            const insertIndex = atRowKey ? t.findIndex(r => r.$kuid === atRowKey) : -1
+            const index = insertIndex >= 0 ? insertIndex : t.length
+            const rows: any[] = []
 
-            for (let i = start; i < end; i++) {
+            for (let i = 0; i < count; i++) {
               const emptySurvey: Api.Form.Question = {
                 name: '',
-                $xpath: null as any, // Filled later
+                $xpath: null as any, // Filled later on save
                 calculation: '',
                 type: 'text',
                 $kuid: SchemaParser.gen$kuid(),
               }
+
               const emptyChoice: Api.Form.Choice = {
                 name: '',
                 $kuid: SchemaParser.gen$kuid(),
                 list_name: '',
                 label: [],
               }
-              const emptyRow = table === 'survey' ? emptySurvey : emptyChoice
-              t.push({...emptyRow} as any)
+
+              rows.push(table === 'survey' ? emptySurvey : emptyChoice)
             }
+
+            t.splice(index, 0, ...rows)
           }),
 
         deleteRows: ({table, rowIds}) =>
