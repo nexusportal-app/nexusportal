@@ -5,13 +5,12 @@ import {AppHeaderMenu} from '@/core/layout/AppHeaderMenu'
 import {Core} from '@/shared'
 import {useLayoutContext} from '@/shared/Layout/LayoutContext'
 import {Obj} from '@axanc/ts-utils'
-import {Badge, Box, BoxProps, Icon, MenuItem, Slide, useColorScheme, useTheme} from '@mui/material'
+import {Badge, BoxProps, Icon, MenuItem, Slide, useColorScheme, useTheme} from '@mui/material'
 import {Link, useNavigate} from '@tanstack/react-router'
 import {Api} from '@infoportal/api-sdk'
 import {UseQueryWorkspaceInvitation} from '@/core/query/workspace/useQueryWorkspaceInvitation.js'
 import {appConfig} from '@/conf/AppConfig.js'
 import React from 'react'
-import {height} from '@mui/system'
 import {IpLogo} from '@/shared/logo/logo'
 import {ToggleSidebarButton} from '@/core/layout/ToggleSidebarButton'
 
@@ -41,7 +40,8 @@ export const AppHeader = ({workspaceId, children, sx, id = 'aa-header-id', ...pr
         component="header"
         sx={{
           minHeight: 39,
-          px: 1,
+          pl: .5,
+          pr: 1,
           display: 'flex',
           alignItems: 'center',
           background: Core.alphaVar(t.vars.palette.background.paper, 0.35),

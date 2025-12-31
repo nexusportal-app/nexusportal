@@ -89,7 +89,7 @@ function FormBuilder() {
           >
             <Box
               sx={{
-                gap: t.vars.spacing,
+                gap: showPreview ? t.vars.spacing : 0,
                 justifyItems: 'center',
                 width: showPreview ? '100%' : '100%',
                 margin: 'auto',
