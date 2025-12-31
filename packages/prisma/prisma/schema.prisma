@@ -435,7 +435,7 @@ model Dashboard {
   category         String?
   description      String?
   sections         DashboardSection[]
-  sourceform       Form               @relation(fields: [sourceFormId], references: [id])
+  sourceform       Form               @relation(fields: [sourceFormId], references: [id], onDelete: Cascade)
   sourceFormId     String             @db.VarChar(32)
   workspace        Workspace          @relation(fields: [workspaceId], references: [id])
   workspaceId      String             @db.Uuid
@@ -471,7 +471,7 @@ model DashboardSection {
   description String?
   createdAt   DateTime          @default(now())
   widgets     DashboardWidget[]
-  dashboard   Dashboard         @relation(fields: [dashboardId], references: [id])
+  dashboard   Dashboard         @relation(fields: [dashboardId], references: [id], onDelete: Cascade)
   dashboardId String
 }
 

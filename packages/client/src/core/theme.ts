@@ -268,7 +268,6 @@ export const muiTheme = ({
           root: ({theme}) => ({
             border: cardBorderSize ? `${cardBorderSize}px solid` : 'none',
             borderColor: cardBorderColor ?? theme.vars.palette.divider,
-            // border: `1px solid ${theme.vars.palette.divider}`,
           }),
         },
       },
@@ -401,7 +400,7 @@ export const muiTheme = ({
       MuiDialog: {
         styleOverrides: {
           paper: ({theme}) => ({
-            background: alphaVar(theme.vars.palette.background.paper, 0.7),
+            background: alphaVar(theme.vars.palette.background.paper, 1),
           }),
         },
       },
