@@ -108,13 +108,14 @@ const buildCachedData = <T extends Row>({
   columns.forEach(col => {
     classNameTdIndex[col.id] = getColumnClassName(col)
   })
+
   dataIndexes.forEach(index => {
     const row = data[index]
     columns.forEach(col => {
       if (!row) return
       const rendered = col.render(row) // : {label: '?', value: '?'}
       const rowId = getRowKey(row)
-      if (!rowId) return
+      if (rowId === undefined || rowId === null) return
       if (!result[rowId]) result[rowId] = {}
       result[rowId][col.id] = {
         label: rendered.label,
@@ -202,7 +203,7 @@ function createHandlerMap<T extends Row>(): HandlerMap<T> {
 
     APPEND_VIEWPORT_CACHE: (state, {limit, offset, data, columns, getRowKey}) => {
       const missingIndexes: number[] = []
-      for (let i = offset; i <= offset + limit; i++) {
+      for (let i = offset; i < offset + limit && i < data.length; i++) {
         if (!state.hasRenderedRowId[i]) {
           state.hasRenderedRowId[i] = true
           missingIndexes.push(i)
