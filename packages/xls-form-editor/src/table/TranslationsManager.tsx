@@ -1,13 +1,13 @@
 import {Box, InputBase, useTheme} from '@mui/material'
 import * as Core from '@infoportal/client-core'
-import {useXlsFormStore} from '../core/useStore'
 import {useI18n} from '@infoportal/client-i18n'
+import {useXlsFormState} from './XlsFormEditorContext'
 
 export const TranslationsManager = () => {
   const {m} = useI18n()
   const t = useTheme()
-  const translations = useXlsFormStore(_ => _.schema.translations)
-  const setTranslations = useXlsFormStore(_ => _.setTranslations)
+  const translations = useXlsFormState(_ => _.schema.translations)
+  const setTranslations = useXlsFormState(_ => _.setTranslations)
   return (
     <Core.Modal
       title={m.translations}

@@ -9,7 +9,7 @@ import {questionTypeMuiIcon} from '@infoportal/form-helper'
 
 type QType = Exclude<Api.Form.QuestionType, (typeof skippedQuestionTypes)[number]>
 
-const separators: Seq<QType> = seq(['end_repeat', 'select_multiple', 'datetime'])
+const separators: Seq<QType> = seq(['end_repeat', 'select_one_from_file', 'calculate', 'datetime'])
 
 const options: Core.SelectOption<QType>[] = seq(Obj.keys(questionTypeMuiIcon) as QType[])
   .filter(_ => !skippedQuestionTypes.includes(_ as any))
@@ -19,11 +19,8 @@ const options: Core.SelectOption<QType>[] = seq(Obj.keys(questionTypeMuiIcon) as
       key: qType,
       value: qType,
       children: (
-        <
-          // sx={{borderBottom: separators.has(qType) ? '1px solid silver' : undefined}}
-        >
+        <>
           <Icon
-            data-value={qType}
             children={questionTypeMuiIcon[qType]}
             sx={{color: t => t.vars.palette.text.secondary, ml: -0.5, mr: 1}}
           />{' '}

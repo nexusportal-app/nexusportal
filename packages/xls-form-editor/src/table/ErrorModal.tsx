@@ -75,7 +75,9 @@ const ErrorItem = ({label, errors}: {label: string; errors?: (string | number)[]
   if (!errors) return null
   return (
     <>
-      <Core.Txt sx={{mb: 1}} block bold>{label}</Core.Txt>
+      <Core.Txt sx={{mb: 1}} block bold>
+        {label}
+      </Core.Txt>
       <Box sx={{display: 'flex', gap: t.vars?.spacing, flexWrap: 'wrap'}}>
         {errors.map((item, i) => (
           <Chip size="small" label={item} key={i} />

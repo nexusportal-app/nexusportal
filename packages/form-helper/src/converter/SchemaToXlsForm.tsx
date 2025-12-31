@@ -29,7 +29,7 @@ export class SchemaToXlsForm {
     const wb = XLSX.utils.book_new()
 
     const surveySheet = XLSX.utils.json_to_sheet(this.table.survey)
-    const choicesSheet = XLSX.utils.json_to_sheet(this.table.choices)
+    const choicesSheet = XLSX.utils.json_to_sheet(this.table.choices, {header: ['list_name', 'name', 'label']})
     const settingsRows = Object.keys(this.table.settings).length ? [this.table.settings] : []
 
     const settingsSheet = XLSX.utils.json_to_sheet(settingsRows)

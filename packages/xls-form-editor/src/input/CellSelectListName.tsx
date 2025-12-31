@@ -1,11 +1,11 @@
 import * as Core from '@infoportal/client-core'
 import {SelectSingle} from '@infoportal/client-core'
-import {useXlsFormStore} from '../core/useStore'
 import {CellPointer, useCell} from '../core/useCell'
 import {BoxProps, useTheme} from '@mui/material'
 import {seq} from '@axanc/ts-utils'
 import {useMemo} from 'react'
 import {cellSelectSx} from './CellSelectType'
+import {useXlsFormState} from '../table/XlsFormEditorContext'
 
 export const SelectListName = ({
   value,
@@ -15,7 +15,7 @@ export const SelectListName = ({
   value?: string
   onChange: (_: string) => void
 } & Omit<Core.SelectSingleNullableProps, 'options' | 'value' | 'onChange'>) => {
-  const choices = useXlsFormStore(s => s.schema.choices)
+  const choices = useXlsFormState(s => s.schema.choices)
 
   const options = useMemo(() => {
     return seq(choices)
@@ -46,7 +46,7 @@ export const CellSelectListName = ({
         },
       }}
       sx={{
-        ...cellSelectSx as any,
+        ...(cellSelectSx as any),
         ...sx,
       }}
       value={cell.value}

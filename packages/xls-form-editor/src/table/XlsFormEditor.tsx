@@ -1,16 +1,26 @@
 import {Box, SxProps, Tab, Tabs, useTheme} from '@mui/material'
 import * as Datatable from '@infoportal/client-datatable'
 import {useI18n} from '@infoportal/client-i18n'
-import {getDataKey, useXlsFormStore} from '../core/useStore'
+import {getDataKey} from '../core/useStore'
 import {useCallback, useEffect, useMemo, useRef, useState} from 'react'
 import * as Core from '@infoportal/client-core'
 import {Api} from '@infoportal/api-sdk'
 import {ActionBar} from './ActionBar'
 import {getChoicesColumns} from './getChoicesColumns'
 import {getSurveyColumns} from './getSurveyColumns'
-import {SchemaParser, SchemaValidator} from '@infoportal/form-helper'
+import {SchemaValidator} from '@infoportal/form-helper'
 import {ErrorModal, ErrorModalValue} from './ErrorModal'
 import {TranslationsManager} from './TranslationsManager'
+import {useBeforeUnload} from './useBeforeUnload'
+import {useXlsFormState, XlsFormEditorProvider} from './XlsFormEditorContext'
+
+export type XlsFormEditorProps = {
+  saving?: boolean
+  value?: Api.Form.Schema
+  onChange?: (_: Api.Form.Schema) => void
+  onCommit?: (_: Api.Form.Schema) => void
+  onSave?: (_: Api.Form.Schema) => void
+}
 
 export type TableName = 'survey' | 'choices'
 
@@ -19,31 +29,26 @@ const tableSx: SxProps = {
   '& .dtd': {px: 0},
 }
 
-export const XlsFormEditor = ({
-  value,
-  saving,
-  onChange,
-  onCommit,
-}: {
-  saving?: boolean
-  value?: Api.Form.Schema
-  onChange?: (_: Api.Form.Schema) => void
-  onCommit?: (_: Api.Form.Schema) => void
-  onSave?: (_: Api.Form.Schema) => void
-}) => {
+export const XlsFormEditor = (props: XlsFormEditorProps) => {
+  return (
+    <XlsFormEditorProvider value={props.value}>
+      <XlsFormEditorWithStore {...props} />
+    </XlsFormEditorProvider>
+  )
+}
+
+export const XlsFormEditorWithStore = ({value, saving, onChange, onCommit}: XlsFormEditorProps) => {
   const {m} = useI18n()
   const t = useTheme()
 
-  const schema = useXlsFormStore(_ => _.schema)
-  const setSchema = useXlsFormStore(_ => _.setSchema)
-  const addSurveyRow = useXlsFormStore(_ => _.addRows)
-  const reorderRows = useXlsFormStore(_ => _.reorderRows)
-  const translations = useXlsFormStore(_ => _.schema.translations)
-  const deleteRows = useXlsFormStore(_ => _.deleteRows)
-  const undo = useXlsFormStore(_ => _.undo)
-  const redo = useXlsFormStore(_ => _.redo)
-  const past = useXlsFormStore(_ => _.past)
-  const future = useXlsFormStore(_ => _.future)
+  const schema = useXlsFormState(_ => _.schema)
+  const addSurveyRow = useXlsFormState(_ => _.addRows)
+  const reorderRows = useXlsFormState(_ => _.reorderRows)
+  const deleteRows = useXlsFormState(_ => _.deleteRows)
+  const undo = useXlsFormState(_ => _.undo)
+  const redo = useXlsFormState(_ => _.redo)
+  const past = useXlsFormState(_ => _.past)
+  const future = useXlsFormState(_ => _.future)
 
   const [rowsToAdd, setRowsToAdd] = useState(1)
   const [validationReport, setValidationReport] = useState<ErrorModalValue | undefined>()
@@ -56,9 +61,14 @@ export const XlsFormEditor = ({
     // return JSON.stringify(value) !== JSON.stringify(schema)
   }, [past])
 
+  useBeforeUnload(quickCheckIfSchemaHasChanged, 'test')
+
   const columns: Datatable.Column.Props<any>[] = useMemo(() => {
     const defaultWith = 160
-    const cols = activeTab === 'survey' ? getSurveyColumns({t, translations}) : getChoicesColumns({t, translations})
+    const cols =
+      activeTab === 'survey'
+        ? getSurveyColumns({t, translations: schema.translations})
+        : getChoicesColumns({t, translations: schema.translations})
     return cols.map(_ => {
       if (_.width) return _
       return {
@@ -66,7 +76,7 @@ export const XlsFormEditor = ({
         width: defaultWith,
       }
     })
-  }, [activeTab, translations])
+  }, [activeTab, schema.translations])
 
   const checkFormAndSubmit = (cb?: (_: Api.Form.Schema) => void) => {
     if (!cb || !quickCheckIfSchemaHasChanged) return
@@ -78,10 +88,6 @@ export const XlsFormEditor = ({
     if (errors?.errors) setValidationReport(errors)
     else cb?.(schema)
   }
-
-  useEffect(() => {
-    if (value) setSchema(value)
-  }, [value])
 
   useEffect(() => {
     checkFormAndSubmit(onChange)

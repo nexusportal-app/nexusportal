@@ -1,4 +1,3 @@
-import {useXlsFormStore} from '../core/useStore'
 import {Box, Checkbox} from '@mui/material'
 import * as Datatable from '@infoportal/client-datatable'
 import {SelectType} from '../input/CellSelectType'
@@ -6,6 +5,7 @@ import {SelectAppearance} from '../input/CellSelectAppearance'
 import {SelectListName} from '../input/CellSelectListName'
 import {useMemo} from 'react'
 import {Api} from '@infoportal/api-sdk'
+import {useXlsFormState} from './XlsFormEditorContext'
 
 type ActionBarProps = {
   value?: any
@@ -29,8 +29,8 @@ const selectSx = {
 }
 
 export const ActionBar = ({field, value, lang, rowKeys, table}: ActionBarProps) => {
-  const updateCells = useXlsFormStore(_ => _.updateCells)
-  const translations = useXlsFormStore(_ => _.schema.translations)
+  const updateCells = useXlsFormState(_ => _.updateCells)
+  const translations = useXlsFormState(_ => _.schema.translations)
   const fieldIndex = useMemo(() => {
     if (lang) return translations.indexOf(lang)
   }, [translations, lang])

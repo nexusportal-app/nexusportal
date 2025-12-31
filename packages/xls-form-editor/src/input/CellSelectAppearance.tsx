@@ -54,7 +54,7 @@ export const CellSelectAppearance = ({
         },
       }}
       sx={{
-        ...cellSelectSx as any,
+        ...(cellSelectSx as any),
         ...sx,
       }}
       value={cell.value}
