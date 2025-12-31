@@ -86,12 +86,12 @@ type TsRestResponse<S extends HTTPStatusCode, T> =
 const map = (res: any) => {
   if (res.status === 200) return res.body
   if (res.status === 204) return undefined
-  if (res.status === 404) throw new HttpError.NotFound(res.body?.message)
-  if (res.status === 403) throw new HttpError.Forbidden(res.body?.message)
-  if (res.status === 409) throw new HttpError.Conflict(res.body?.message)
-  if (res.status === 400) throw new HttpError.BadRequest(res.body?.message)
-  if (res.status === 500) throw new HttpError.InternalServerError(res.body?.message)
-  throw new HttpError.InternalServerError(res.body?.message)
+  if (res.status === 404) throw new HttpError.NotFound(res.body?.message, res.body?.errorId)
+  if (res.status === 403) throw new HttpError.Forbidden(res.body?.message, res.body?.errorId)
+  if (res.status === 409) throw new HttpError.Conflict(res.body?.message, res.body?.errorId)
+  if (res.status === 400) throw new HttpError.BadRequest(res.body?.message, res.body?.errorId)
+  if (res.status === 500) throw new HttpError.InternalServerError(res.body?.message, res.body?.errorId)
+  throw new HttpError.InternalServerError(res.body?.message, res.body?.errorId)
 }
 export const map200 = <T>(res: TsRestResponse<200, T>): T => map(res)
 

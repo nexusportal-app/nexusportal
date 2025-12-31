@@ -114,7 +114,7 @@ export const ToastProvider = ({children, vertical = 'top', horizontal = 'right'}
         }
         onClose={handleClose}
         message={
-          <div style={{display: 'flex', alignItems: 'center'}}>
+          <div style={{display: 'flex', maxWidth: 400, alignItems: 'center'}}>
             {renderIcon(type)}
             <Box component="span" sx={{ml: 2}}>
               {message}

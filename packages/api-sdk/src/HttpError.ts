@@ -2,6 +2,7 @@ export class HttpError extends Error {
   constructor(
     public code: HttpError.StatusCode,
     public message: string,
+    public errorId?: string,
     public data?: any,
   ) {
     super(message)
@@ -41,35 +42,35 @@ export namespace HttpError {
   }
 
   export class NoFileUploaded extends HttpError {
-    constructor(message: string) {
-      super(400, message)
+    constructor(message: string, errorId?: string) {
+      super(400, message, errorId)
     }
   }
 
   export class BadRequest extends HttpError {
-    constructor(message: string) {
-      super(400, message)
+    constructor(message: string, errorId?: string) {
+      super(400, message, errorId)
       // this.name = this.constructor.name
     }
   }
 
   export class Conflict extends HttpError {
-    constructor(message: string) {
-      super(409, message)
+    constructor(message: string, errorId?: string) {
+      super(409, message, errorId)
       // this.name = this.constructor.name
     }
   }
 
   export class WrongFormat extends HttpError {
-    constructor(message: string) {
-      super(400, message)
+    constructor(message: string, errorId?: string) {
+      super(400, message, errorId)
       // this.name = this.constructor.name
     }
   }
 
   export class InternalServerError extends HttpError {
-    constructor(message: string) {
-      super(500, message)
+    constructor(message: string, errorId?: string) {
+      super(500, message, errorId)
       // this.name = this.constructor.name
     }
   }

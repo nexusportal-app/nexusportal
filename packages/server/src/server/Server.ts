@@ -33,9 +33,12 @@ export class Server {
     const errorId = genUUID().split('-')[0]
 
     const statusMap = new Map<Function, ErrorHttpStatusCode>([
+      [HttpError.NoFileUploaded, 400],
+      [HttpError.BadRequest, 400],
       [HttpError.Conflict, 409],
       [HttpError.Forbidden, 403],
       [HttpError.NotFound, 404],
+      [HttpError.WrongFormat, 404],
       [ZodError, 400],
     ])
 
@@ -49,12 +52,9 @@ export class Server {
     this.log.error(`${req.path} errorId=${errorId} - ${errorMessage}`)
     if (status === 500) console.log(e)
     res.status(status).json({
-      status,
-      body: {
-        errorId,
-        message: e.message,
-        data: (e as any)?.data,
-      },
+      errorId,
+      message: e.message,
+      data: (e as any)?.data,
     })
   }
 
