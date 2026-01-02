@@ -52,8 +52,8 @@ export const DatatableGlobalStyles = () => (
         whiteSpace: 'nowrap',
         textOverflow: 'ellipsis',
         backgroundColor: `rgb(from ${theme.vars.palette.background.paper} r g b)`,
-        '& [class$="MuiOutlinedInput-notchedOutline"]': {
-          border: 'none',
+        '& .MuiOutlinedInput-notchedOutline': {
+          border: 'none !important',
         },
         '&:not(:last-of-type)': {
           borderRight: `1px solid ${theme.vars.palette.divider}`,

@@ -14,7 +14,6 @@ import {FormBuilderTabs} from '@/features/Form/Builder/FormBuilderTabs'
 import {createContext, useContextSelector} from 'use-context-selector'
 import {formBuilderVersionRoute} from '@/features/Form/Builder/Version/FormBuilderVersion'
 import {UseQueryPermission} from '@/core/query/useQueryPermission'
-import {seq} from '@axanc/ts-utils'
 import {UseQuerySchema} from '@/core/query/form/useQuerySchema'
 
 const formBuilderRoutePath = 'formCreator'
@@ -91,6 +90,7 @@ function FormBuilder() {
               sx={{
                 gap: showPreview ? t.vars.spacing : 0,
                 justifyItems: 'center',
+                height: '100%',
                 width: showPreview ? '100%' : '100%',
                 margin: 'auto',
                 display: 'flex',
@@ -104,7 +104,6 @@ function FormBuilder() {
                 sx={{
                   flex: '1 1 var(--left-width)',
                   transition: 'flex-basis 0.4s ease',
-                  minWidth: 0,
                 }}
               >
                 <FormBuilderTabs sx={{margin: 'auto', width: showPreview ? '100%' : '50%'}} />
@@ -114,9 +113,10 @@ function FormBuilder() {
 
               <Box
                 sx={{
+                  overflowY: 'scroll',
                   flex: '1 1 var(--right-width)',
                   transition: 'flex-basis 0.4s ease',
-                  overflow: 'hidden',
+                  maxWidth: 450,
                   opacity: showPreview ? 1 : 0,
                 }}
               >

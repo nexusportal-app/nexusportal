@@ -1,6 +1,6 @@
 import * as React from 'react'
 import {ReactElement, ReactNode} from 'react'
-import {LayoutProvider} from './LayoutContext'
+import {LayoutProvider, useLayoutContext} from './LayoutContext'
 import {Box, LinearProgress} from '@mui/material'
 
 export interface LayoutProps {
@@ -33,6 +33,7 @@ export const Layout = ({
 }
 
 const LayoutUsingContext = ({sidebar, header, children}: Pick<LayoutProps, 'sidebar' | 'header' | 'children'>) => {
+  const {sidebarOpen, sidebarPinned} = useLayoutContext()
   return (
     <Box component="main" sx={{display: 'flex', flexDirection: 'column', height: '100vh'}}>
       {header}
@@ -48,8 +49,8 @@ const LayoutUsingContext = ({sidebar, header, children}: Pick<LayoutProps, 'side
           sx={{
             overflowY: 'scroll',
             flex: 1,
-            pr: .5,
-            pl: 1,
+            pr: 0.5,
+            pl: sidebarOpen && sidebarPinned ? 1 : 0.5,
             transition: t => t.transitions.create('all'),
             position: 'relative',
             // display: 'flex',

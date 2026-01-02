@@ -27,11 +27,14 @@ export const TabContent = ({
         // overflowY: 'scroll', // I removed this so WidgetSettingsPanel can be sticky
         flex: 1,
         minHeight: 0,
-        mt: .25,
-        pt: .75,
+        mt: 0.25,
+        pt: 0.75,
+        ...widthStyle,
+        ...sx,
       }}
+      {...props}
     >
-      <Box sx={{...widthStyle, ...sx}} {...props} children={loading ? <PagePlaceholder /> : children} />
+      {loading ? <PagePlaceholder /> : children}
     </Box>
   )
 }
