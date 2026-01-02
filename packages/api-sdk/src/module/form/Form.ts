@@ -59,7 +59,8 @@ export namespace Form {
 
   export type Choice = Omit<KoboSdk.Form.Choice, '$autovalue'>
   export type QuestionType = KoboSdk.Form.QuestionType
-  export type Question = Omit<KoboSdk.Form.Question, 'calculation' | '$autoname' | '$qpath'> & {
+  export type Question = Omit<KoboSdk.Form.Question, '$xpath' | 'calculation' | '$autoname' | '$qpath'> & {
+    $xpath?: string
     // Should be optional in kobo-sdk
     calculation?: string
   }

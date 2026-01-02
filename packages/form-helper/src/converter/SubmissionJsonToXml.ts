@@ -1,7 +1,7 @@
 import {XMLBuilder} from 'fast-xml-parser'
 import {Api} from '@infoportal/api-sdk'
 
-type QIndex = Record<string, {$xpath: string; type: string} | undefined>
+type QIndex = Record<string, {$xpath?: string; type: string} | undefined>
 
 export const TO_FILL_LATER = '_TO_FILL_LATER_'
 
@@ -18,7 +18,7 @@ export class SubmissionJsonToXml {
       const q = this.questionIndex[key]
       if (!q) continue
 
-      const parts = q.$xpath.split('/').filter(Boolean)
+      const parts = q.$xpath?.split('/').filter(Boolean) ?? []
       const leaf = parts.pop()! // last part is the question name
 
       this.assignNested(root, parts, leaf, value)
@@ -60,7 +60,7 @@ export class SubmissionJsonToXml {
       const q = this.questionIndex[k]
       if (!q) continue
 
-      const parts = q.$xpath.split('/').filter(Boolean)
+      const parts = q.$xpath?.split('/').filter(Boolean) ?? []
       const leaf = parts.pop()!
 
       out[leaf] = v
