@@ -11,7 +11,7 @@ export class PyxFormClient {
     return this.getXml(formId, buffer)
   }
 
-  static readonly valdiateAndGetXmlByFilePath = async (
+  static readonly validateAndGetXmlByFilePath = async (
     formId: Api.FormId,
     filePath: string,
   ): Promise<Api.Form.Schema.Validation> => {

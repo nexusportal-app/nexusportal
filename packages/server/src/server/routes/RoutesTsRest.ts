@@ -426,6 +426,12 @@ export class RoutesTsRest extends Router {
             this.auth(_)
               .then(({body}) => schema.getByVersionXml({formId: body.formId, versionId: body.versionId}))
               .then(this.ok200),
+          downloadXls: _ =>
+            this.auth(_).then(async ({res, body}) => {
+              res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+              const stream = await schema.downloadXls(body)
+              return {status: 200, body: stream}
+            }),
         },
         access: {
           create: _ =>

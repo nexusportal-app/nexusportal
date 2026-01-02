@@ -1,9 +1,10 @@
 import {Api} from '@infoportal/api-sdk'
 import {useAppSettings} from '@/core/context/ConfigContext'
-import {useQuery} from '@tanstack/react-query'
+import {useMutation, useQuery} from '@tanstack/react-query'
 import {queryKeys} from '@/core/query/query.index'
 import {useMemo} from 'react'
 import {SchemaInspector} from '@infoportal/form-helper'
+import {downloadBufferAsFile} from '@infoportal/client-core'
 
 export class UseQuerySchema {
   static readonly get = ({workspaceId, formId}: {workspaceId: Api.WorkspaceId; formId?: Api.FormId}) => {
@@ -91,6 +92,16 @@ export class UseQuerySchema {
         return apiv2.form.schema.getByVersionXml({workspaceId, formId, versionId: versionId!})
       },
       enabled: !!versionId,
+    })
+  }
+
+  static readonly downloadXls = ({workspaceId, formId}: {workspaceId: Api.WorkspaceId; formId: Api.FormId}) => {
+    const {apiv2} = useAppSettings()
+    return useMutation({
+      mutationFn: () =>
+        apiv2.form.schema
+          .downloadXls({workspaceId, formId})
+          .then(buffer => downloadBufferAsFile(buffer as any, formId + '.xlsx')),
     })
   }
 }

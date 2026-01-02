@@ -41,7 +41,7 @@ export class SchemaToXlsForm {
     return wb
   }
 
-  async asBuffer() {
+  async asBuffer(): Promise<any> {
     const XLSX = await importXlsx()
     const wb = await this.asXlsx()
     return XLSX.write(wb, {bookType: 'xlsx', type: 'buffer'})

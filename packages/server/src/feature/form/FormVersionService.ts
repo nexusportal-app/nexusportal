@@ -41,7 +41,7 @@ export class FormVersionService {
   }
 
   readonly validateXlsForm = async (filePath: string): Promise<Api.Form.Schema.ValidationWithSchema> => {
-    const {schemaXml, ...validation} = await PyxFormClient.valdiateAndGetXmlByFilePath(
+    const {schemaXml, ...validation} = await PyxFormClient.validateAndGetXmlByFilePath(
       'we_dont_mind_formId_since_xml_wont_be_used' as Api.FormId,
       filePath,
     )

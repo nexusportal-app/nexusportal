@@ -19,6 +19,22 @@ export const formSchemaContract = c.router({
     },
   },
 
+  downloadXls: {
+    method: 'POST',
+    path: '/form/schema/downloadXls',
+    headers: z.object({
+      'Content-Type': z.string().optional(),
+      'Content-disposition': z.string().optional(),
+    }),
+    body: z.object({
+      workspaceId: schema.workspaceId,
+      formId: schema.formId,
+    }),
+    responses: {
+      200: z.unknown(),
+    },
+  },
+
   getXml: {
     method: 'POST',
     path: '/form/schema/getXml',
@@ -84,6 +100,10 @@ export const formSchemaClient = (client: TsRestClient) => {
 
     getByVersionXml: (body: {workspaceId: Api.WorkspaceId; formId: Api.FormId; versionId: Api.Form.VersionId}) => {
       return client.form.schema.getByVersionXml({body}).then(map200)
+    },
+
+    downloadXls: (body: {workspaceId: Api.WorkspaceId; formId: Api.FormId}) => {
+      return client.form.schema.downloadXls({body}).then(map200)
     },
   }
 }

@@ -10,6 +10,7 @@ import {formBuilderVersionRoute} from '@/features/Form/Builder/Version/FormBuild
 import {formBuilderEditorRoute} from '@/features/Form/Builder/Editor/FormBuilderEditor'
 import {useFormContext} from '@/features/Form/Form'
 import {useFormBuilderContext} from '@/features/Form/Builder/FormBuilder'
+import {UseQuerySchema} from '@/core/query/form/useQuerySchema'
 
 export const FormBuilderTabs = ({sx}: {sx?: SxProps<Theme>}) => {
   const formId = useFormContext(_ => _.formId)
@@ -17,6 +18,7 @@ export const FormBuilderTabs = ({sx}: {sx?: SxProps<Theme>}) => {
   const setShowPreview = useFormBuilderContext(_ => _.setShowPreview)
   const showPreview = useFormBuilderContext(_ => _.showPreview)
   const versions = useFormBuilderContext(_ => _.versions)
+  const downloadXls = UseQuerySchema.downloadXls({workspaceId, formId})
 
   const {m} = useI18n()
   const t = useTheme()
@@ -38,6 +40,14 @@ export const FormBuilderTabs = ({sx}: {sx?: SxProps<Theme>}) => {
         icon={<Icon>upload</Icon>}
         label={m.upload}
         disabled={!queryPermission.data?.version_canCreate}
+      />
+      <Tab
+        icon={<Icon>download</Icon>}
+        label={m.download}
+        iconPosition="start"
+        disabled={downloadXls.isPending}
+        onClick={() => downloadXls.mutateAsync()}
+        sx={{flex: 1}}
       />
       <TabLink sx={{flex: 1}} icon={<Icon>edit</Icon>} label={m.editor} to={formBuilderEditorRoute.fullPath} />
       <Box

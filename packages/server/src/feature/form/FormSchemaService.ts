@@ -4,6 +4,8 @@ import {KoboSchemaCache} from './KoboSchemaCache.js'
 import {PrismaClient} from '@infoportal/prisma'
 import {KoboSdkGenerator} from '../kobo/KoboSdkGenerator.js'
 import {PyxFormClient} from '../../core/PyxFormClient.js'
+import {SchemaToXlsForm} from '@infoportal/form-helper'
+import {Readable} from 'stream'
 
 export class FormSchemaService {
   constructor(
@@ -18,6 +20,13 @@ export class FormSchemaService {
     return Api.Form.isConnectedToKobo(form)
       ? this.koboSchemaCache.get({refreshCacheIfMissing: true, formId}).then(_ => (_ ? _.content : undefined))
       : this.getBy({formId, status: 'active'})
+  }
+
+  readonly downloadXls = async ({workspaceId, formId}: {workspaceId: Api.WorkspaceId; formId: Api.FormId}) => {
+    const schema = await this.get({formId})
+    if (!schema) throw new HttpError.NotFound(`Schema not found for ${formId}.`)
+    const buffer = await SchemaToXlsForm.convert(schema).asBuffer()
+    return Readable.from(buffer)
   }
 
   readonly getXml = async ({formId}: {formId: Api.FormId}): Promise<undefined | Api.Form.SchemaXml> => {
