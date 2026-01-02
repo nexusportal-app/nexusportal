@@ -1,6 +1,6 @@
 import {Box, BoxProps, Icon, Tab, Tabs, useTheme} from '@mui/material'
 import {useI18n} from '@infoportal/client-i18n'
-import {useEffect, useMemo, useRef, useState} from 'react'
+import {useCallback, useEffect, useMemo, useRef, useState} from 'react'
 import {Obj} from '@axanc/ts-utils'
 import Editor, {useMonaco} from '@monaco-editor/react'
 import type * as monaco from 'monaco-editor'
@@ -10,6 +10,7 @@ import {Core} from '@/shared'
 import {UseQueryFromAction} from '@/core/query/form/useQueryFromAction'
 import {Api} from '@infoportal/api-sdk'
 import {DeleteActionButton} from '@/features/Form/Action/Action/DeleteActionButton'
+import {useCaptureCtrlS} from '@/shared/useCaptureCtrlS'
 
 const monacoBg = '#1e1e1e'
 
@@ -74,7 +75,7 @@ function FormActionEditorWithMonaco({
   const [activePath, setActivePath] = useState<keyof typeof files>('/action.ts')
   const [bodyChanges, setBodyChanges] = useState<string>(body)
 
-  const handleSave = () => {
+  const handleSave = useCallback(() => {
     if (isReadOnly) return
     const model = monaco.Uri.file('/action.ts')
     if (!model) throw new Error('Failed to load model.')
@@ -84,7 +85,7 @@ function FormActionEditorWithMonaco({
       _ => _.severity >= monaco.MarkerSeverity.Warning && _.severity < monaco.MarkerSeverity.Error,
     ).length
     queryActionUpdate.mutateAsync({id: actionId, body: bodyChanges, bodyWarnings: warnings, bodyErrors: errors})
-  }
+  }, [queryActionUpdate, isReadOnly])
 
   useCaptureCtrlS(handleSave)
   useEffect(() => setBodyChanges(body), [body])
@@ -238,19 +239,4 @@ function getDefaultBody() {
     `  return submission`,
     `}`,
   ].join('\n')
-}
-
-function useCaptureCtrlS(action: () => void) {
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if ((e.ctrlKey || e.metaKey) && e.key === 's') {
-        e.preventDefault()
-        action()
-      }
-    }
-    window.addEventListener('keydown', handleKeyDown)
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown)
-    }
-  }, [])
 }

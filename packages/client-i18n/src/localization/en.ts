@@ -117,6 +117,7 @@ export const en = Object.freeze({
     accessLevel: 'Access level',
     lastStatusUpdate: 'Last status update',
     save: 'Save',
+    areYouSureToLeave: 'Are you sure you want to leave?',
     readonly: 'Read only',
     somethingWentWrong: 'Something went wrong',
     yes: 'Yes',
