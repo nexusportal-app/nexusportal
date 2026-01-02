@@ -1,6 +1,9 @@
 import {useEffect} from 'react'
+import {useI18n} from '@infoportal/client-i18n'
 
-export function useBeforeUnload(condition?: boolean, message = 'Are you sure you want to leave?') {
+export function useBeforeUnload(condition?: boolean, message?: string) {
+  const {m} = useI18n()
+  message = message || m.areYouSureToLeave
   useEffect(() => {
     if (!condition) return
     const handler = (e: BeforeUnloadEvent) => {

@@ -29,7 +29,7 @@ export class QuestionType {
       id: q.name,
       width: defaultColWidth,
       typeLabel: q.type,
-      ...map(q.$xpath.split('/')[0], value => ({
+      ...map(q.$xpath?.split('/')[0], value => ({
         group: {label: translateQuestion(value), id: value},
       })),
       typeIcon: <KoboTypeIcon children={q.type} />,

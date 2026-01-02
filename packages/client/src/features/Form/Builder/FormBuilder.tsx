@@ -104,6 +104,7 @@ function FormBuilder() {
                 sx={{
                   flex: '1 1 var(--left-width)',
                   transition: 'flex-basis 0.4s ease',
+                  minWidth: 0,
                 }}
               >
                 <FormBuilderTabs sx={{margin: 'auto', width: showPreview ? '100%' : '50%'}} />

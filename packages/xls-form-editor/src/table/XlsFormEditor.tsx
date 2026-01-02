@@ -11,8 +11,10 @@ import {getSurveyColumns} from './getSurveyColumns'
 import {SchemaValidator} from '@infoportal/form-helper'
 import {ErrorModal, ErrorModalValue} from './ErrorModal'
 import {TranslationsManager} from './TranslationsManager'
-import {useBeforeUnload} from './useBeforeUnload'
 import {useXlsFormState, XlsFormEditorProvider} from './XlsFormEditorContext'
+import {useCaptureCtrlS} from '@infoportal/client/src/shared/useCaptureCtrlS'
+import {hasSchemaChanged} from './hasSchemaChanged'
+import {alphaVar} from '@infoportal/client-core'
 
 export type XlsFormEditorProps = {
   saving?: boolean
@@ -25,7 +27,7 @@ export type XlsFormEditorProps = {
 export type TableName = 'survey' | 'choices'
 
 const tableSx: SxProps = {
-  height: 'calc(100vh - 192px)',
+  height: 'calc(100vh - 182px)',
   '& .dtd': {px: 0},
 }
 
@@ -56,13 +58,9 @@ export const XlsFormEditorWithStore = ({value, saving, onChange, onCommit}: XlsF
   const [activeTab, setActiveTab] = useState<TableName>('survey')
   const datatableHandle = useRef<Datatable.Handle>(null)
 
-  const quickCheckIfSchemaHasChanged = useMemo(() => {
-    if (past.length === 0) return false
-    return true
-    // return JSON.stringify(value) !== JSON.stringify(schema)
-  }, [past])
-
-  useBeforeUnload(quickCheckIfSchemaHasChanged, 'test')
+  const hasChanged = useMemo(() => {
+    return hasSchemaChanged(value, schema)
+  }, [value, schema])
 
   const columns: Datatable.Column.Props<any>[] = useMemo(() => {
     const defaultWith = 160
@@ -79,20 +77,28 @@ export const XlsFormEditorWithStore = ({value, saving, onChange, onCommit}: XlsF
     })
   }, [activeTab, schema.translations])
 
-  const checkFormAndSubmit = (cb?: (_: Api.Form.Schema) => void) => {
-    if (!cb || !quickCheckIfSchemaHasChanged) return
-    if (JSON.stringify(value) === JSON.stringify(schema)) {
-      setValidationReport({noChanges: true})
-      return
-    }
-    const errors = SchemaValidator.validate(schema)
-    if (errors?.errors) setValidationReport(errors)
-    else cb?.(schema)
-  }
+  const checkFormAndSubmit = useCallback(
+    (cb?: (_: Api.Form.Schema) => void) => {
+      if (!cb || !hasChanged) return
+      // if (JSON.stringify(value) === JSON.stringify(schema)) {
+      //   setValidationReport({noChanges: true})
+      //   return
+      // }
+      const errors = SchemaValidator.validate(schema)
+      if (errors?.errors) setValidationReport(errors)
+      else cb?.(schema)
+    },
+    [hasChanged, schema],
+  )
 
   useEffect(() => {
     checkFormAndSubmit(onChange)
-  }, [schema])
+  }, [schema, checkFormAndSubmit])
+
+  // useBeforeUnload(hasChanged)
+  useCaptureCtrlS(() => {
+    checkFormAndSubmit(onCommit)
+  })
 
   const handleEvent = useCallback((action: Datatable.Action<Api.Form.Question | Api.Form.Choice>) => {
     switch (action.type) {
@@ -123,7 +129,7 @@ export const XlsFormEditorWithStore = ({value, saving, onChange, onCommit}: XlsF
         <Core.IconBtn children="redo" disabled={!future.length} onClick={redo} />
         <Core.Btn
           loading={saving}
-          disabled={!quickCheckIfSchemaHasChanged}
+          disabled={!hasChanged}
           variant="contained"
           onClick={() => {
             checkFormAndSubmit(onCommit)
@@ -140,6 +146,13 @@ export const XlsFormEditorWithStore = ({value, saving, onChange, onCommit}: XlsF
       <Datatable.Component
         ref={datatableHandle}
         header={header}
+        rowStyle={_ => {
+          return (_ as Api.Form.Question).type === 'begin_group'
+            ? {background: t.vars?.palette.action.disabledBackground}
+            : (_ as Api.Form.Question).type === 'begin_repeat'
+              ? {background: alphaVar(t.vars?.palette.info.main, 0.3)}
+              : null
+        }}
         module={{
           export: {enabled: true},
           rowsDragging: {enabled: true},
