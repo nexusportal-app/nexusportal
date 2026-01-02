@@ -2,6 +2,7 @@ import {NextFunction, Request, Response} from 'express'
 import {HttpError} from '@infoportal/api-sdk'
 import {PrismaClient} from '@infoportal/prisma'
 import {SubmissionImportService} from '../../../feature/form/submission/SubmissionImportService.js'
+import * as fs from 'node:fs'
 
 export class ControllerKoboApiXlsImport {
   constructor(
@@ -14,12 +15,9 @@ export class ControllerKoboApiXlsImport {
       return next(new HttpError.NoFileUploaded('No file was uploaded'))
     }
     const formId: string = req.params.formId
-    const action = req.query.action
-    if (action === 'create') {
-      await this.service.processData(formId, req.file.path, 'create')
-    } else {
-      await this.service.processData(formId, req.file.path, 'update')
-    }
+    const action = req.query.action as 'create' | 'update'
+    await this.service.processData(formId, req.file.path, action)
+    fs.unlink(req.file.path, () => {})
     res.send({})
   }
 }

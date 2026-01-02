@@ -7,6 +7,7 @@ import {prismaMapper} from '../../core/prismaMapper/PrismaMapper.js'
 import {KoboSchemaCache} from './KoboSchemaCache.js'
 import {SchemaParser, SchemaValidator, XlsFormToSchema} from '@infoportal/form-helper'
 import {PyxFormClient} from '../../core/PyxFormClient.js'
+import fs from 'node:fs'
 
 export class FormVersionService {
   constructor(
@@ -37,6 +38,7 @@ export class FormVersionService {
     file: Express.Multer.File
   }) => {
     const schemaJson = await XlsFormToSchema.convert(file.path)
+    fs.unlink(file.path, () => {})
     return this.createNewVersion({fileName: file.filename, schemaJson, ...rest})
   }
 
@@ -46,6 +48,7 @@ export class FormVersionService {
       filePath,
     )
     const schemaJson = await XlsFormToSchema.convert(filePath)
+    fs.unlink(filePath, () => {})
     return {...validation, schemaJson}
   }
 
