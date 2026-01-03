@@ -27,6 +27,9 @@
     },
     {
       "path": "./packages/xls-form-editor"
+    },
+    {
+      "path": "./packages/demo-workspace-init"
     }
   ]
 }

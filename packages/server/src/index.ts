@@ -11,6 +11,7 @@ import {EmailService} from './feature/email/EmailService.js'
 import {DbInit} from './core/DbInit.js'
 import * as os from 'os'
 import {FormActionRunner} from './feature/form/action/executor/FormActionRunner.js'
+import {DemoWorkspaceInit} from '@infoportal/demo-workspace-init'
 
 export type AppLogger = WinstonLogger
 
@@ -108,6 +109,7 @@ const startApp = async (conf: AppConf) => {
   init()
   // } else {
   start()
+  await new DemoWorkspaceInit(prisma).init()
   if (appConf.production) {
     process.on('uncaughtException', err => {
       log.error('Uncaught Exception:', err)

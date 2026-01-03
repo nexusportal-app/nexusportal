@@ -1,12 +1,12 @@
-import {Box, ButtonBase, ButtonBaseProps, Icon, useTheme} from '@mui/material'
+import {Box, Icon, useTheme} from '@mui/material'
 import {AppAvatar, Core} from '@/shared'
 import {useI18n} from '@infoportal/client-i18n'
 import {Link} from '@tanstack/react-router'
 import {Api} from '@infoportal/api-sdk'
 import {UseQueryWorkspaceInvitation} from '@/core/query/workspace/useQueryWorkspaceInvitation.js'
-import {appConfig} from '@/conf/AppConfig.js'
 import {AccessLevelRow} from '@/core/layout/AppHeaderMenu.js'
-import {CardAdd} from '@/shared/CardAdd'
+
+const height = 240
 
 export const WorkspaceCard = ({workspace}: {workspace: Api.Workspace}) => {
   const {m, formatDate} = useI18n()
@@ -17,7 +17,7 @@ export const WorkspaceCard = ({workspace}: {workspace: Api.Workspace}) => {
       <Core.Panel
         sx={{
           mb: 0,
-          minHeight: 200,
+          minHeight: height,
           p: 2,
           display: 'flex',
           flexDirection: 'column',
@@ -66,7 +66,7 @@ export const WorkspaceCardInvitation = ({
         display: 'flex',
         flexDirection: 'column',
         mb: 0,
-        minHeight: 200,
+        minHeight: height,
         ...sx,
       }}
     >
@@ -102,5 +102,47 @@ export const WorkspaceCardInvitation = ({
         </Core.Btn>
       </Core.PanelFoot>
     </Core.Panel>
+  )
+}
+
+export const WorkspaceCardDemo = ({workspace}: {workspace: Api.Workspace}) => {
+  const {m, formatDate} = useI18n()
+  const t = useTheme()
+
+  return (
+    <Link to="/$workspaceId/overview" params={{workspaceId: workspace.id}}>
+      <Core.Panel
+        sx={{
+          mb: 0,
+          minHeight: height,
+          p: 2,
+          alignItems: 'center',
+          display: 'flex',
+          justifyContent: 'center',
+          flexDirection: 'column',
+          transition: t.transitions.create(''),
+          textAlign: 'center',
+          '&:hover': {
+            boxShadow: t.vars.shadows[2],
+          },
+        }}
+      >
+        <Icon
+          sx={{
+            fontSize: 60,
+            fontWeight: 'bold',
+            mb: 1,
+            background: 'linear-gradient(90deg, #00c6ff, #0072ff)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+          }}
+          color="primary"
+        >
+          explore
+        </Icon>
+        <Core.Txt size="big" sx={{fontWeight: '700'}} color="primary">{m.exploreDemoWorkspace}</Core.Txt>
+        <Core.Txt color="hint">{m.exploreDemoWorkspaceDesc}</Core.Txt>
+      </Core.Panel>
+    </Link>
   )
 }
