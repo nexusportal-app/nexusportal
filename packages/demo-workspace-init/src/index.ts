@@ -1,15 +1,22 @@
 import {Api} from '@infoportal/api-sdk'
 import {Prisma, PrismaClient} from '@infoportal/prisma'
-import {users} from './fixture/users.js'
-import {rrm, rrmVersion} from './fixture/form-rrm.js'
-import {mapFor} from '@axanc/ts-utils'
-import {generateRandomSubmission} from './fixture/submissions-generator.js'
+import {jobTitle, users} from './fixture/users.js'
+import {formRrmSchema, formRrmVersion, fromRrm} from './fixture/form-rrm.js'
+import {generateRandomSubmissions} from './fixture/submissions-generator.js'
 import {createdBySystem, demoWorkspaceId} from './utils.js'
 import {workspace} from './fixture/workspace.js'
+import {formHhs, formHhsSchema, formHssVersion} from './fixture/form-hhs.js'
+import {dashboardPm, dashboardPmPublished, dashboardPmSection, dashboardPmWidgets} from './fixture/dashboard-pm.js'
+import {formNta, formNtaSchema, formNtaVersion} from './fixture/form-shelter-nta.js'
+import {formGlobal, formGlobalAction, formGlobalVersion} from './fixture/form-global.js'
+
+const forms = [fromRrm, formHhs, formNta, formGlobal]
+const formsVersion = [formRrmVersion, formHssVersion, formNtaVersion, formGlobalVersion]
 
 export class DemoWorkspaceInit {
   constructor(private prisma: PrismaClient) {
   }
+
 
   readonly reset = async () => {
     await this.prisma.form.deleteMany({where: {workspaceId: demoWorkspaceId}})
@@ -22,10 +29,65 @@ export class DemoWorkspaceInit {
     await this.initWorkspace()
     await this.createUsers(users)
     await this.createWorkspaceAccess(users)
-    await this.prisma.form.createMany({data: [rrm]})
-    await this.prisma.formVersion.createMany({data: [rrmVersion]})
-    await this.prisma.formSubmission.createMany({
-      data: [...mapFor(10, _ => generateRandomSubmission(rrmVersion))],
+    await this.prisma.form.createMany({data: forms})
+    await this.prisma.formVersion.createMany({data: formsVersion})
+    await Promise.all([
+      this.createFormAccess(),
+      this.prisma.formSubmission.createMany({
+        data: [
+          ...generateRandomSubmissions({
+            formId: fromRrm.id as Api.FormId,
+            schemaJson: formRrmSchema,
+            version: formRrmVersion.version,
+            count: 300,
+            startDate: new Date(2024, 0, 1),
+            endDate: new Date(2024, 11, 1),
+          }),
+          ...generateRandomSubmissions({
+            numericRanges: {
+              age: [0, 90],
+              household_size: [1, 8],
+            },
+            version: formHssVersion.version,
+            formId: formHhs.id as Api.FormId,
+            schemaJson: formHhsSchema,
+            count: 500,
+            startDate: new Date(2024, 0, 1),
+            endDate: new Date(2024, 11, 1),
+          }),
+          ...generateRandomSubmissions({
+            numericRanges: {
+              age: [0, 90],
+              household_size: [1, 8],
+            },
+            version: formNtaVersion.version,
+            formId: formNta.id as Api.FormId,
+            schemaJson: formNtaSchema,
+            count: 250,
+            startDate: new Date(2024, 4, 1),
+            endDate: new Date(2024, 11, 1),
+          }),
+        ],
+      }),
+      this.prisma.dashboard.createMany({
+        data: [dashboardPm],
+      }),
+      this.prisma.formAction.createMany({
+        data: [...formGlobalAction],
+      }),
+    ])
+    await this.prisma.dashboardPublished.createMany({
+      data: [dashboardPmPublished],
+    })
+    await this.prisma.dashboardSection.createMany({
+      data: [
+        ...dashboardPmSection,
+      ],
+    })
+    await this.prisma.dashboardWidget.createMany({
+      data: [
+        ...dashboardPmWidgets,
+      ],
     })
   }
 
@@ -49,7 +111,19 @@ export class DemoWorkspaceInit {
         createdBy: createdBySystem,
         userId: _.id,
         workspaceId: demoWorkspaceId,
-        level: Api.AccessLevel.Read,
+        level: Api.AccessLevel.Admin,
+      })),
+    })
+  }
+
+  private createFormAccess = async () => {
+    return this.prisma.formAccess.createMany({
+      data: forms.map(form => ({
+        createdBy: createdBySystem,
+        formId: form.id,
+        job: jobTitle,
+        workspaceId: demoWorkspaceId,
+        level: Api.AccessLevel.Admin,
       })),
     })
   }
