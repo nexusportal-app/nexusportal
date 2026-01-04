@@ -27,8 +27,8 @@ export const useQuerySession = () => {
     mutationFn: async (email: Api.User.Email) => {
       const session = await api.session.connectAs(email)
       queryClient.setQueryData(queryKeys.session(), session)
-      queryClient.invalidateQueries({queryKey: queryKeys.workspaces()})
-      queryClient.invalidateQueries({queryKey: queryKeys.formAccess()})
+      queryClient.removeQueries({queryKey: queryKeys.workspaces()})
+      queryClient.removeQueries({queryKey: queryKeys.formAccess()})
     },
     onError: toastHttpError,
   })
@@ -37,8 +37,8 @@ export const useQuerySession = () => {
     mutationFn: async () => {
       const session = await api.session.revertConnectAs()
       queryClient.setQueryData(queryKeys.session(), session)
-      queryClient.invalidateQueries({queryKey: queryKeys.workspaces()})
-      queryClient.invalidateQueries({queryKey: queryKeys.formAccess()})
+      queryClient.removeQueries({queryKey: queryKeys.workspaces()})
+      queryClient.removeQueries({queryKey: queryKeys.formAccess()})
     },
     onError: toastHttpError,
   })

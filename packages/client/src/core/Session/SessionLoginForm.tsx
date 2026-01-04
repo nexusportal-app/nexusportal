@@ -13,6 +13,7 @@ import {useGoogleLogin} from '@react-oauth/google'
 import {ButtonProps} from '@mui/material/Button'
 import {Api} from '@infoportal/api-sdk'
 import {styleUtils} from '@infoportal/client-core'
+import {Session} from '@/core/sdk/server/session/Session'
 
 const BtnLogin = ({
   title,
@@ -63,7 +64,7 @@ const BtnLogin = ({
   )
 }
 
-export const SessionLoginForm = ({setSession}: {setSession: (_: Api.User) => void}) => {
+export const SessionLoginForm = ({setSession}: {setSession: (_: Session) => void}) => {
   const {api} = useAppSettings()
   const {m} = useI18n()
   const {toastError} = useIpToast()
@@ -72,7 +73,7 @@ export const SessionLoginForm = ({setSession}: {setSession: (_: Api.User) => voi
   const _saveSession = useAsync(
     mapPromise({
       promise: api.session.login,
-      mapThen: _ => setSession(_.user),
+      mapThen: setSession,
     }),
   )
   useEffectFn(_saveSession.error, () => toastError(m.youDontHaveAccess))

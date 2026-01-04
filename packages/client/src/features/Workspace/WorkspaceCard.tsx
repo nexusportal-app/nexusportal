@@ -8,6 +8,7 @@ import {AccessLevelRow} from '@/core/layout/AppHeaderMenu.js'
 import {useQuerySession} from '@/core/query/useQuerySession'
 import {demoWorkspaceId, isVisitorAccount, isVisitorEmail} from '@infoportal/demo-workspace-init/utils'
 import {useSession} from '@/core/Session/SessionContext'
+import {UseQueryWorkspace} from '@/core/query/workspace/useQueryWorkspace'
 
 const height = 240
 
