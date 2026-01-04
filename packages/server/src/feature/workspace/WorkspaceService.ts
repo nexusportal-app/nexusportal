@@ -2,10 +2,11 @@ import {PrismaClient} from '@infoportal/prisma'
 import {genShortid, slugify, UUID} from '@infoportal/common'
 import {Api} from '@infoportal/api-sdk'
 import {prismaMapper} from '../../core/prismaMapper/PrismaMapper.js'
-import {demoWorkspaceId} from '@infoportal/demo-workspace-init'
+import {demoWorkspaceId} from '@infoportal/demo-workspace-init/utils'
 
 export class WorkspaceService {
-  constructor(private prisma: PrismaClient) {}
+  constructor(private prisma: PrismaClient) {
+  }
 
   readonly checkSlug = async (name: string) => {
     const suggestedSlug = await this.getUniqSlug(name)
@@ -38,18 +39,11 @@ export class WorkspaceService {
     return this.prisma.workspace
       .findMany({
         where: {
-          OR: [
-            {
-              access: {
-                some: {
-                  user: {email},
-                },
-              },
+          access: {
+            some: {
+              user: {email},
             },
-            {
-              id: demoWorkspaceId,
-            },
-          ],
+          },
         },
         select: {
           id: true,

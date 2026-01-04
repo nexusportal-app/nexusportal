@@ -4,12 +4,12 @@ import {users} from './fixture/users.js'
 import {rrm, rrmVersion} from './fixture/form-rrm.js'
 import {mapFor} from '@axanc/ts-utils'
 import {generateRandomSubmission} from './fixture/submissions-generator.js'
-import {createdBySystem, demoWorkspaceId, workspace} from './fixture/workspace.js'
-
-export {demoWorkspaceId} from './fixture/workspace.js'
+import {createdBySystem, demoWorkspaceId} from './utils.js'
+import {workspace} from './fixture/workspace.js'
 
 export class DemoWorkspaceInit {
-  constructor(private prisma: PrismaClient) {}
+  constructor(private prisma: PrismaClient) {
+  }
 
   readonly reset = async () => {
     await this.prisma.form.deleteMany({where: {workspaceId: demoWorkspaceId}})
@@ -44,15 +44,13 @@ export class DemoWorkspaceInit {
   }
 
   private readonly createWorkspaceAccess = async (users: {id: string}[]) => {
-    return users.map(_ =>
-      this.prisma.workspaceAccess.createMany({
-        data: users.map(_ => ({
-          createdBy: createdBySystem,
-          userId: _.id,
-          workspaceId: demoWorkspaceId,
-          level: Api.AccessLevel.Read,
-        })),
-      }),
-    )
+    return this.prisma.workspaceAccess.createMany({
+      data: users.map(_ => ({
+        createdBy: createdBySystem,
+        userId: _.id,
+        workspaceId: demoWorkspaceId,
+        level: Api.AccessLevel.Read,
+      })),
+    })
   }
 }

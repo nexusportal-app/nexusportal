@@ -10,19 +10,12 @@ export const useQuerySession = () => {
   const {toastHttpError} = useIpToast()
   const queryClient = useQueryClient()
 
-  const setSessionDataAndCache = ({workspaces, originalEmail, user}: Session) => {
-    queryClient.setQueryData(queryKeys.workspaces(), workspaces)
-    queryClient.setQueryData(queryKeys.originalEmail(), originalEmail)
-    return user
-  }
-
   const getMe = useQuery({
     retry: 0,
     queryKey: queryKeys.session(),
     queryFn: async () => {
       try {
-        const data = await api.session.getMe()
-        return setSessionDataAndCache(data)
+        return api.session.getMe()
       } catch (e) {
         // toastError(m.youDontHaveAccess)
         throw e
@@ -33,7 +26,9 @@ export const useQuerySession = () => {
   const connectAs = useMutation({
     mutationFn: async (email: Api.User.Email) => {
       const session = await api.session.connectAs(email)
-      return setSessionDataAndCache(session)
+      queryClient.setQueryData(queryKeys.session(), session)
+      queryClient.invalidateQueries({queryKey: queryKeys.workspaces()})
+      queryClient.invalidateQueries({queryKey: queryKeys.formAccess()})
     },
     onError: toastHttpError,
   })
@@ -41,7 +36,9 @@ export const useQuerySession = () => {
   const revertConnectAs = useMutation({
     mutationFn: async () => {
       const session = await api.session.revertConnectAs()
-      return setSessionDataAndCache(session)
+      queryClient.setQueryData(queryKeys.session(), session)
+      queryClient.invalidateQueries({queryKey: queryKeys.workspaces()})
+      queryClient.invalidateQueries({queryKey: queryKeys.formAccess()})
     },
     onError: toastHttpError,
   })
@@ -51,7 +48,6 @@ export const useQuerySession = () => {
       await api.session.logout()
       queryClient.removeQueries({queryKey: queryKeys.session()})
       queryClient.removeQueries({queryKey: queryKeys.formAccess()})
-      queryClient.removeQueries({queryKey: queryKeys.workspaces()})
     },
     onError: toastHttpError,
   })

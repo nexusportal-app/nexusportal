@@ -1,6 +1,6 @@
 import {Api} from '@infoportal/api-sdk'
 import {Prisma} from '@infoportal/prisma'
-import {createdBySystem, demoWorkspaceId} from './workspace.js'
+import {createdBySystem, demoWorkspaceId} from '../utils.js'
 
 export const rrm: Prisma.FormCreateManyInput = {
   name: 'Rapid Response',

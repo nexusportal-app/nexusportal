@@ -83,7 +83,9 @@ export class RoutesExpress extends Router {
       r.post('/session/login', this.safe(session.login))
       r.post(
         '/session/connect-as',
-        this.authMiddleware({access: {workspace: ['user_canConnectAs']}}),
+        this.authMiddleware(
+          // {access: {workspace: ['user_canConnectAs']}} Will be managed manually
+        ),
         this.safe(session.connectAs),
       )
       r.post('/session/connect-as-revert', this.authMiddleware(), this.safe(session.revertConnectAs))

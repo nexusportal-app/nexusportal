@@ -26,14 +26,6 @@ function Workspaces() {
   const {m} = useI18n()
   const loading = queryInvitations.isLoading || queryWorkspace.isLoading
 
-  const demo = useMemo(() => {
-    return queryWorkspace.data?.find(_ => _.slug === 'demo')
-  }, [queryWorkspace.data])
-
-  const workspaces = useMemo(() => {
-    return queryWorkspace.data?.filter(_ => _.slug !== 'demo')
-  }, [queryWorkspace.data])
-
   return (
     <ProtectRoute>
       <Layout header={<AppHeader />}>
@@ -55,12 +47,10 @@ function Workspaces() {
                   <WorkspaceCardInvitation invitation={_} />
                 </Grid>
               ))}
-              {demo && (
-                <Grid key={demo.slug} size={{xs: 6, sm: 4, md: 3}}>
-                  <WorkspaceCardDemo workspace={demo} />
-                </Grid>
-              )}
-              {workspaces?.map(_ => (
+              <Grid size={{xs: 6, sm: 4, md: 3}}>
+                <WorkspaceCardDemo />
+              </Grid>
+              {queryWorkspace.data?.map(_ => (
                 <Grid key={_.slug} size={{xs: 6, sm: 4, md: 3}}>
                   <WorkspaceCard workspace={_} />
                 </Grid>

@@ -57,7 +57,7 @@ export const useSession = (): SessionContext => {
 
 export const SessionProvider = ({children}: {children: ReactNode}) => {
   const querySession = useQuerySession()
-  const user = querySession.getMe.data
+  const session = querySession.getMe.data
   const queryPermission = UseQueryPermission.global()
   const queryClient = useQueryClient()
   const navigate = useNavigate()
@@ -65,11 +65,10 @@ export const SessionProvider = ({children}: {children: ReactNode}) => {
   return (
     <Context.Provider
       value={{
+        ...session,
         globalPermission: queryPermission.data,
-        originalEmail: querySession.originalEmail,
         revertConnectAs: querySession.revertConnectAs,
         connectAs: querySession.connectAs,
-        user: user,
         setUser: (_: Api.User) => queryClient.setQueryData(queryKeys.session(), _),
         logout: async () => {
           await querySession.logout.mutateAsync()
@@ -83,11 +82,10 @@ export const SessionProvider = ({children}: {children: ReactNode}) => {
 }
 
 export const ProtectRoute = ({children}: {children: ReactNode}) => {
-  const {m} = useI18n()
   const queryPermission = UseQueryPermission.global()
   const querySession = useQuerySession()
   const queryWorkspace = UseQueryWorkspace.get()
-  const {user, originalEmail, revertConnectAs, setUser, logout} = useSessionPending()
+  const {user, setUser} = useSessionPending()
 
   if (queryWorkspace.isLoading || querySession.getMe.isPending || queryPermission.isPending) {
     return (
@@ -124,24 +122,5 @@ export const ProtectRoute = ({children}: {children: ReactNode}) => {
   //     </Page>
   //   )
   // }
-  return (
-    <>
-      {originalEmail && (
-        <Box sx={{px: 2, py: 0.25, background: t => t.vars.palette.background.paper}}>
-          Connected as <b>{user.email}</b>. Go back as <b>{originalEmail}</b>
-          <Core.Btn
-            sx={{ml: 1}}
-            loading={revertConnectAs.isPending}
-            onClick={() => revertConnectAs.mutate()}
-            variant="contained"
-            icon="logout"
-            size="small"
-          >
-            {m.return}
-          </Core.Btn>
-        </Box>
-      )}
-      {children}
-    </>
-  )
+  return children
 }

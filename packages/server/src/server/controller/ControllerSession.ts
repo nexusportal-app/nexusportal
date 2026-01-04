@@ -2,15 +2,15 @@ import {NextFunction, Request, Response} from 'express'
 import * as yup from 'yup'
 import {PrismaClient} from '@infoportal/prisma'
 import {SessionService} from '../../feature/session/SessionService.js'
-import {Api} from '@infoportal/api-sdk'
-import {appConf} from '../../core/AppConf.js'
+import {Api, HttpError} from '@infoportal/api-sdk'
+import {isVisitorAccount} from '@infoportal/demo-workspace-init/utils'
 
 export class ControllerSession {
   constructor(
     private prisma: PrismaClient,
     private service = new SessionService(prisma),
-    private conf = appConf,
-  ) {}
+  ) {
+  }
 
   readonly getMe = async (req: Request, res: Response, next: NextFunction) => {
     // if (req.hostname.startsWith('localhost') || req.hostname.startsWith('192')) {
@@ -18,8 +18,8 @@ export class ControllerSession {
     //   req.session.app = {user: user as any}
     // }
     // if (!isAuthenticated(req)) throw new HttpError.Forbidden('No access.')
-    const profile = await this.service.get(req.session.app!.user)
-    res.send({...profile, ...req.session.app})
+    const user = await this.service.get(req.session.app!.user)
+    res.send({user, originalEmail: req.session.app?.originalEmail})
   }
 
   readonly logout = async (req: Request, res: Response, next: NextFunction) => {
@@ -28,7 +28,7 @@ export class ControllerSession {
   }
 
   readonly login = async (req: Request, res: Response, next: NextFunction) => {
-    const user = await yup
+    const userInfo = await yup
       .object({
         name: yup.string().required(),
         username: yup.string().required(),
@@ -36,14 +36,15 @@ export class ControllerSession {
         provider: yup.string().oneOf(['google', 'microsoft']).required(),
       })
       .validate(req.body)
-    const session = await this.service.login(user)
-    req.session.app = {user: session.user}
-    res.send(session)
+    const user = await this.service.login(userInfo)
+    req.session.app = {user}
+    res.send({user})
   }
 
   readonly revertConnectAs = async (req: Request, res: Response, next: NextFunction) => {
-    const data = await this.service.revertConnectAs(req.session.app?.originalEmail)
-    res.send(data)
+    const user = await this.service.revertConnectAs(req.session.app?.originalEmail)
+    req.session.app = {user}
+    res.send({user})
   }
 
   readonly connectAs = async (req: Request, res: Response, next: NextFunction) => {
@@ -52,13 +53,21 @@ export class ControllerSession {
         email: yup.string().required(),
       })
       .validate(req.body)
-    const spyUser = await this.service.connectAs({
-      spyEmail: body.email as Api.User.Email,
-      connectedUser: req.session.app!.user,
+    const emailToSpy = body.email as Api.User.Email
+    const connectedUser = req.session.app!.user
+    const spyUser = await this.service.getSpyUser({
+      spyEmail: emailToSpy,
+      connectedUser,
     })
-    req.session.app = spyUser
-    req.session.app.originalEmail = req.session.app.user.email
-    res.send(spyUser)
+    if (isVisitorAccount(spyUser) || connectedUser!.accessLevel === Api.AccessLevel.Admin) {
+      req.session.app = {
+        user: spyUser,
+        originalEmail: connectedUser.email,
+      }
+      res.send(req.session.app)
+    } else {
+      throw new HttpError.Forbidden(`Cannot connected as ${emailToSpy}.`)
+    }
   }
 
   readonly track = async (req: Request, res: Response, next: NextFunction) => {

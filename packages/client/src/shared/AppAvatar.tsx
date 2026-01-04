@@ -1,6 +1,8 @@
 import {useAppSettings} from '@/core/context/ConfigContext'
 import {Box, BoxProps, Icon, Tooltip, useTheme} from '@mui/material'
 import {Api} from '@infoportal/api-sdk'
+import {isVisitorAccount, isVisitorEmail} from '@infoportal/demo-workspace-init/utils'
+import React from 'react'
 
 type Props = BoxProps & {
   icon?: string
@@ -12,6 +14,9 @@ type Props = BoxProps & {
   tooltip?: boolean
   // hideTooltip?: boolean
 }
+
+// export const visitorGradient = ['#e600a9', '#6a4cff', '#1f6bff']
+export const visitorGradient = ['#facc15', '#fb923c', '#ef4444']
 
 export const AppAvatar = ({
   email,
@@ -54,7 +59,7 @@ export const AppAvatar = ({
       }}
       {...props}
     >
-      {!email && (
+      {!email ? (
         <Icon
           sx={{
             color: t.vars.palette.grey['600'],
@@ -66,6 +71,8 @@ export const AppAvatar = ({
         >
           {icon}
         </Icon>
+      ) : isVisitorEmail(email) && (
+        <Icon>explore</Icon>
       )}
     </Box>
   )

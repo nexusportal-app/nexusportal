@@ -275,6 +275,7 @@ export const en = Object.freeze({
     deleteSelected: `Delete selected`,
     downloadAsXLS: 'Download as XLS',
     downloadAsPdf: 'Download as PDF',
+    switchBack: 'Switch back',
     download: 'Download',
     all: 'All',
     created: 'Created',

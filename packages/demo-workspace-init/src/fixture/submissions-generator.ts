@@ -53,11 +53,8 @@ function generateValue(q: SurveyNode, choiceIndex: Record<string, string[]>) {
 
 function isRelevant(q: SurveyNode, answers: Record<string, any>): boolean {
   if (!q.relevant) return true
-
   const match = q.relevant.match(/selected\(\$\{(.+?)\},\s*'(.+?)'\)/)
-
   if (!match) return true
-
   const [, field, value] = match
   return answers[field] === value
 }

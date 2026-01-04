@@ -17,19 +17,20 @@ export class SessionService {
     private user = UserService.getInstance(prisma),
     private workspace = new WorkspaceService(prisma),
     private log: AppLogger = app.logger('SessionService'),
-  ) {}
+  ) {
+  }
 
   readonly login = async (userBody: {
     name: string
     username: string
     accessToken: string
     provider: 'google' | 'microsoft'
-  }) => {
+  }): Promise<Api.User> => {
     switch (userBody.provider) {
       case 'google':
-        return this.loginWithGoogle(userBody).then(this.get)
+        return this.loginWithGoogle(userBody)
       case 'microsoft':
-        return this.loginWithMicrosoft(userBody).then(this.get)
+        return this.loginWithMicrosoft(userBody)
       default:
         throw new Error('Invalid provider')
     }
@@ -181,25 +182,20 @@ export class SessionService {
     })
   }
 
-  readonly connectAs = async ({connectedUser, spyEmail}: {connectedUser: Api.User; spyEmail: Api.User.Email}) => {
+  readonly getSpyUser = async ({connectedUser, spyEmail}: {connectedUser: Api.User; spyEmail: Api.User.Email}) => {
     const connectAsUser = await this.user.getByEmail(spyEmail).then(HttpError.throwNotFoundIfUndefined('connectAs'))
     if (connectAsUser.id === connectedUser.id) throw new SessionError.UserNoAccess()
-    return this.get(connectAsUser)
+    return connectAsUser
   }
 
   readonly revertConnectAs = async (originalEmail?: Api.User.Email) => {
     if (!originalEmail) {
       throw new HttpError.Forbidden('')
     }
-    const user = await this.user.getByEmail(originalEmail).then(HttpError.throwNotFoundIfUndefined(''))
-    return this.get(user)
+    return this.user.getByEmail(originalEmail).then(HttpError.throwNotFoundIfUndefined(''))
   }
 
-  readonly get = async (user: Api.User): Promise<UserProfile> => {
-    const workspaces = await this.workspace.getByUser(user.email)
-    return {
-      workspaces,
-      user,
-    }
+  readonly get = async (user: Api.User): Promise<Api.User> => {
+    return user
   }
 }

@@ -33,8 +33,8 @@ export const users = [
   },
   ...mapFor(14, i => {
     return {
-      id: '00000000-0000-0000-0000-10000000000' + i,
-      email: 'visitor@nexusportal.app',
+      id: '00000000-0000-0000-0000-1000000000' + ('' + i).padStart(2, '0'),
+      email: `visitor.${i}@nexusportal.app`,
       job: 'Omniscient Visitor',
     }
   }),

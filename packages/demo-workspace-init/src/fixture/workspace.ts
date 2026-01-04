@@ -1,8 +1,4 @@
-import {Api} from '@infoportal/api-sdk'
-
-export const createdBySystem = 'SYSTEM'
-
-export const demoWorkspaceId = '00000000-0000-0000-0000-000000000000' as Api.WorkspaceId
+import {createdBySystem, demoWorkspaceId} from '../utils.js'
 
 export const workspace = {
   id: demoWorkspaceId,

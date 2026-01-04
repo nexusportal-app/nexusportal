@@ -1,10 +1,13 @@
-import {Box, Icon, useTheme} from '@mui/material'
-import {AppAvatar, Core} from '@/shared'
+import {Box, Icon, LinearProgress, useTheme} from '@mui/material'
+import {AppAvatar, Core, visitorGradient} from '@/shared'
 import {useI18n} from '@infoportal/client-i18n'
-import {Link} from '@tanstack/react-router'
+import {Link, useNavigate} from '@tanstack/react-router'
 import {Api} from '@infoportal/api-sdk'
 import {UseQueryWorkspaceInvitation} from '@/core/query/workspace/useQueryWorkspaceInvitation.js'
 import {AccessLevelRow} from '@/core/layout/AppHeaderMenu.js'
+import {useQuerySession} from '@/core/query/useQuerySession'
+import {demoWorkspaceId, isVisitorAccount, isVisitorEmail} from '@infoportal/demo-workspace-init/utils'
+import {useSession} from '@/core/Session/SessionContext'
 
 const height = 240
 
@@ -105,44 +108,55 @@ export const WorkspaceCardInvitation = ({
   )
 }
 
-export const WorkspaceCardDemo = ({workspace}: {workspace: Api.Workspace}) => {
-  const {m, formatDate} = useI18n()
+export const WorkspaceCardDemo = () => {
+  const {m} = useI18n()
   const t = useTheme()
+  const navigate = useNavigate()
+  const {user} = useSession()
+  const queryConnectAs = useQuerySession().connectAs
 
   return (
-    <Link to="/$workspaceId/overview" params={{workspaceId: workspace.id}}>
-      <Core.Panel
+    <Core.Panel
+      onClick={async () => {
+        if (!isVisitorAccount(user)) {
+          const visitorIndex = Math.floor(Math.random() * 15)
+          await queryConnectAs.mutateAsync(`visitor.${visitorIndex}@nexusportal.app` as Api.User.Email)
+        }
+        navigate({to: '/$workspaceId/overview', params: {workspaceId: demoWorkspaceId}})
+      }}
+      sx={{
+        mb: 0,
+        minHeight: height,
+        p: 2,
+        position: 'relative',
+        alignItems: 'center',
+        display: 'flex',
+        justifyContent: 'center',
+        cursor: 'pointer',
+        flexDirection: 'column',
+        transition: t.transitions.create(''),
+        textAlign: 'center',
+        '&:hover': {
+          boxShadow: t.vars.shadows[2],
+        },
+      }}
+    >
+      {queryConnectAs.isPending && <LinearProgress sx={{position: 'absolute', top: 0, right: 0, left: 0}} />}
+      <Icon
         sx={{
-          mb: 0,
-          minHeight: height,
-          p: 2,
-          alignItems: 'center',
-          display: 'flex',
-          justifyContent: 'center',
-          flexDirection: 'column',
-          transition: t.transitions.create(''),
-          textAlign: 'center',
-          '&:hover': {
-            boxShadow: t.vars.shadows[2],
-          },
+          fontSize: 60,
+          fontWeight: 'bold',
+          mb: 1,
+          background: `linear-gradient(90deg, ${visitorGradient[0]}, ${visitorGradient[1]}, ${visitorGradient[2]})`,
+          WebkitBackgroundClip: 'text',
+          WebkitTextFillColor: 'transparent',
         }}
+        color="primary"
       >
-        <Icon
-          sx={{
-            fontSize: 60,
-            fontWeight: 'bold',
-            mb: 1,
-            background: 'linear-gradient(90deg, #00c6ff, #0072ff)',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-          }}
-          color="primary"
-        >
-          explore
-        </Icon>
-        <Core.Txt size="big" sx={{fontWeight: '700'}} color="primary">{m.exploreDemoWorkspace}</Core.Txt>
-        <Core.Txt color="hint">{m.exploreDemoWorkspaceDesc}</Core.Txt>
-      </Core.Panel>
-    </Link>
+        explore
+      </Icon>
+      <Core.Txt size="big" sx={{fontWeight: '700', mb: .5}} color="primary">{m.exploreDemoWorkspace}</Core.Txt>
+      <Core.Txt color="hint">{m.exploreDemoWorkspaceDesc}</Core.Txt>
+    </Core.Panel>
   )
 }
