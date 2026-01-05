@@ -1,8 +1,5 @@
 import {UseDashboardFilters, useDashboardFilters} from '@/features/Dashboard/Context/useDashboardFilters'
-import {
-  UseFlattenRepeatGroupData,
-  useFlattenRepeatGroupData,
-} from '@/features/Dashboard/Context/useGetDataByRepeatGroup'
+import {UseFlattenRepeatGroupData, useFlattenRepeatGroupData} from '@/features/Dashboard/Context/useGetDataByRepeatGroup'
 import {seq} from '@axanc/ts-utils'
 import {useI18n} from '@infoportal/client-i18n'
 import {Api} from '@infoportal/api-sdk'
@@ -11,12 +8,6 @@ import {Dispatch, ReactNode, SetStateAction, useMemo, useState} from 'react'
 import {createContext, useContextSelector} from 'use-context-selector'
 import {UseDashboardFilteredDataCache, useDashboardFilteredDataCache} from './useDashboardData'
 import {UseDashboardFormEdit, useDashboardFormEdit} from './useDashboardFormEdit'
-import {
-  UseDashboardGridLayoutResponsive,
-  useDashboardGridLayoutResponsive,
-  useDashboardGridLayoutStatic,
-  UseDashboardGridLayoutStatic,
-} from '@/features/Dashboard/Context/useDashboardGridLayout'
 
 // TODO this type could be globalized. It's maybe defined somewhere already
 export type Answers = Api.Submission.Meta & Record<string, any>
@@ -35,8 +26,6 @@ export type DashboardContext = {
   widgetsBySection: Map<Api.Dashboard.SectionId, Api.Dashboard.Widget[]>
   sections: Api.Dashboard.Section[]
   updateForm: UseDashboardFormEdit
-  gridLayoutResponsive: UseDashboardGridLayoutResponsive
-  gridLayoutStatic: UseDashboardGridLayoutStatic
 }
 
 const Context = createContext<DashboardContext>({} as DashboardContext)
@@ -105,13 +94,9 @@ export const DashboardProvider = ({
 
   const updateForm = useDashboardFormEdit({workspaceId, dashboard})
 
-  const gridLayoutResponsive = useDashboardGridLayoutResponsive(widgets, dashboard)
-  const gridLayoutStatic = useDashboardGridLayoutStatic(widgets, dashboard)
   return (
     <Context.Provider
       value={{
-        gridLayoutResponsive,
-        gridLayoutStatic,
         updateForm,
         flattenRepeatGroupData,
         dataRange,

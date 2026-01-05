@@ -17,6 +17,7 @@ import {useMemo} from 'react'
 import {Responsive, WidthProvider} from 'react-grid-layout'
 import {DashboardRenderFilterChips} from './DashboardRenderFilterChips'
 import {UseQuerySchema} from '@/core/query/form/useQuerySchema'
+import {useDashboardGridLayoutResponsive} from '@/features/Dashboard/Context/useDashboardGridLayout'
 
 const GridLayout = WidthProvider(Responsive)
 
@@ -149,7 +150,7 @@ function WithContext({snapshot}: {snapshot: Api.DashboardWithSnapshot['snapshot'
 }
 
 function Section({widgets, dashboard}: {dashboard: Api.Dashboard; widgets: Api.Dashboard.Widget[]}) {
-  const layout = useDashboardContext(_ => _.gridLayoutResponsive)
+  const layout = useDashboardGridLayoutResponsive(widgets, dashboard)
 
   return (
     <GridLayout

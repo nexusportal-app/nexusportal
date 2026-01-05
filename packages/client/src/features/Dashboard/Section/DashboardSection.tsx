@@ -18,6 +18,7 @@ import GridLayout, {WidthProvider} from 'react-grid-layout'
 import 'react-grid-layout/css/styles.css'
 import {DeleteSectionBtn} from '@/features/Dashboard/Section/DashboardSectionBtnDelete'
 import {DashboardSectionBtnCreate} from '@/features/Dashboard/Section/DashboardSectionBtnCreate'
+import {useDashboardGridLayoutStatic} from '@/features/Dashboard/Context/useDashboardGridLayout'
 
 const FixedGridLayout = WidthProvider(GridLayout)
 
@@ -71,7 +72,7 @@ export function DashboardSection() {
     [queryWidgetUpdate],
   )
 
-  const layout = useDashboardContext(_ => _.gridLayoutStatic)
+  const layout = useDashboardGridLayoutStatic(widgets, dashboard)
 
   const theme: Theme = useMemo(() => {
     return muiTheme({
