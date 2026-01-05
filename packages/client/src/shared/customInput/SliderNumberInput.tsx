@@ -59,11 +59,28 @@ export function SliderNumberInput({
       <Slider
         defaultValue={defaultValue}
         sx={{
+          borderRadius: styleUtils(t).color.input.default.borderRadius,
+          padding: 0,
           height: sliderHeight,
           position: 'absolute',
           bottom: 0,
           right: 0,
           left: 0,
+          '& .MuiSlider-thumb': {
+            background: 'transparent',
+            '&:before': {
+              boxShadow: 'none',
+            },
+            // '&:active': {
+            //   width: 2,
+            //   height: 28,
+            // },
+            // transition: theme.transitions.create('height'),
+            // width: 5,
+            // height: 22,
+            // borderRadius: 4,
+            // WebkitMask: 'radial-gradient(circle 4px at center, transparent 99%, black 100%)',
+          },
         }}
         disabled={disabled}
         onChange={(e, v) => onChange(v, e)}
