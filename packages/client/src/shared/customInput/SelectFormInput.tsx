@@ -26,7 +26,7 @@ export function SelectFormInput({
   return (
     <>
       {assets.length > 10 && <AppSidebarFilters assets={assets} onFilterChanges={setFilteredAsset} sx={{mb: 1}} />}
-      <Core.RadioGroup<Api.FormId> dense sx={{height: 500, overflowY: 'scroll'}} value={value} onChange={onChange}>
+      <Core.RadioGroup<Api.FormId> dense sx={{maxHeight: 500, overflowY: 'scroll'}} value={value} onChange={onChange}>
         {filteredAsset.map(_ => (
           <Core.RadioGroupItem
             hideRadio

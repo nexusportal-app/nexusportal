@@ -15,32 +15,32 @@ import {UseQuerySchema} from '@/core/query/form/useQuerySchema'
 import {ColumnQuestionProps} from '@infoportal/database-column/dist/columns/type'
 import {useAppSettings} from '@/core/context/ConfigContext'
 
-export const databaseKoboRepeatRoute = createRoute({
+export const databaseRepeatGroupRoute = createRoute({
   getParentRoute: () => formRoute,
   path: 'group/$group',
-  component: DatabaseKoboRepeatContainer,
+  component: DatabaseRepeatGroupContainer,
   validateSearch: z.object({
     id: z.string().optional(),
     index: z.number().optional(),
   }),
 })
 
-function DatabaseKoboRepeatContainer() {
-  const {workspaceId, formId, group} = databaseKoboRepeatRoute.useParams() as {
+function DatabaseRepeatGroupContainer() {
+  const {workspaceId, formId, group} = databaseRepeatGroupRoute.useParams() as {
     workspaceId: Api.WorkspaceId
     formId: Api.FormId
     group: string
   }
-  const {id, index} = databaseKoboRepeatRoute.useSearch()
+  const {id, index} = databaseRepeatGroupRoute.useSearch()
   const langIndex = useFormContext(_ => _.langIndex)
 
   const querySchema = UseQuerySchema.getInspector({workspaceId, formId, langIndex})
 
   return (
-    <TabContent width="full" sx={{p: 0, pb: 0, mb: 0}} animationDeps={[formId]} loading={querySchema.isLoading}>
+    <TabContent width="full" sx={{pb: 0, mb: 0}} animationDeps={[formId]} loading={querySchema.isLoading}>
       {map(querySchema.data, schema => (
         <Core.Panel sx={{mb: 0}}>
-          <DatabaseKoboRepeat
+          <DatabaseRepeatGroup
             id={id}
             index={index}
             inspector={schema}
@@ -54,7 +54,7 @@ function DatabaseKoboRepeatContainer() {
   )
 }
 
-const DatabaseKoboRepeat = ({
+const DatabaseRepeatGroup = ({
   inspector,
   id,
   index,

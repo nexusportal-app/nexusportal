@@ -8,7 +8,7 @@ import {formBuilderRoute} from '@/features/Form/Builder/FormBuilder'
 import {databaseAccessRoute} from '@/features/Form/Access/DatabaseAccess'
 import {databaseHistoryRoute} from '@/features/Form/History/DatabaseHistory'
 import {formSettingsRoute} from './features/Form/Settings/FormSettings'
-import {databaseKoboRepeatRoute} from '@/features/Form/RepeatGroup/DatabaseKoboRepeatGroup'
+import {databaseRepeatGroupRoute} from '@/features/Form/RepeatGroup/DatabaseKoboRepeatGroup'
 import {workspaceRoute} from '@/features/Workspace/Workspace'
 import {App} from '@/App'
 import {collectRoute} from '@/features/Collect/Collect'
@@ -50,7 +50,7 @@ const tsRoutes = [
         submissionsRoute,
         submissionRoute,
         databaseHistoryRoute,
-        databaseKoboRepeatRoute,
+        databaseRepeatGroupRoute,
         formSettingsRoute,
         formActionsRoute.addChildren([formActionRoute, formActionLogsRoute, formActionReportsRoute]),
       ]),
