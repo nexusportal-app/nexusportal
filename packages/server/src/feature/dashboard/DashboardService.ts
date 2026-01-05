@@ -10,7 +10,8 @@ export class DashboardService {
   constructor(
     private prisma: PrismaClient,
     private schema = new FormSchemaService(prisma),
-  ) {}
+  ) {
+  }
 
   readonly getById = async ({id}: {id: Api.DashboardId}): Promise<Api.Dashboard | undefined> => {
     return this.prisma.dashboard
@@ -27,16 +28,24 @@ export class DashboardService {
   }): Promise<any> => {
     return this.prisma.dashboard
       .findFirst({
-        include: {
-          published: {select: {snapshot: true}},
+        where: {
+          slug: dashboardSlug,
+          deletedAt: null,
+          workspace: {slug: workspaceSlug},
+          published: {isNot: null},
         },
-        where: {workspace: {slug: workspaceSlug}, slug: dashboardSlug, publishedId: {not: null}, deletedAt: null},
+        include: {
+          published: {
+            select: {snapshot: true},
+          },
+        },
       })
-      .then(_ => {
-        if (!_) return
+      .then(dashboard => {
+        if (!dashboard) return
+
         return {
-          ..._,
-          snapshot: _.published!.snapshot,
+          ...dashboard,
+          snapshot: dashboard.published!.snapshot,
         }
       })
   }
@@ -80,10 +89,10 @@ export class DashboardService {
     ]
     return this.prisma.$queryRawUnsafe(
       `
-        SELECT ${selectParts.join(', ')}
-        FROM "FormSubmission"
-        WHERE "formId" = $1
-    `,
+          SELECT ${selectParts.join(', ')}
+          FROM "FormSubmission"
+          WHERE "formId" = $1
+      `,
       dashboard.sourceFormId,
     )
   }
@@ -148,17 +157,33 @@ export class DashboardService {
     }
   }
 
-  readonly getAll = async ({workspaceId}: {workspaceId: Api.WorkspaceId}): Promise<Api.Dashboard[]> => {
+  readonly getAll = async ({
+    workspaceId,
+  }: {
+    workspaceId: Api.WorkspaceId
+  }): Promise<Api.Dashboard[]> => {
     return this.prisma.dashboard
       .findMany({
-        where: {workspaceId, deletedAt: null},
+        where: {
+          workspaceId,
+          deletedAt: null,
+        },
+        include: {
+          published: {
+            select: {id: true},
+          },
+        },
       })
-      .then(_ =>
-        _.map(_ => {
-          return prismaMapper.dashboard.mapDashboard({..._, isPublished: !!_.publishedId})
-        }),
+      .then(dashboards =>
+        dashboards.map(d =>
+          prismaMapper.dashboard.mapDashboard({
+            ...d,
+            isPublished: !!d.published,
+          }),
+        ),
       )
   }
+
 
   readonly update = async ({
     id,
@@ -184,12 +209,12 @@ export class DashboardService {
     workspaceId,
     publishedBy,
   }: Api.Dashboard.Payload.Publish & {publishedBy: Api.User.Email}) => {
-    const dashboard = await this.prisma.dashboard.findFirstOrThrow({where: {id}, select: {id: true, publishedId: true}})
+    const dashboard = await this.prisma.dashboard.findFirstOrThrow({where: {id}, select: {id: true, published: {select: {id: true}}}})
     const snapshot = await this.prisma.dashboardSection.findMany({
       select: {id: true, title: true, description: true, widgets: true},
       where: {dashboardId: id},
     })
-    if (dashboard?.publishedId) await this.prisma.dashboardPublished.delete({where: {id: dashboard.publishedId}})
+    if (dashboard?.published?.id) await this.prisma.dashboardPublished.delete({where: {id: dashboard.published.id}})
     await this.prisma.dashboardPublished.create({
       data: {snapshot, publishedBy, dashboard: {connect: {id: dashboard.id}}},
     })

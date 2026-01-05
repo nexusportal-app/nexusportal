@@ -453,16 +453,17 @@ model Dashboard {
   deletedAt DateTime?
   deletedBy String?
 
-  published   DashboardPublished? @relation(fields: [publishedId], references: [id])
-  publishedId String?             @unique
+  published DashboardPublished?
 }
 
 model DashboardPublished {
-  id          String     @id @default(uuid())
+  id          String   @id @default(uuid())
   snapshot    Json
-  publishedAt DateTime   @default(now())
+  publishedAt DateTime @default(now())
   publishedBy String
-  dashboard   Dashboard?
+
+  dashboardId String    @unique
+  dashboard   Dashboard @relation(fields: [dashboardId], references: [id], onDelete: Cascade)
 }
 
 model DashboardSection {
