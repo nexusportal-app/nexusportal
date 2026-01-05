@@ -192,6 +192,7 @@ export const XlsFormEditorWithStore = ({value, saving, onChange, onCommit}: XlsF
         <Core.Btn
           onClick={() => {
             addSurveyRow({table: activeTab, count: rowsToAdd, atRowKey: lastSelectedRowKey})
+            if (lastSelectedRowKey) return
             setTimeout(() => datatableHandle.current?.scrollBottom())
           }}
           icon="add"

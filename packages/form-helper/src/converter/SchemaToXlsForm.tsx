@@ -18,7 +18,8 @@ const importFs = () => {
 }
 
 export class SchemaToXlsForm {
-  private constructor(private readonly table: XlsFormMap) {}
+  private constructor(private readonly table: XlsFormMap) {
+  }
 
   asJson() {
     return this.table
@@ -29,7 +30,7 @@ export class SchemaToXlsForm {
     const wb = XLSX.utils.book_new()
 
     const surveySheet = XLSX.utils.json_to_sheet(this.table.survey)
-    const choicesSheet = XLSX.utils.json_to_sheet(this.table.choices, {header: ['list_name', 'name', 'label']})
+    const choicesSheet = XLSX.utils.json_to_sheet(this.table.choices)
     const settingsRows = Object.keys(this.table.settings).length ? [this.table.settings] : []
 
     const settingsSheet = XLSX.utils.json_to_sheet(settingsRows)
@@ -78,21 +79,21 @@ export class SchemaToXlsForm {
 
   private static flattenRow =
     (schema: Api.Form.Schema) =>
-    ({$kuid, ...row}: Record<string, any>): Record<string, any> => {
-      let translated = schema.translated ?? []
-      if (translated.length === 0) translated = ['constraint_message', 'hint', 'label']
-      const out: Record<string, any> = {}
-      for (const [key, value] of Obj.entries(row)) {
-        if (translated.includes(key as any) && Array.isArray(value)) {
-          schema.translations.forEach((lang, i) => {
-            out[`${key}:${lang}`] = value[i] ?? ''
-          })
-        } else {
-          out[key] = value
+      ({$kuid, ...row}: Record<string, any>): Record<string, any> => {
+        let translated = schema.translated ?? []
+        if (translated.length === 0) translated = ['constraint_message', 'hint', 'label']
+        const out: Record<string, any> = {}
+        for (const [key, value] of Obj.entries(row)) {
+          if (translated.includes(key as any) && Array.isArray(value)) {
+            schema.translations.forEach((lang, i) => {
+              out[`${key}:${lang}`] = value[i] ?? ''
+            })
+          } else {
+            out[key] = value
+          }
         }
+        return out
       }
-      return out
-    }
 
   static convert(schema: Api.Form.Schema): SchemaToXlsForm {
     return new SchemaToXlsForm({

@@ -24,7 +24,7 @@ describe('SubmissionJsonToXml (xpath includes qname)', () => {
       },
     } as unknown as Api.Submission
 
-    const converter = new SubmissionJsonToXml(qIndex)
+    const converter = new SubmissionJsonToXml('id1' as Api.FormId, qIndex)
     const xml = converter.convert(json)
     const parsed = parseXml(xml)
 
@@ -59,7 +59,7 @@ describe('SubmissionJsonToXml (xpath includes qname)', () => {
       },
     } as unknown as Api.Submission
 
-    const converter = new SubmissionJsonToXml(qIndex)
+    const converter = new SubmissionJsonToXml('id1' as Api.FormId, qIndex)
     const xml = converter.convert(json)
     const parsed = parseXml(xml)
 
@@ -103,7 +103,7 @@ describe('SubmissionJsonToXml (xpath includes qname)', () => {
       },
     } as unknown as Api.Submission
 
-    const converter = new SubmissionJsonToXml(qIndex)
+    const converter = new SubmissionJsonToXml('id1' as Api.FormId, qIndex)
     const xml = converter.convert(json)
     const parsed = parseXml(xml)
 
@@ -131,7 +131,7 @@ describe('SubmissionJsonToXml (xpath includes qname)', () => {
       },
     } as unknown as Api.Submission
 
-    const converter = new SubmissionJsonToXml(qIndex)
+    const converter = new SubmissionJsonToXml('id1' as Api.FormId, qIndex)
 
     const xml = converter.convert(json)
     const parsed = parseXml(xml)
@@ -140,7 +140,7 @@ describe('SubmissionJsonToXml (xpath includes qname)', () => {
   })
 
   it('empty JSON gives empty <data/>', () => {
-    const converter = new SubmissionJsonToXml({})
+    const converter = new SubmissionJsonToXml('id1' as Api.FormId, {})
     const xml = converter.convert({id: 'id1', answers: {}} as unknown as Api.Submission)
     const parsed = parseXml(xml)
 

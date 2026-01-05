@@ -40,7 +40,14 @@ export const AsyncInputWrapper = ({
   }, [innerValue, value])
 
   return (
-    <>
+    <form
+      style={{display: 'flex', flex: 1}}
+      onSubmit={e => {
+        e.preventDefault()
+        if (!hasChanged || isPending) return
+        onConfirm(innerValue)
+      }}
+    >
       <Box sx={{flex: 1, display: 'flex', alignItems: 'center'}}>
         <StartAdornmentLabel label={label} />
         {renderInput({
@@ -57,6 +64,7 @@ export const AsyncInputWrapper = ({
       <Core.IconBtn
         size="small"
         tooltip={m.save}
+        type="submit"
         color={errorMsg && !hasChanged ? 'error' : 'primary'}
         loading={isPending}
         disabled={!hasChanged}
@@ -64,6 +72,6 @@ export const AsyncInputWrapper = ({
       >
         check
       </Core.IconBtn>
-    </>
+    </form>
   )
 }

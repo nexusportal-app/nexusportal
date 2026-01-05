@@ -10,6 +10,7 @@ export const importXlsx = () => {
   }
   return xlsxPromise
 }
+
 export class XlsFormToSchema {
   static readonly convert = async (filePath: string): Promise<Api.Form.Schema> => {
     const xlsx = await importXlsx()
@@ -29,6 +30,7 @@ export class XlsFormToSchema {
     const mergeTranslation = (question: Record<string, any>): any => {
       const newQuestion: any = {}
       Object.keys(question).forEach(colName => {
+        if (question[colName] === '') return
         if (colName.includes('::')) {
           const [key, lang] = colName.split('::')
           if (!newQuestion[key]) newQuestion[key] = new Array(translated.length).fill(null)

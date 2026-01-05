@@ -12,7 +12,8 @@ export class FormSchemaService {
     private prisma: PrismaClient,
     private koboSchemaCache = KoboSchemaCache.getInstance(prisma),
     private koboSdk = KoboSdkGenerator.getSingleton(prisma),
-  ) {}
+  ) {
+  }
 
   readonly get = async ({formId}: {formId: Api.FormId}): Promise<undefined | Api.Form.Schema> => {
     const form = await this.getKoboInfo(formId)
@@ -23,7 +24,12 @@ export class FormSchemaService {
   }
 
   readonly downloadXls = async ({workspaceId, formId}: {workspaceId: Api.WorkspaceId; formId: Api.FormId}) => {
-    const schema = await this.get({formId})
+    const schema = await this.prisma.formVersion.findFirst({
+      select: {schemaJson: true},
+      where: {formId},
+      orderBy: {version: 'desc'},
+    })
+      .then(_ => _?.schemaJson as any)
     if (!schema) throw new HttpError.NotFound(`Schema not found for ${formId}.`)
     const buffer = await SchemaToXlsForm.convert(schema).asBuffer()
     return Readable.from(buffer)
