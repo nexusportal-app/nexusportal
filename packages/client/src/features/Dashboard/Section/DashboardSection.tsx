@@ -80,6 +80,23 @@ export function DashboardSection() {
     })
   }, [dashboard.theme])
 
+  const persistLayout = useCallback(
+    (layout: GridLayout.Layout[]) => {
+      layout.forEach(({i, x, y, w, h}) => {
+        const widget = widgets.find(_ => _.id === i)
+        if (!widget) return
+
+        const p = widget.position
+        if (p.x === x && p.y === y && p.w === w && p.h === h) return
+
+        updateWidget(i as Api.Dashboard.WidgetId, {
+          position: {x, y, w, h},
+        })
+      })
+    },
+    [widgets, updateWidget],
+  )
+
   if (!sections.some(_ => _.id === sectionId)) return <ErrorContent sx={{height: '100%'}} />
 
   return (
@@ -148,17 +165,19 @@ export function DashboardSection() {
               <Box sx={{position: 'relative'}}>
                 <GridResponsiveDivider />
                 <FixedGridLayout
-                  onLayoutChange={layout => {
-                    layout.forEach(({i, x, y, h, w}) => {
-                      if (w <= 0 || h <= 0) return
-                      const widget = widgets?.find(_ => _.id === i)
-                      if (!widget) return
-                      const p = widget.position
-                      if (p.x === x && p.y === y && p.h === h && p.w === w) return
-                      updateWidget(i as Api.Dashboard.WidgetId, {position: {x, y, h, w}})
-                    })
-                  }}
+                  // onLayoutChange={layout => {
+                  //   layout.forEach(({i, x, y, h, w}) => {
+                  //     if (w <= 0 || h <= 0) return
+                  //     const widget = widgets?.find(_ => _.id === i)
+                  //     if (!widget) return
+                  //     const p = widget.position
+                  //     if (p.x === x && p.y === y && p.h === h && p.w === w) return
+                  //     updateWidget(i as Api.Dashboard.WidgetId, {position: {x, y, h, w}})
+                  //   })
+                  // }}
                   {...layout}
+                  onDragStop={persistLayout}
+                  onResizeStop={persistLayout}
                   draggableHandle=".drag-handle"
                 >
                   {widgets.map(widget => (
