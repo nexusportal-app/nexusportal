@@ -40,7 +40,7 @@ const useBuildInterface = ({
         `// ${queryForm.data!.name}\n` +
         new SchemaTsInterfaceBuilder(name, inspector.schema, undefined, undefined, inspector).build(),
     )
-  }, [querySchema.data])
+  }, [queryForm.data, querySchema.data])
   return {
     ...querySchema,
     data,

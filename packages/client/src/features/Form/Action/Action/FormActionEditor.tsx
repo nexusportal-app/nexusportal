@@ -24,12 +24,12 @@ type Props = BoxProps & {
   isReadOnly?: boolean
 }
 
+const ACTION_PATH = '/action.ts'
+
 export function FormActionEditor(props: Props) {
   const monaco = useMonaco()
-  if (monaco) {
-    return <FormActionEditorWithMonaco monaco={monaco} {...props} />
-  }
-  return null
+  if (!monaco) return null
+  return <FormActionEditorWithMonaco monaco={monaco} {...props} />
 }
 
 function FormActionEditorWithMonaco({
@@ -38,77 +38,126 @@ function FormActionEditorWithMonaco({
   actionId,
   body = getDefaultBody(),
   inputType,
-  monaco,
-  isReadOnly,
   outputType,
+  isReadOnly,
+  monaco,
   sx,
-  ...props
-}: Props & {
-  monaco: NonNullable<ReturnType<typeof useMonaco>>
-}) {
+  ...boxProps
+}: Props & {monaco: NonNullable<ReturnType<typeof useMonaco>>}) {
   const t = useTheme()
   const {m} = useI18n()
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null)
+  const constrainedRef = useRef<any>(null)
+
   const queryActionUpdate = UseQueryFromAction.update(workspaceId, formId)
 
-  const files = useMemo(() => {
-    return {
-      '/action.ts': {
-        value: body,
-        isReadonly: false,
-      },
-      '/input.ts': {
-        isReadonly: true,
-        value: inputType,
-      },
-      '/output.ts': {
-        isReadonly: true,
-        value: outputType,
-      },
-      '/meta.ts': {
-        isReadonly: true,
-        value: getMetaInterface(),
-      },
-    } as const
-  }, [body, inputType, outputType])
+  const files = useMemo(
+    () => ({
+      [ACTION_PATH]: {value: body, readonly: false},
+      '/input.ts': {value: inputType, readonly: true},
+      '/output.ts': {value: outputType, readonly: true},
+      '/meta.ts': {value: getMetaInterface(), readonly: true},
+    }),
+    [body, inputType, outputType],
+  )
 
-  const [activePath, setActivePath] = useState<keyof typeof files>('/action.ts')
-  const [bodyChanges, setBodyChanges] = useState<string>(body)
+  const [activePath, setActivePath] = useState<keyof typeof files>(ACTION_PATH)
+  const [bodyChanges, setBodyChanges] = useState(body)
 
-  const handleSave = useCallback(() => {
-    if (isReadOnly) return
-    const model = monaco.Uri.file('/action.ts')
-    if (!model) throw new Error('Failed to load model.')
-    const markers = monaco.editor?.getModelMarkers({resource: model})
-    const errors = markers.filter(_ => _.severity >= monaco.MarkerSeverity.Error).length
-    const warnings = markers.filter(
-      _ => _.severity >= monaco.MarkerSeverity.Warning && _.severity < monaco.MarkerSeverity.Error,
-    ).length
-    queryActionUpdate.mutateAsync({id: actionId, body: bodyChanges, bodyWarnings: warnings, bodyErrors: errors})
-  }, [queryActionUpdate, isReadOnly])
+  const getModel = useCallback(
+    (path: string) => monaco.editor.getModel(monaco.Uri.file(path)),
+    [monaco],
+  )
 
-  useCaptureCtrlS(handleSave)
-  useEffect(() => setBodyChanges(body), [body])
+  const ensureModels = useCallback(() => {
+    Obj.entries(files).forEach(([path, {value}]) => {
+      const uri = monaco.Uri.file(path)
+      if (!monaco.editor.getModel(uri)) {
+        monaco.editor.createModel(value, 'typescript', uri)
+      }
+    })
+
+    // extra libs only for readonly type sources
+    // ;['/input.ts', '/output.ts', '/meta.ts'].forEach(path => {
+    //   monaco.typescript.typescriptDefaults.addExtraLib(
+    //     files[path as keyof typeof files].value,
+    //     `file://${path}`,
+    //   )
+    // })
+  }, [files, monaco])
+
+  useEffect(() => {
+    Obj.entries(files).forEach(([path, {value}]) => {
+      const model = monaco.editor.getModel(monaco.Uri.file(path))
+      if (model && model.getValue() !== value) {
+        model.setValue(value)
+      }
+    })
+
+    setBodyChanges(body)
+  }, [actionId, files, monaco])
+
+  const handleMount = useCallback(
+    (editor: monaco.editor.IStandaloneCodeEditor) => {
+      editorRef.current = editor
+      ensureModels()
+
+      editor.setModel(getModel(activePath)!)
+      constrainedRef.current = constrainedEditor(monaco)
+      constrainedRef.current.initializeIn(editor)
+    },
+    [ensureModels, getModel, activePath, monaco],
+  )
 
   useEffect(() => {
     const editor = editorRef.current
     if (!editor) return
 
-    const uri = monaco.Uri.file(activePath)
-    const model = monaco.editor.getModel(uri)
+    const model = getModel(activePath)
     if (!model) return
 
-    editor.updateOptions({readOnly: false})
     editor.setModel(model)
-    editor
-      .getAction('editor.action.formatDocument')
-      ?.run()
-      .then(() => {
-        editor.updateOptions({readOnly: isReadOnly ?? files[activePath].isReadonly})
-      })
-  }, [activePath])
 
-  let restrictions: any[] = []
+    const readonly = isReadOnly || files[activePath].readonly
+    editor.updateOptions({readOnly: readonly})
+
+    // Apply constraints only on action.ts
+    if (activePath === ACTION_PATH && constrainedRef.current) {
+      constrainedRef.current.removeAllRestrictions?.(model)
+
+      constrainedRef.current.addRestrictionsTo(model, [
+        {
+          range: [
+            6,
+            1,
+            model.getLineCount(),
+            model.getLineMaxColumn(model.getLineCount()),
+          ],
+        },
+      ])
+    }
+  }, [activePath, isReadOnly, files, getModel])
+
+  const handleSave = useCallback(async () => {
+    if (isReadOnly) return
+
+    const model = getModel(ACTION_PATH)
+    if (!model) return
+
+    const markers = monaco.editor.getModelMarkers({resource: model.uri})
+    const errors = markers.filter(m => m.severity === monaco.MarkerSeverity.Error).length
+    const warnings = markers.filter(m => m.severity === monaco.MarkerSeverity.Warning).length
+
+    await queryActionUpdate.mutateAsync({
+      id: actionId,
+      body: bodyChanges,
+      bodyErrors: errors,
+      bodyWarnings: warnings,
+    })
+  }, [isReadOnly, getModel, monaco, bodyChanges, queryActionUpdate, actionId])
+
+  useCaptureCtrlS(handleSave)
+  useEffect(() => setBodyChanges(body), [body])
 
   return (
     <Box
@@ -117,88 +166,68 @@ function FormActionEditorWithMonaco({
         maxHeight: '85vh',
         minHeight: 0,
         borderRadius: t.vars.shape.borderRadius,
-        overflow: 'hidden',
         background: monacoBg,
         ...sx,
       }}
-      {...props}
+      {...boxProps}
     >
-      <Tabs value={activePath} onChange={(e, _) => setActivePath(_)} sx={{background: 'none', mb: 0.5}}>
-        {Obj.keys(files).map(_ => (
+      <Tabs value={activePath} onChange={(_, v) => setActivePath(v)} sx={{background: 'none', mb: 0.5}}>
+        {Obj.keys(files).map(path => (
           <Tab
+            key={path}
+            value={path}
             sx={{color: 'white'}}
             label={
               <Box sx={{display: 'flex', alignItems: 'center'}}>
-                {(isReadOnly || files[_].isReadonly) && (
+                {(isReadOnly || files[path].readonly) && (
                   <Icon fontSize="small" sx={{mr: 1}}>
                     lock
                   </Icon>
                 )}
-                {_.replace(/^\//, '')}
+                {path.replace('/', '')}
               </Box>
             }
-            value={_}
-            key={_}
           />
         ))}
+
         {!isReadOnly && (
           <>
             <Core.Btn
-              loading={queryActionUpdate.isPending}
-              onClick={handleSave}
-              disabled={bodyChanges === body}
-              variant="contained"
               size="small"
-              sx={{alignSelf: 'center', marginLeft: 'auto', mr: 1}}
+              variant="contained"
+              loading={queryActionUpdate.isPending}
+              disabled={bodyChanges === body}
+              onClick={handleSave}
+              sx={{alignSelf: 'center', ml: 'auto', mr: 1}}
             >
               {m.save}
             </Core.Btn>
+
             <DeleteActionButton actionId={actionId} formId={formId} workspaceId={workspaceId}>
               <Core.IconBtn sx={{color: 'white'}}>delete</Core.IconBtn>
             </DeleteActionButton>
           </>
         )}
       </Tabs>
+
       <Editor
-        key={actionId}
-        options={{
-          minimap: {enabled: false},
-        }}
-        onChange={_ => {
-          if (activePath === '/action.ts') {
-            setBodyChanges(_!)
-          }
-        }}
-        onMount={(editor, monaco) => {
-          editorRef.current = editor
-          Obj.entries(files).forEach(([path, {value, isReadonly}]) => {
-            let model = monaco.editor.getModel(monaco.Uri.file(path))
-            if (!model) monaco.editor.createModel(value, 'typescript', monaco.Uri.file(path))
-            monaco.languages.typescript.typescriptDefaults.addExtraLib(
-              value,
-              `file://${path}`, // keep the .ts extension here
-            )
-          })
-          editor.setModel(monaco.editor.getModel(monaco.Uri.file(activePath)))
-          // Readonly 1st row of action.ts
-          const model = editor.getModel()!
-          const constrainedInstance = constrainedEditor(monaco)
-          constrainedInstance.initializeIn(editor)
-          restrictions.push({
-            range: [6, 1, model.getLineCount(), model.getLineMaxColumn(model.getLineCount())],
-          })
-          constrainedInstance.addRestrictionsTo(model, restrictions)
-        }}
-        beforeMount={monacoInstance => {
-          monacoInstance.languages.typescript.typescriptDefaults.setCompilerOptions({
-            target: 8, // monaco.languages.typescript.ScriptTarget.ES2020,
+        theme="vs-dark"
+        defaultLanguage="typescript"
+        options={{minimap: {enabled: false}}}
+        beforeMount={m => {
+          m.languages.typescript.typescriptDefaults.setCompilerOptions({
+            target: m.languages.typescript.ScriptTarget.ES2020,
             strict: true,
             noEmit: true,
             allowNonTsExtensions: true,
           })
         }}
-        theme="vs-dark"
-        defaultLanguage="typescript"
+        onMount={handleMount}
+        onChange={value => {
+          if (activePath === ACTION_PATH && typeof value === 'string') {
+            setBodyChanges(value)
+          }
+        }}
       />
     </Box>
   )
@@ -206,7 +235,7 @@ function FormActionEditorWithMonaco({
 
 function getMetaInterface() {
   return [
-    `// Meta Data`,
+    `// Meta data`,
     `export type Submission<T extends Record<string, any>> = {`,
     `  id: string`,
     `  submissionTime: Date`,
@@ -234,8 +263,9 @@ function getDefaultBody() {
     `import {Output} from 'output'`,
     `import {Submission} from 'meta'`,
     ``,
-    `async function transform(submission: Submission<Input.Type>): Promise<Output.Type | Output.Type[]> {`,
-    `  // write your transformation here`,
+    `export async function transform(`,
+    `  submission: Submission<Input.Type>`,
+    `): Promise<Output.Type | Output.Type[]> {`,
     `  return submission`,
     `}`,
   ].join('\n')
