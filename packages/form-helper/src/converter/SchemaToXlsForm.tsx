@@ -86,7 +86,7 @@ export class SchemaToXlsForm {
         for (const [key, value] of Obj.entries(row)) {
           if (translated.includes(key as any) && Array.isArray(value)) {
             schema.translations.forEach((lang, i) => {
-              out[`${key}:${lang}`] = value[i] ?? ''
+              out[`${key}::${lang}`] = value[i] ?? ''
             })
           } else {
             out[key] = value

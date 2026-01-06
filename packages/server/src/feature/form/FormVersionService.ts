@@ -8,6 +8,7 @@ import {KoboSchemaCache} from './KoboSchemaCache.js'
 import {SchemaParser, SchemaValidator, XlsFormToSchema} from '@infoportal/form-helper'
 import {PyxFormClient} from '../../core/PyxFormClient.js'
 import fs from 'node:fs'
+import {seq} from '@axanc/ts-utils'
 
 export class FormVersionService {
   constructor(
@@ -131,13 +132,13 @@ export class FormVersionService {
     })
   }
 
-  readonly getVersions = ({formId}: {formId: Api.FormId}): Promise<Api.Form.Version[]> => {
-    return this.prisma.formVersion
+  readonly getVersions = async ({formId}: {formId: Api.FormId}): Promise<Api.Form.Version[]> => {
+    const versions = await this.prisma.formVersion
       .findMany({
         omit: {schemaJson: true, schemaXml: true},
         where: {formId},
       })
-      .then(_ => _.map(prismaMapper.form.mapVersion) as Api.Form.Version[])
+    return seq(versions).map(prismaMapper.form.mapVersion).sortByNumber(_ => _.createdAt.getTime(), '9-0')
   }
 
   readonly hasActiveVersion = ({formId}: {formId: Api.FormId}): Promise<boolean> => {

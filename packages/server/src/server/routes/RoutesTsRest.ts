@@ -7,7 +7,6 @@ import {KoboFormService} from '../../feature/kobo/KoboFormService.js'
 import {KoboAccountService} from '../../feature/kobo/KoboAccountService.js'
 import {FormService} from '../../feature/form/FormService.js'
 import {WorkspaceService} from '../../feature/workspace/WorkspaceService.js'
-import {WorkspaceAccessService} from '../../feature/workspace/WorkspaceAccessService.js'
 import {SubmissionService} from '../../feature/form/submission/SubmissionService.js'
 import {WorkspaceInvitationService} from '../../feature/workspace/WorkspaceInvitationService.js'
 import {MetricsService} from '../../feature/MetricsService.js'
@@ -43,7 +42,6 @@ export class RoutesTsRest extends Router {
 
   readonly register = () => {
     const workspace = new WorkspaceService(this.prisma)
-    const workspaceAccess = new WorkspaceAccessService(this.prisma)
     const databaseView = new DatabaseView(this.prisma)
     const workspaceInvitation = new WorkspaceInvitationService(this.prisma)
     const koboForm = new KoboFormService(this.prisma)

@@ -20,9 +20,9 @@ export const AppSidebarAsset = ({
 }) => {
   const t = useTheme()
   return (
-    <Tooltip asset={asset}>
-      <AssetLink workspaceId={workspaceId} asset={asset}>
-        {({isActive}) => (
+    <AssetLink workspaceId={workspaceId} asset={asset}>
+      {({isActive}) => (
+        <Tooltip asset={asset}>
           <SidebarItem
             size={formItemSize}
             sx={{height: 26}}
@@ -53,9 +53,9 @@ export const AppSidebarAsset = ({
               {/* {asset.custom && <span style={{fontWeight: 300}}> ({m._koboDatabase.mergedDb})</span>} */}
             </Core.Txt>
           </SidebarItem>
-        )}
-      </AssetLink>
-    </Tooltip>
+        </Tooltip>
+      )}
+    </AssetLink>
   )
 }
 

@@ -49,9 +49,9 @@ model WorkspaceAccess {
   createdAt   DateTime    @default(now())
   createdBy   String
   level       AccessLevel
-  user        User        @relation(fields: [userId], references: [id])
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId      String      @db.Uuid
-  workspace   Workspace   @relation(fields: [workspaceId], references: [id])
+  workspace   Workspace   @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
   workspaceId String      @db.Uuid
 
   @@unique([workspaceId, userId])
@@ -383,11 +383,11 @@ model FormAction {
   bodyWarnings Int?
   logs         FormActionLog[]
 
-  form   Form   @relation("OwnerFormToAction", fields: [formId], references: [id])
+  form   Form   @relation("OwnerFormToAction", fields: [formId], references: [id], onDelete: Cascade)
   formId String
 
   // Action is triggered when this form receive new submission
-  targetForm   Form   @relation("TargetFormToAction", fields: [targetFormId], references: [id])
+  targetForm   Form   @relation("TargetFormToAction", fields: [targetFormId], references: [id], onDelete: Cascade)
   targetFormId String
 
   @@index([formId])

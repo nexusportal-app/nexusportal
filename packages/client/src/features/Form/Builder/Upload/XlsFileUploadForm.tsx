@@ -1,6 +1,6 @@
 import {Controller, useForm} from 'react-hook-form'
 import {DragDropFileInput} from '@/shared/DragDropFileInput'
-import React, {useMemo, useRef, useState} from 'react'
+import React, {useRef, useState} from 'react'
 import {Core} from '@/shared'
 import {UseQueryVersion, useQueryVersion} from '@/core/query/form/useQueryVersion'
 import {useI18n} from '@infoportal/client-i18n'
@@ -8,8 +8,7 @@ import {Alert, AlertTitle, Box, CircularProgress, Icon, Skeleton} from '@mui/mat
 import {Api} from '@infoportal/api-sdk'
 import {DiffView} from '@/features/Form/Builder/Upload/DiffView'
 import {createRoute, useNavigate} from '@tanstack/react-router'
-import {formBuilderRoute} from '@/features/Form/Builder/FormBuilder'
-import {seq} from '@axanc/ts-utils'
+import {formBuilderRoute, useFormBuilderContext} from '@/features/Form/Builder/FormBuilder'
 import {UseQueryPermission} from '@/core/query/useQueryPermission'
 import {ErrorContent} from '@/shared/PageError'
 import {FormBuilderBody} from '@/features/Form/Builder/FormBuilderBody'
@@ -42,11 +41,8 @@ export const formBuilderXlsUploaderRoute = createRoute({
 
 function XlsFileUploadForm() {
   const {workspaceId, formId} = formBuilderRoute.useParams() as {workspaceId: Api.WorkspaceId; formId: Api.FormId}
-  const queryVersion = useQueryVersion({workspaceId, formId})
   const queryPermission = UseQueryPermission.form({workspaceId, formId})
-  const lastSchema = useMemo(() => {
-    return seq(queryVersion.get.data ?? []).last()
-  }, [queryVersion.get.data])
+  const lastSchema = useFormBuilderContext(_ => _.versions.last)
 
   if (!queryPermission.data?.version_canCreate) return <ErrorContent variant="forbidden" />
   return <XlsFileUploadFormInner lastSchema={lastSchema} workspaceId={workspaceId} formId={formId} />
@@ -185,44 +181,44 @@ function XlsFileUploadFormInner({
                 },
                 ...(lastSchema
                   ? [
-                      {
-                        name: 'check',
-                        label: m.checkDiff,
-                        component: () => {
-                          const actions = <Actions disabledNext={!schemaHasChanges} />
-                          if (querySchema.isLoading) {
-                            return (
-                              <>
-                                {actions}
-                                <Skeleton height={200} />
-                              </>
-                            )
-                          }
-                          if (!validation) {
-                            return <Core.Fender type="error" title={m.error} />
-                          }
+                    {
+                      name: 'check',
+                      label: m.checkDiff,
+                      component: () => {
+                        const actions = <Actions disabledNext={!schemaHasChanges} />
+                        if (querySchema.isLoading) {
                           return (
                             <>
                               {actions}
-                              {schemaHasChanges === false && (
-                                <Alert color="error" sx={{mt: 1}}>
-                                  <AlertTitle>{m.xlsFormNoChangeTitle}</AlertTitle>
-                                  {m.xlsFormNoChangeDesc}
-                                </Alert>
-                              )}
-                              <DiffView
-                                stepperRef={stepperRef}
-                                oldStr={schemaToString(removeSysKeys(querySchema.data))}
-                                newStr={schemaToString(validation.schemaJson)}
-                                hasChanges={setSchemaHasChanges}
-                                sx={{mt: 1}}
-                              />
-                              {actions}
+                              <Skeleton height={200} />
                             </>
                           )
-                        },
+                        }
+                        if (!validation) {
+                          return <Core.Fender type="error" title={m.error} />
+                        }
+                        return (
+                          <>
+                            {actions}
+                            {schemaHasChanges === false && (
+                              <Alert color="error" sx={{mt: 1}}>
+                                <AlertTitle>{m.xlsFormNoChangeTitle}</AlertTitle>
+                                {m.xlsFormNoChangeDesc}
+                              </Alert>
+                            )}
+                            <DiffView
+                              stepperRef={stepperRef}
+                              oldStr={schemaToString(removeSysKeys(querySchema.data))}
+                              newStr={schemaToString(validation.schemaJson)}
+                              hasChanges={setSchemaHasChanges}
+                              sx={{mt: 1}}
+                            />
+                            {actions}
+                          </>
+                        )
                       },
-                    ]
+                    },
+                  ]
                   : []),
                 {
                   name: 'submit',

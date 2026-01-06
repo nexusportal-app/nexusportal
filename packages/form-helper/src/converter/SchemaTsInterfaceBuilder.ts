@@ -54,11 +54,11 @@ export class SchemaTsInterfaceBuilder {
       case 'datetime': {
         return 'Date'
       }
-      // case 'begin_repeat': {
-      //   return (
-      //     this.generateInterface(this.schemaInspector.lookup.group.getByName(question.name)?.questions ?? []) + `[]`
-      //   )
-      // }
+      case 'begin_repeat': {
+        return (
+          this.generateInterface(this.schemaInspector.lookup.group.getByName(question.name)?.questions ?? [], question.name) + `[]`
+        )
+      }
       default: {
         return 'string'
       }
@@ -71,14 +71,23 @@ export class SchemaTsInterfaceBuilder {
       .slice(0, maxLength)
   }
 
-  private generateInterface = (questions: Api.Form.Question[]): string => {
+  private generateInterface = (questions: Api.Form.Question[], parentGroupName?: string): string => {
     const body = questions
-      .filter(_ => !this.ignoredQuestionTypes.has(_.type))
+      .filter(question => {
+        if (this.ignoredQuestionTypes.has(question.type)) return false
+        const group = this.schemaInspector.lookup.group.getByQuestionName(question.name)
+        // top-level
+        if (!parentGroupName) {
+          return !group
+        }
+        // inside a repeat/group
+        return group?.name === parentGroupName
+      })
       .map(question => {
         const type = this.buildType({question})
         return [
           `// [${question.type}] ${this.sanitizeLabel(this.schemaInspector.translate.question(question.name))} (${question.$xpath})`,
-          `'${question.name}': ${type};`,
+          `'${question.name}'${question.required ? '' : '?'}: ${type};`,
         ].join('\n')
       })
     return `{\n ${body.join('\n')} }`
