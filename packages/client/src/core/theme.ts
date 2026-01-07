@@ -103,7 +103,7 @@ export const muiTheme = ({
           },
           background: {
             default: '#031525',
-            paper: '#0d2136',
+            paper: alpha('#0d2136', cardOpacity / 10),
           },
         },
       },
@@ -160,7 +160,7 @@ export const muiTheme = ({
           '.MuiIcon-root': {
             verticalAlign: 'middle',
             lineHeight: 1,
-            fontFamily: "'Material Symbols Outlined'",
+            fontFamily: '\'Material Symbols Outlined\'',
             fontSize: 24,
             fontStyle: 'normal',
             fontWeight: 'normal',
@@ -169,7 +169,7 @@ export const muiTheme = ({
             display: 'inline-block',
             whiteSpace: 'nowrap',
             direction: 'ltr',
-            fontVariationSettings: "'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24",
+            fontVariationSettings: '\'FILL\' 0, \'wght\' 400, \'GRAD\' 0, \'opsz\' 24',
           },
           b: {
             fontWeight: 'bold',

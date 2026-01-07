@@ -1,6 +1,6 @@
 import * as React from 'react'
 import {createContext, Dispatch, ReactNode, SetStateAction, useContext, useEffect, useMemo, useState} from 'react'
-import {useEffectFn} from '@axanc/react-hooks'
+import {useEffectFn, usePersistentState} from '@axanc/react-hooks'
 import {Breakpoint, useTheme} from '@mui/material'
 import {useI18n} from '@infoportal/client-i18n'
 
@@ -36,8 +36,8 @@ export const LayoutProvider = ({
   const {m} = useI18n()
   const [title, setTitle] = useState(_title)
   const [pageWidth, setPageWidth] = useState(getWidth())
-  const [sidebarOpen, setSidebarOpen] = useState(true)
-  const [sidebarPinned, setSidebarPinned] = useState(true)
+  const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [sidebarPinned, setSidebarPinned] = usePersistentState(true, {storageKey: 'app-sidebar-pinned'})
   const t = useTheme()
 
   const currentBreakpointDown = useMemo(() => {
