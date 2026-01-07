@@ -36,8 +36,8 @@ export const LayoutProvider = ({
   const {m} = useI18n()
   const [title, setTitle] = useState(_title)
   const [pageWidth, setPageWidth] = useState(getWidth())
-  const [sidebarOpen, setSidebarOpen] = useState(false)
   const [sidebarPinned, setSidebarPinned] = usePersistentState(true, {storageKey: 'app-sidebar-pinned'})
+  const [sidebarOpen, setSidebarOpen] = useState(sidebarPinned)
   const t = useTheme()
 
   const currentBreakpointDown = useMemo(() => {
