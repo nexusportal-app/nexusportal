@@ -16,86 +16,95 @@ export class SchemaTsInterfaceBuilder {
 
   private readonly schemaInspector: SchemaInspector
 
-  private readonly ignoredQuestionTypes: Set<Api.Form.QuestionType> = new Set([
+  private readonly ignoredQuestionTypes = new Set<Api.Form.QuestionType>([
     'start',
     'end',
     'begin_group',
     'end_group',
     'end_repeat',
-    // 'calculate',
-    // 'note',
   ])
 
-  private generateChoices = () => {
+  private indent = (str: string, level = 1): string =>
+    str
+      .split('\n')
+      .map(line => (line ? '  '.repeat(level) + line : line))
+      .join('\n')
+
+  private block = (lines: string[], level = 1): string =>
+    `{\n${this.indent(lines.join('\n'), level)}\n}`
+
+  private generateChoices = (): string => {
     const byList = seq(this.schema.choices).groupBy(_ => _.list_name)
-    const body = Obj.entries(byList).map(([listName, choices]) => {
-      return `${listName}: [${choices.map(_ => `'${_.name}'`).join(',')}]`
-    })
+
+    const entries = Obj.entries(byList).map(
+      ([listName, choices]) =>
+        `${listName}: [${choices.map(c => `'${c.name}'`).join(', ')}] as const,`,
+    )
+
     return [
       `export type Choice<List extends keyof typeof choices> = (typeof choices)[List][number]`,
-      `const choices = { ${body.join(',\n')} } as const`,
-    ].join('\n\n')
+      '',
+      `const choices = ${this.block(entries)}`,
+    ].join('\n')
   }
 
-  private buildType = ({question}: {question: Api.Form.Question}) => {
+  private buildType = (question: Api.Form.Question): string => {
     switch (question.type) {
-      case 'select_multiple':
-      case 'select_one': {
+      case 'select_one':
+      case 'select_multiple': {
         if (!question.select_from_list_name) return 'string'
-        const choicesCount = this.schemaInspector.lookup.choicesIndex[question.select_from_list_name].length
-        if (choicesCount > this.skipChoicesOverLimit) return `string`
-        return `Choice<'${question.select_from_list_name}'>` + (question.type === 'select_multiple' ? '[]' : '')
+        const count =
+          this.schemaInspector.lookup.choicesIndex[question.select_from_list_name]?.length ?? 0
+        if (count > this.skipChoicesOverLimit) return 'string'
+        return `Choice<'${question.select_from_list_name}'>${question.type === 'select_multiple' ? '[]' : ''}`
       }
       case 'integer':
-      case 'decimal': {
+      case 'decimal':
         return 'number'
-      }
       case 'date':
-      case 'datetime': {
+      case 'datetime':
         return 'Date'
-      }
       case 'begin_repeat': {
-        return (
-          this.generateInterface(this.schemaInspector.lookup.group.getByName(question.name)?.questions ?? [], question.name) + `[]`
-        )
+        const questions = this.schemaInspector.lookup.group.getByName(question.name)?.questions ?? []
+        return `${this.generateInterface(questions, question.name)}[]`
       }
-      default: {
+      default:
         return 'string'
-      }
     }
   }
 
-  private sanitizeLabel = (label: string, maxLength = 100) => {
-    return removeHtml(label)
-      .replaceAll(/\r?\n|\r/g, ' ')
-      .slice(0, maxLength)
+  private sanitizeLabel = (label: string, maxLength = 100): string =>
+    removeHtml(label).replace(/\r?\n/g, ' ').slice(0, maxLength)
+
+  private generateInterface = (
+    questions: Api.Form.Question[],
+    parentGroupName?: string,
+  ): string => {
+    const fields = questions
+      .filter(q => {
+        if (this.ignoredQuestionTypes.has(q.type)) return false
+        const group = this.schemaInspector.lookup.group.getByQuestionName(q.name)
+        return parentGroupName ? group?.name === parentGroupName : !group
+      })
+      .map(q => {
+        const comment = `// [${q.type}] ${this.sanitizeLabel(
+          this.schemaInspector.translate.question(q.name),
+        )} (${q.$xpath})`
+
+        const field = `'${q.name}'${q.required ? '' : '?'}: ${this.buildType(q)};`
+        return `${comment}\n${field}`
+      })
+
+    return this.block(fields)
   }
 
-  private generateInterface = (questions: Api.Form.Question[], parentGroupName?: string): string => {
-    const body = questions
-      .filter(question => {
-        if (this.ignoredQuestionTypes.has(question.type)) return false
-        const group = this.schemaInspector.lookup.group.getByQuestionName(question.name)
-        // top-level
-        if (!parentGroupName) {
-          return !group
-        }
-        // inside a repeat/group
-        return group?.name === parentGroupName
-      })
-      .map(question => {
-        const type = this.buildType({question})
-        return [
-          `// [${question.type}] ${this.sanitizeLabel(this.schemaInspector.translate.question(question.name))} (${question.$xpath})`,
-          `'${question.name}'${question.required ? '' : '?'}: ${type};`,
-        ].join('\n')
-      })
-    return `{\n ${body.join('\n')} }`
-  }
-
-  readonly build = () => {
-    const mainInterface = `export type Type = ${this.generateInterface(this.schema.survey)}`
-    const choices = this.generateChoices()
-    return `export namespace ${this.name} { ${mainInterface}\n\n${choices} }`
+  readonly build = (): string => {
+    return [
+      `export namespace ${this.name} {`,
+      this.indent(`export type Type = ${this.generateInterface(this.schema.survey)}`),
+      '',
+      this.indent(this.generateChoices()),
+      `}`,
+    ].join('\n')
   }
 }

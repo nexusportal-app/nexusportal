@@ -73,17 +73,21 @@ function FormActionEditorWithMonaco({
     Obj.entries(files).forEach(([path, {value}]) => {
       const uri = monaco.Uri.file(path)
       if (!monaco.editor.getModel(uri)) {
-        monaco.editor.createModel(value, 'typescript', uri)
+        const model = monaco.editor.createModel(value, 'typescript', uri)
+        model.updateOptions({
+          tabSize: 2,
+          insertSpaces: true,
+        })
       }
     })
 
     // extra libs only for readonly type sources
-    // ;['/input.ts', '/output.ts', '/meta.ts'].forEach(path => {
-    //   monaco.typescript.typescriptDefaults.addExtraLib(
-    //     files[path as keyof typeof files].value,
-    //     `file://${path}`,
-    //   )
-    // })
+    ;['/input.ts', '/output.ts', '/meta.ts'].forEach(path => {
+      monaco.typescript.typescriptDefaults.addExtraLib(
+        files[path as keyof typeof files].value,
+        `file://${path}`,
+      )
+    })
   }, [files, monaco])
 
   useEffect(() => {
@@ -159,6 +163,12 @@ function FormActionEditorWithMonaco({
   useCaptureCtrlS(handleSave)
   useEffect(() => setBodyChanges(body), [body])
 
+  const handleFormat = useCallback(() => {
+    const editor = editorRef.current
+    if (!editor) return
+    editor.getAction('editor.action.formatDocument')?.run()
+  }, [])
+
   return (
     <Box
       sx={{
@@ -191,22 +201,29 @@ function FormActionEditorWithMonaco({
         ))}
 
         {!isReadOnly && (
-          <>
+          <Box sx={{ml: 'auto', alignItems: 'center', display: 'flex', gap: 1, color: 'white'}}>
+            <Core.IconBtn
+              color="inherit"
+              tooltip={m.format}
+              onClick={handleFormat}
+              title="Format code"
+            >
+              format_align_left
+            </Core.IconBtn>
             <Core.Btn
               size="small"
               variant="contained"
               loading={queryActionUpdate.isPending}
               disabled={bodyChanges === body}
               onClick={handleSave}
-              sx={{alignSelf: 'center', ml: 'auto', mr: 1}}
             >
               {m.save}
             </Core.Btn>
 
             <DeleteActionButton actionId={actionId} formId={formId} workspaceId={workspaceId}>
-              <Core.IconBtn sx={{color: 'white'}}>delete</Core.IconBtn>
+              <Core.IconBtn color="inherit" tooltip={m.delete}>delete</Core.IconBtn>
             </DeleteActionButton>
-          </>
+          </Box>
         )}
       </Tabs>
 
