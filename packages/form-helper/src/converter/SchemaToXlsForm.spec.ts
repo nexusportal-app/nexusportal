@@ -26,10 +26,10 @@ describe('SchemaToXlsForm.convert', () => {
       {
         name: 'q1',
         type: 'text',
-        'label:en': 'Hello',
-        'label:fr': 'Bonjour',
-        'hint:en': 'Type here',
-        'hint:fr': 'Écris ici',
+        'label::en': 'Hello',
+        'label::fr': 'Bonjour',
+        'hint::en': 'Type here',
+        'hint::fr': 'Écris ici',
         other: 'x',
       },
     ])
@@ -74,33 +74,33 @@ describe('SchemaToXlsForm.convert', () => {
       {
         name: 'q1',
         type: 'select_one yn',
-        'label:en': 'Hello',
-        'label:fr': 'Bonjour',
-        'hint:en': 'Type here',
-        'hint:fr': 'Écris ici',
+        'label::en': 'Hello',
+        'label::fr': 'Bonjour',
+        'hint::en': 'Type here',
+        'hint::fr': 'Écris ici',
         other: 'x',
       },
       {
         name: 'q2',
         type: 'select_multiple yn',
-        'label:en': 'Hello',
-        'label:fr': 'Bonjour',
-        'hint:en': 'Type here',
-        'hint:fr': 'Écris ici',
+        'label::en': 'Hello',
+        'label::fr': 'Bonjour',
+        'hint::en': 'Type here',
+        'hint::fr': 'Écris ici',
         other: 'x',
       },
     ])
 
     expect(out.choices).toEqual([
       {
-        'label:en': 'yes',
-        'label:fr': 'yes',
+        'label::en': 'yes',
+        'label::fr': 'yes',
         list_name: 'yn',
         name: 'yes',
       },
       {
-        'label:en': 'no',
-        'label:fr': 'no',
+        'label::en': 'no',
+        'label::fr': 'no',
         list_name: 'yn',
         name: 'no',
       },
@@ -131,8 +131,8 @@ describe('SchemaToXlsForm.convert', () => {
       {
         name: 'q1',
         type: 'text',
-        'label:en': 'Hello',
-        'label:fr': '', // missing → empty string
+        'label::en': 'Hello',
+        'label::fr': '', // missing → empty string
       },
     ])
   })
@@ -190,14 +190,14 @@ describe('SchemaToXlsForm.convert', () => {
       {
         list_name: 'yesno',
         name: 'yes',
-        'label:en': 'Yes',
-        'label:es': 'Sí',
+        'label::en': 'Yes',
+        'label::es': 'Sí',
       },
       {
         list_name: 'yesno',
         name: 'no',
-        'label:en': 'No',
-        'label:es': 'No',
+        'label::en': 'No',
+        'label::es': 'No',
       },
     ])
   })

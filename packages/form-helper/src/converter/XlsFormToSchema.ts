@@ -33,7 +33,7 @@ export class XlsFormToSchema {
         if (question[colName] === '') return
         if (colName.includes('::')) {
           const [key, lang] = colName.split('::')
-          if (!newQuestion[key]) newQuestion[key] = new Array(translated.length).fill(null)
+          if (!newQuestion[key]) newQuestion[key] = new Array(langs.length).fill(null)
           newQuestion[key][langs.indexOf(lang)] = question[colName]
         } else {
           newQuestion[colName] = question[colName]
