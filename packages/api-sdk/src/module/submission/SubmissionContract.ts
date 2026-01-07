@@ -89,7 +89,7 @@ export const submissionContract = c.router({
       submissionIds: z.array(schema.submissionId).min(1),
     }),
     responses: {
-      204: schema.emptyResult,
+      204: c.noBody(),
     },
     metadata: makeMeta({
       access: {

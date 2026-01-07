@@ -107,7 +107,7 @@ export const formContract = c.router({
       formId: schema.formId,
     }),
     responses: {
-      204: schema.emptyResult,
+      204: c.noBody(),
     },
     metadata: makeMeta({
       access: {

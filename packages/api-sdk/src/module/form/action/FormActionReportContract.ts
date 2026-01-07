@@ -8,14 +8,15 @@ const c = initContract()
 
 export const formActionReportContract = c.router({
   getRunning: {
-    method: 'GET',
-    path: `/:workspaceId/form/:formId/action/report/running`,
-    pathParams: z.object({
+    method: 'POST',
+    path: `/form/action/report/running`,
+    body: z.object({
       workspaceId: schema.workspaceId,
       formId: schema.formId,
     }),
     responses: {
-      200: c.type<Api.Form.Action.Report | undefined>(),
+      200: c.type<Api.Form.Action.Report>(),
+      204: c.noBody(),
     },
     metadata: makeMeta({
       access: {
@@ -24,9 +25,9 @@ export const formActionReportContract = c.router({
     }),
   },
   getByFormId: {
-    method: 'GET',
-    path: `/:workspaceId/form/:formId/action/report`,
-    pathParams: z.object({
+    method: 'POST',
+    path: `/form/action/report`,
+    body: z.object({
       workspaceId: schema.workspaceId,
       formId: schema.formId,
     }),
@@ -43,18 +44,18 @@ export const formActionReportContract = c.router({
 
 export const formActionReportClient = (client: TsRestClient) => {
   return {
-    getRunning: (params: {
+    getRunning: (body: {
       workspaceId: Api.WorkspaceId
       formId: Api.FormId
     }): Promise<Api.Form.Action.Report | undefined> => {
       return client.form.action.report
-        .getRunning({params})
+        .getRunning({body})
         .then(map200)
         .then(_ => (_ ? Api.Form.Action.Report.map(_) : _))
     },
-    getByFormId: (params: {workspaceId: Api.WorkspaceId; formId: Api.FormId}): Promise<Api.Form.Action.Report[]> => {
+    getByFormId: (body: {workspaceId: Api.WorkspaceId; formId: Api.FormId}): Promise<Api.Form.Action.Report[]> => {
       return client.form.action.report
-        .getByFormId({params})
+        .getByFormId({body})
         .then(map200)
         .then(_ => _.map(Api.Form.Action.Report.map))
     },

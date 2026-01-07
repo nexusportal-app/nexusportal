@@ -44,7 +44,7 @@ export const workspaceContract = c.router({
     method: 'DELETE',
     path: `/workspace/:id`,
     pathParams: c.type<{id: Api.Uuid}>(),
-    responses: {204: schema.emptyResult},
+    responses: {204: c.noBody()},
     metadata: makeMeta({
       access: {
         workspace: ['canDelete'],

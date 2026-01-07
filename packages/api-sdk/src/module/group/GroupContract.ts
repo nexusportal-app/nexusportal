@@ -53,7 +53,7 @@ export const groupContract = c.router({
       id: schema.groupId,
     }),
     responses: {
-      204: schema.emptyResult,
+      204: c.noBody(),
     },
     metadata: makeMeta({
       access: {
@@ -105,7 +105,7 @@ export const groupContract = c.router({
       id: schema.groupItemId,
     }),
     responses: {
-      204: schema.emptyResult,
+      204: c.noBody(),
     },
     metadata: makeMeta({
       access: {

@@ -1,5 +1,5 @@
 import {app, AppLogger} from '../../index.js'
-import {apiContract, HttpError} from '@infoportal/api-sdk'
+import {Api, apiContract, HttpError} from '@infoportal/api-sdk'
 import {UserService} from '../../feature/user/UserService.js'
 import {createExpressEndpoints, initServer} from '@ts-rest/express'
 import {FormVersionService} from '../../feature/form/FormVersionService.js'
@@ -529,12 +529,12 @@ export class RoutesTsRest extends Router {
           report: {
             getByFormId: _ =>
               this.auth(_)
-                .then(({params}) => formActionReport.getByFormId(params))
+                .then(({body}) => formActionReport.getByFormId(body))
                 .then(this.ok200),
             getRunning: _ =>
               this.auth(_)
-                .then(({params}) => formActionRunningReport.get(params.formId))
-                .then(this.okOrNotFound),
+                .then(({body}) => formActionRunningReport.get(body.formId))
+                .then(this.okNullable),
           },
           log: {
             search: _ =>

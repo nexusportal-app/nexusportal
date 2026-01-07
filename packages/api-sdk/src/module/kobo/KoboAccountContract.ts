@@ -65,7 +65,7 @@ export const koboAccountContract = c.router({
     }),
     path: `/:workspaceId/kobo/server/:id`,
     responses: {
-      204: schema.emptyResult,
+      204: c.noBody(),
     },
     metadata: makeMeta({
       access: {

@@ -53,7 +53,7 @@ export const formActionContract = c.router({
     method: 'POST',
     path: `/form/action/remove`,
     body: c.type<Api.Form.Action.Payload.Remove>(),
-    responses: {204: schema.emptyResult},
+    responses: {204: c.noBody()},
     metadata: makeMeta({
       access: {
         form: ['action_canUpdate'],

@@ -11,7 +11,7 @@ export const dashboardContract = c.router({
     method: 'POST',
     path: '/dashboard/publish',
     body: c.type<Api.Dashboard.Payload.Publish>(),
-    responses: {204: schema.emptyResult},
+    responses: {204: c.noBody()},
   },
   getPublished: {
     method: 'POST',
@@ -38,7 +38,7 @@ export const dashboardContract = c.router({
       workspaceId: schema.workspaceId,
       id: schema.dashboardId,
     }),
-    responses: {204: schema.emptyResult},
+    responses: {204: c.noBody()},
   },
   search: {
     method: 'POST',
@@ -80,7 +80,7 @@ export const dashboardContract = c.router({
     method: 'POST',
     path: `/dashboard/delete`,
     body: c.type<Api.Dashboard.Payload.Delete>(),
-    responses: {204: schema.emptyResult},
+    responses: {204: c.noBody()},
     metadata: makeMeta({
       access: {
         workspace: ['dashboard_canDelete'],

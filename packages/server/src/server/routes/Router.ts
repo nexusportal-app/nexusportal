@@ -28,7 +28,8 @@ export class Router {
     protected formAccess = new FormAccessService(prisma),
     protected permission = new PermissionService(prisma, undefined, formAccess),
     protected log: AppLogger = app.logger('Routes'),
-  ) {}
+  ) {
+  }
 
   readonly assertAuth = async (req: Request, meta?: Meta): Promise<void> => {
     //req.session.app.user = {
@@ -56,23 +57,28 @@ export class Router {
     return args as any
   }
 
-  readonly ok200 = <T>(body: T): {status: SuccessfulHttpStatusCode; body: T} => {
+  readonly ok200 = <T>(body: T): {status: 200; body: T} => {
     return {
-      status: 200,
+      status: 200 as const,
       body: body as T,
     }
   }
 
-  readonly ok204 = <T>(body: T): {status: 204; body: undefined} => {
+  readonly ok204 = (_?: unknown): {status: 204, body: undefined} => {
     return {
-      status: 204,
-      body: {} as unknown as undefined,
+      status: 204 as const,
+      body: undefined,
     }
+  }
+
+  readonly okNullable = <T>(body: T | null | undefined): {status: 204, body: undefined} | {status: 200; body: T} => {
+    if (body === null || body === undefined) return this.ok204()
+    return this.ok200(body)
   }
 
   readonly okOrNotFound = <T>(body: T | undefined): {status: SuccessfulHttpStatusCode; body: T} => {
     if (body) return this.ok200(body)
-    throw HttpError.NotFound
+    throw new HttpError.NotFound()
   }
 
   readonly ensureFile = <T extends HandlerArgs>(args: T): Promise<T & {file: Express.Multer.File}> => {

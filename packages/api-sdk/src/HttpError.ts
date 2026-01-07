@@ -14,12 +14,12 @@ export namespace HttpError {
 
   export const throwNotFoundIfUndefined =
     (message: string = 'Resource not found') =>
-    <T>(t: T | undefined | null): T => {
-      if (t) return t
-      throw new NotFound(message)
-    }
+      <T>(t: T | undefined | null): T => {
+        if (t) return t
+        throw new NotFound(message)
+      }
 
-  export const throwError = (error: {new (): HttpError}) => (e?: Error) => {
+  export const throwError = (error: {new(): HttpError}) => (e?: Error) => {
     return Promise.reject(new error())
   }
 
@@ -29,6 +29,7 @@ export namespace HttpError {
       public data?: any,
     ) {
       super(401, message)
+      this.name = this.constructor.name
     }
   }
 
@@ -38,40 +39,42 @@ export namespace HttpError {
       public data?: any,
     ) {
       super(404, message)
+      this.name = this.constructor.name
     }
   }
 
   export class NoFileUploaded extends HttpError {
     constructor(message: string, errorId?: string) {
       super(400, message, errorId)
+      this.name = this.constructor.name
     }
   }
 
   export class BadRequest extends HttpError {
     constructor(message: string, errorId?: string) {
       super(400, message, errorId)
-      // this.name = this.constructor.name
+      this.name = this.constructor.name
     }
   }
 
   export class Conflict extends HttpError {
     constructor(message: string, errorId?: string) {
       super(409, message, errorId)
-      // this.name = this.constructor.name
+      this.name = this.constructor.name
     }
   }
 
   export class WrongFormat extends HttpError {
     constructor(message: string, errorId?: string) {
       super(400, message, errorId)
-      // this.name = this.constructor.name
+      this.name = this.constructor.name
     }
   }
 
   export class InternalServerError extends HttpError {
     constructor(message: string, errorId?: string) {
       super(500, message, errorId)
-      // this.name = this.constructor.name
+      this.name = this.constructor.name
     }
   }
 }

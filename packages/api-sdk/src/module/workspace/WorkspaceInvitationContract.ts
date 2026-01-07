@@ -34,7 +34,7 @@ export const workspaceInvitationContract = c.router({
     pathParams: z.object({
       id: schema.workspaceInvitationId,
     }),
-    responses: {204: schema.emptyResult},
+    responses: {204: c.noBody()},
   },
   create: {
     method: 'PUT',
@@ -58,7 +58,7 @@ export const workspaceInvitationContract = c.router({
       workspaceId: schema.workspaceId,
       id: schema.workspaceInvitationId,
     }),
-    responses: {204: schema.emptyResult},
+    responses: {204: c.noBody()},
     metadata: makeMeta({
       access: {
         workspace: ['user_canDelete'],

@@ -42,7 +42,7 @@ export const formAccessContract = c.router({
     path: `/:workspaceId/form/:formId/access/:id`,
     pathParams: c.type<Api.Access.Payload.PathParams & {id: Api.AccessId}>(),
     responses: {
-      204: schema.emptyResult,
+      204: c.noBody(),
     },
     metadata: makeMeta({
       access: {

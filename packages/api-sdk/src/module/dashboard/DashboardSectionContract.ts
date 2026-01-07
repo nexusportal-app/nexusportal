@@ -42,7 +42,7 @@ export const sectionContract = c.router({
       workspaceId: schema.workspaceId,
       id: schema.sectionId,
     }),
-    responses: {204: schema.emptyResult},
+    responses: {204: c.noBody()},
     metadata: makeMeta({
       access: {
         workspace: ['dashboard_canUpdate'],
