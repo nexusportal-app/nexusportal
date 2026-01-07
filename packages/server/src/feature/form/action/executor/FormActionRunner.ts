@@ -7,13 +7,13 @@ import {SubmissionService} from '../../submission/SubmissionService.js'
 import {FormActionRunningReportManager} from './FormActionRunningReportManager.js'
 import {FormActionErrorHandler} from './FormActionErrorHandler.js'
 import {Worker} from '@infoportal/form-action-runner'
-import {chunkify, seq} from '@axanc/ts-utils'
+import {chunkify, duration, seq} from '@axanc/ts-utils'
 import {PromisePool} from '@supercharge/promise-pool'
 import {appConf} from '../../../../core/AppConf.js'
 
 export class FormActionRunner {
   private liveReport = FormActionRunningReportManager.getInstance(this.prisma)
-  private errorHandler = new FormActionErrorHandler(this.prisma, app.logger('FormActionError'))
+  private errorHandler = new FormActionErrorHandler(this.prisma, app.logger('FormActionErrorHandler'))
 
   constructor(
     private prisma: PrismaClient,
@@ -22,7 +22,8 @@ export class FormActionRunner {
     private event = app.event,
     private log = app.logger('FormActionTriggerService'),
     private conf = appConf,
-  ) {}
+  ) {
+  }
 
   readonly startListening = () => {
     this.log.info('Listening to Form Actions.')
@@ -34,6 +35,8 @@ export class FormActionRunner {
   private findValidActions = app.cache.request({
     key: AppCacheKey.FormAction,
     genIndex: _ => _,
+    cacheIf: _ => false, // disable for now, could lead to unexpected bugs
+    ttlMs: duration(1, 'hour'),
     fn: async (formId: Api.FormId) => {
       return this.prisma.formAction
         .findMany({
@@ -82,12 +85,12 @@ export class FormActionRunner {
     try {
       await PromisePool.withConcurrency(1)
         .for(actions)
-        .process(async action => {
+        .process(async (action: Api.Form.Action) => {
           const submissions = await this.submission.searchAnswers({workspaceId, formId: action.targetFormId})
           this.log.info(
             `Executing ${formId}: Action ${action.id}: ${submissions.total} submissions from Form ${action.targetFormId}`,
           )
-          await this.runActionOnSubmission({workspaceId, formId, action, submissions: submissions.data})
+          await this.runActionOnSubmissions({workspaceId, formId, action, submissions: submissions.data})
           this.liveReport.update(formId, prev => ({
             actionExecuted: prev.actionExecuted + 1,
           }))
@@ -95,7 +98,7 @@ export class FormActionRunner {
       return await this.liveReport.finalize(formId)
     } catch (e) {
       await this.errorHandler.handle(e, {formId})
-      return await this.liveReport.finalize(formId, (e as Error).message)
+      return await this.liveReport.finalize(formId, (e as Error).message ?? 'Unknown error')
     }
   }
 
@@ -113,11 +116,11 @@ export class FormActionRunner {
     return Promise.all(
       actions
         .filter(a => !!a.body)
-        .map(action => this.runActionOnSubmission({workspaceId, action, formId, submissions: [submission]})),
+        .map(action => this.runActionOnSubmissions({workspaceId, action, formId, submissions: [submission]})),
     )
   }
 
-  private readonly runActionOnSubmission = async ({
+  private readonly runActionOnSubmissions = async ({
     workspaceId,
     action,
     submissions,
@@ -131,20 +134,20 @@ export class FormActionRunner {
     if (!action.body || action.disabled) return
 
     if (action.type === 'insert') {
-      const worker = new Worker()
       try {
+        const worker = new Worker()
         const jsCode = worker.transpile(action.body).outputText
 
-        const results = await PromisePool.withConcurrency(1000)
+        const results = await PromisePool.withConcurrency(Math.min(100, submissions.length))
           .for(submissions)
           .process(async s => {
             const res = await worker.run(jsCode, s)
             if (res.error) {
-              throw new HttpError.BadRequest(`Failed to run action ${action.id} on submission ${s.id}`)
+              throw new HttpError.BadRequest(`Failed to run action ${action.name} (${action.id}) on submission ${s.id}. ${JSON.stringify(res.error)}`)
             }
             return {output: res.result, submissionTime: s.submissionTime, submissionId: s.id}
           })
-        if (results.errors.length > 0) throw new HttpError.InternalServerError(JSON.stringify(results.errors))
+        if (results.errors.length > 0) throw new HttpError.InternalServerError(JSON.stringify(results.errors?.[0].message))
 
         const data = seq(results.results)
           .compactBy('output')
@@ -154,7 +157,7 @@ export class FormActionRunner {
         await chunkify({
           data,
           concurrency: 1,
-          size: this.conf.db.maxPreparedStatementParams,
+          size: this.conf.db.maxConcurrency,
           fn: async data => {
             await this.submission.createMany({
               skipDuplicates: false,
@@ -174,7 +177,9 @@ export class FormActionRunner {
           },
         })
       } catch (e) {
-        await this.errorHandler.handle(e, {actionId: action.id})
+        const error = e as Error
+        this.liveReport.update(formId, prev => ({...prev, failed: `${error.name}: ${error.message}`}))
+        await this.errorHandler.handle(e, {formId, actionId: action.id})
       }
     }
   }

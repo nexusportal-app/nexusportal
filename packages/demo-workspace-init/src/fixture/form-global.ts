@@ -1,12 +1,11 @@
 import {createdBySystem, demoWorkspaceId} from '../utils.js'
 import {Prisma} from '@infoportal/prisma'
-import {users} from './users'
 
 export const formGlobal: Prisma.FormCreateManyInput = {
   name: 'Global Database',
   type: 'smart',
   workspaceId: demoWorkspaceId,
-  category: 'Protection',
+  category: 'Global',
   deploymentStatus: 'deployed',
   id: 'id_form_global',
   uploadedBy: createdBySystem,
@@ -15,416 +14,315 @@ export const formGlobal: Prisma.FormCreateManyInput = {
 export const formGlobalSchema = {
   'survey': [
     {
-      'name': 'context',
-      'type': 'begin_group',
-      '$kuid': 'caa0d02c8a',
-      'label': [
-        'Context',
-        'Контекст',
-      ],
-      '$xpath': 'context',
-    },
-    {
-      'hint': [
-        'Program',
-        null,
-      ],
-      'name': 'program',
+      'name': 'office',
       'type': 'select_one',
-      '$kuid': '6b3c30fc0a',
+      '$kuid': '73c54b93b4',
       'label': [
-        'Program',
-        'Програма',
+        'Office',
+        'Офіс',
       ],
-      '$xpath': 'context/program',
-      'required': true,
-      'select_from_list_name': 'program',
-    },
-    {
-      'hint': [
-        'Location ADM1',
-        null,
-      ],
-      'name': 'oblast',
-      'type': 'select_one',
-      '$kuid': '66043aaa74',
-      'label': [
-        'Oblast',
-        'Область',
-      ],
-      '$xpath': 'context/oblast',
-      'required': true,
-      'select_from_list_name': 'oblast',
+      '$xpath': 'office',
+      'required': false,
+      'select_from_list_name': 'office',
     },
     {
       'name': 'donor',
       'type': 'select_one',
-      '$kuid': 'f5febece41',
+      '$kuid': 'd74658231d',
       'label': [
         'Donor',
         'Донор',
       ],
-      '$xpath': 'context/donor',
-      'required': true,
+      '$xpath': 'donor',
+      'required': false,
       'select_from_list_name': 'donor',
     },
     {
-      'type': 'end_group',
-      '$kuid': 'f68ed05f75',
-    },
-    {
-      'name': 'respondent',
-      'type': 'begin_group',
-      '$kuid': '45513f46e6',
+      'name': 'sector',
+      'type': 'select_one',
+      '$kuid': 'e3d1bf6af4',
       'label': [
-        'Respondent',
-        'Респондент',
+        'Sector',
+        'Сектор',
       ],
-      '$xpath': 'respondent',
+      '$xpath': 'sector',
+      'required': false,
+      'select_from_list_name': 'sector',
     },
     {
-      'name': 'firstname',
-      'type': 'text',
-      '$kuid': '9355c90d94',
+      'name': 'program',
+      'type': 'select_one',
+      '$kuid': 'bd355a3563',
       'label': [
-        'First Name',
-        'Ім\'я',
+        'Program',
+        'Програма',
       ],
-      '$xpath': 'respondent/firstname',
-      'required': true,
+      '$xpath': 'program',
+      'required': false,
+      'select_from_list_name': 'program',
     },
     {
-      'name': 'lastname',
-      'type': 'text',
-      '$kuid': 'a1e2b5a299',
+      'name': 'oblast',
+      'type': 'select_one',
+      '$kuid': 'deebab6b79',
       'label': [
-        'Last Name',
-        'Прізвище',
+        'Oblast',
+        'Область',
       ],
-      '$xpath': 'respondent/lastname',
-      'required': true,
+      '$xpath': 'oblast',
+      'required': false,
+      'select_from_list_name': 'oblast',
     },
     {
-      'name': 'taxid',
-      'type': 'text',
-      '$kuid': '649e08b4e8',
-      'label': [
-        'Tax ID',
-        'Ідентифікаційний номер платника податків',
-      ],
-      '$xpath': 'respondent/taxid',
-      'required': true,
-      'constraint': 'regex(., \'^[0-9]{10}$\')',
-      'constraint_message': [
-        '10 digits',
-        null,
-      ],
-    },
-    {
-      'name': 'phone',
-      'type': 'text',
-      '$kuid': 'e501d2ef77',
-      'label': [
-        'Phone number',
-        'Номер телефону',
-      ],
-      '$xpath': 'respondent/phone',
-      'constraint': 'regex(., \'^[0-9]{10}$\')',
-      'constraint_message': [
-        '10 digits',
-        null,
-      ],
-    },
-    {
-      'name': 'income',
-      'type': 'decimal',
-      '$kuid': '10384ed262',
-      'label': [
-        'Total value of HH resources received (UAH) in the last month',
-        'Загальна вартість отриманих ресурсів домогосподарства (грн.) за останній місяць',
-      ],
-      '$xpath': 'respondent/income',
-      'constraint': '. > 0',
-    },
-    {
-      'type': 'end_group',
-      '$kuid': 'bfca25640e',
-    },
-    {
-      'name': 'household',
-      'type': 'begin_group',
-      '$kuid': 'b9ca49d21c',
-      'label': [
-        'Household Characteristics',
-        'Характеристики домогосподарства',
-      ],
-      '$xpath': 'household',
-    },
-    {
-      'name': 'person',
+      'name': 'persons',
       'type': 'begin_repeat',
-      '$kuid': '2770733954',
+      '$kuid': '6e9c472f40',
       'label': [
-        'Household members',
-        'Члени домогосподарства',
+        'Individuals',
+        'Фізичні особи',
       ],
-      '$xpath': 'household/person',
+      '$xpath': 'persons',
     },
     {
       'name': 'age',
       'type': 'integer',
-      '$kuid': '3c0830c877',
+      '$kuid': '4d81867d6e',
       'label': [
         'Age',
         'Вік',
       ],
-      '$xpath': 'household/person/age',
+      '$xpath': 'persons/age',
+      'required': false,
     },
     {
       'name': 'gender',
       'type': 'select_one',
-      '$kuid': 'ef8695cf7f',
+      '$kuid': 'f133eb5764',
       'label': [
         'Gender',
         'Стать',
       ],
-      '$xpath': 'household/person/gender',
-      'required': true,
+      '$xpath': 'persons/gender',
+      'required': false,
       'select_from_list_name': 'gender',
     },
     {
       'name': 'disability',
       'type': 'select_multiple',
-      '$kuid': '01e30b02a5',
+      '$kuid': '6b701aaf02',
       'label': [
-        'Disabilities',
+        'Disability',
         'Інвалідність',
       ],
-      '$xpath': 'household/person/disability',
+      '$xpath': 'persons/disability',
+      'required': false,
       'select_from_list_name': 'disability',
     },
     {
-      'name': 'disability_level',
+      'name': 'displacement_status',
       'type': 'select_one',
-      '$kuid': '87e3f3b3d1',
+      '$kuid': '652c0f4dc5',
       'label': [
-        'Disability level',
-        'Рівень інвалідності',
+        'Displacement Status',
+        'Статус переміщеної особи',
       ],
-      '$xpath': 'household/person/disability_level',
-      'required': true,
-      'select_from_list_name': 'disability_level',
+      '$xpath': 'persons/displacement_status',
+      'required': false,
+      'select_from_list_name': 'displacement_status',
+    },
+    {
+      'name': 'tax_id',
+      'type': 'text',
+      '$kuid': '0e33d2b50b',
+      'label': [
+        'Tax ID',
+        'Ідентифікаційний номер платника податків',
+      ],
+      '$xpath': 'persons/tax_id',
+      'required': false,
+    },
+    {
+      'name': 'phone',
+      'type': 'text',
+      '$kuid': '7055a44cf8',
+      'label': [
+        'Phone Number',
+        'Номер телефону',
+      ],
+      '$xpath': 'persons/phone',
+      'required': false,
     },
     {
       'type': 'end_repeat',
-      '$kuid': '67c475d92e',
-    },
-    {
-      'type': 'end_group',
-      '$kuid': '69a55a5077',
-    },
-    {
-      'name': 'nfi',
-      'type': 'begin_group',
-      '$kuid': 'ff3ccfaede',
-      'label': [
-        'NFI Needs',
-        'Потреби в непродовольчих товарах',
-      ],
-      '$xpath': 'nfi',
-      'relevant': 'selected(${program}, \'nfi\')',
-    },
-    {
-      'name': 'nfi_note',
-      'type': 'note',
-      '$kuid': 'ff8dd533c7',
-      'label': [
-        '**NFI Kits distributed at the point of registration?**',
-        '**Чи видані набори непродовольчих товарів у місці реєстрації?**',
-      ],
-      '$xpath': 'nfi/nfi_note',
-    },
-    {
-      'name': 'nif_hkf',
-      'type': 'integer',
-      '$kuid': '569b65e793',
-      'label': [
-        'Family Hygiene Kits (HKF)',
-        'Набори сімейної гігієни (HKF)',
-      ],
-      '$xpath': 'nfi/nif_hkf',
-    },
-    {
-      'name': 'nfi_nfkf_ks',
-      'type': 'integer',
-      '$kuid': 'dbcdc01356',
-      'label': [
-        'Family NFI kits distributed (NFKF + KS)',
-        'Роздані набори сімейної непродовольчої допомоги (NFKF + KS)',
-      ],
-      '$xpath': 'nfi/nfi_nfkf_ks',
-    },
-    {
-      'name': 'nfi_kit_cc',
-      'type': 'integer',
-      '$kuid': '5e6066021c',
-      'label': [
-        'NFI Kit for Collective Center distributed',
-        'Розданий комплект непродовольчої допомоги для колективного центру',
-      ],
-      '$xpath': 'nfi/nfi_kit_cc',
-    },
-    {
-      'name': 'nfi_fks',
-      'type': 'integer',
-      '$kuid': '6feb3298a7',
-      'label': [
-        'Family kitchen set (FKS)',
-        'Набір сімейної кухні (FKS)',
-      ],
-      '$xpath': 'nfi/nfi_fks',
-    },
-    {
-      'type': 'end_group',
-      '$kuid': '4989b7c701',
-    },
-    {
-      'name': 'esk',
-      'type': 'begin_group',
-      '$kuid': 'c229f2cd48',
-      'label': [
-        'ESK Needs',
-        'Потреби ESK',
-      ],
-      '$xpath': 'esk',
-      'relevant': 'selected(${program}, \'esk\')',
-    },
-    {
-      'name': 'esk_shelter_damage',
-      'type': 'select_one',
-      '$kuid': '725aca0954',
-      'label': [
-        'Current shelter damaged?',
-        'Пошкоджено поточне житло?',
-      ],
-      '$xpath': 'esk/esk_shelter_damage',
-      'select_from_list_name': 'shelter_damage',
-    },
-    {
-      'hint': [
-        'if the individual cannot estimate, enter 0 and provide Household with one kit',
-        null,
-      ],
-      'name': 'esk_estimate_sqm_damage',
-      'type': 'integer',
-      '$kuid': '8fa17eb783',
-      'label': [
-        'Square meter or roof or window that is damaged estimation',
-        'Оцінка площі пошкодженого квадратного метра, даху чи вікна',
-      ],
-      '$xpath': 'esk/esk_estimate_sqm_damage',
-    },
-    {
-      'type': 'end_group',
-      '$kuid': 'cc81858d3b',
-    },
-    {
-      'name': 'mpca',
-      'type': 'begin_group',
-      '$kuid': '70a04d6bf5',
-      'label': [
-        'Cash Assistance Inclusion/Exclusion',
-        'Включення/виключення грошової допомоги',
-      ],
-      '$xpath': 'mpca',
-      'relevant': 'selected(${program}, \'mpca\')',
-    },
-    {
-      'name': 'mpca_tax_id_ph',
-      'type': 'image',
-      '$kuid': '37697963f1',
-      'label': [
-        'Tax number photo',
-        'Фото податкового номера',
-      ],
-      '$xpath': 'mpca/mpca_tax_id_ph',
-    },
-    {
-      'name': 'mpca_tax_exemption',
-      'type': 'select_one',
-      '$kuid': '89012f9999',
-      'label': [
-        'Have a tax exemptions?',
-        'Маєте податкові пільги?',
-      ],
-      '$xpath': 'mpca/mpca_tax_exemption',
-      'select_from_list_name': 'yn',
-    },
-    {
-      'name': 'mpca_pay_method',
-      'type': 'select_one',
-      '$kuid': 'b61d6bbbe3',
-      'label': [
-        'Preferred payment method?',
-        'Бажаний спосіб оплати?',
-      ],
-      '$xpath': 'mpca/mpca_pay_method',
-      'select_from_list_name': 'pay_method',
-    },
-    {
-      'type': 'end_group',
-      '$kuid': '750c0ecbcc',
+      '$kuid': '83e064c731',
     },
   ],
   'choices': [
     {
-      'name': 'mpca',
-      '$kuid': '5e68d7920d',
+      'name': 'bha',
+      '$kuid': '83e213cb5c',
       'label': [
-        'Multipurpose cash assistance (MPCA)',
-        'Багатоцільова грошова допомога (MPCA)',
+        'BHA',
+        'BHA',
       ],
-      'list_name': 'program',
+      'list_name': 'donor',
     },
     {
-      'name': 'nfi',
-      '$kuid': 'a1953e8333',
+      'name': 'echo',
+      '$kuid': 'a131fe6fb7',
       'label': [
-        'Non-Food Items (NFI)',
-        'Непродовольчі товари (NFI)',
+        'ECHO',
+        'ECHO',
+      ],
+      'list_name': 'donor',
+    },
+    {
+      'name': 'unhcr',
+      '$kuid': 'f78cb5464e',
+      'label': [
+        'UNHCR',
+        'UNHCR',
+      ],
+      'list_name': 'donor',
+    },
+    {
+      'name': 'ufr',
+      '$kuid': 'a6c7216d1e',
+      'label': [
+        'UFR',
+        'UFR',
+      ],
+      'list_name': 'donor',
+    },
+    {
+      'name': 'sumy',
+      '$kuid': '3996715285',
+      'label': [
+        'Sumy',
+        'Суми',
+      ],
+      'list_name': 'office',
+    },
+    {
+      'name': 'chernihiv',
+      '$kuid': '5f5e95d4d4',
+      'label': [
+        'Chernihiv',
+        'Чернігів',
+      ],
+      'list_name': 'office',
+    },
+    {
+      'name': 'dnipro',
+      '$kuid': '6faa83acf2',
+      'label': [
+        'Dnipro',
+        'Дніпро',
+      ],
+      'list_name': 'office',
+    },
+    {
+      'name': 'kharkiv',
+      '$kuid': '66d58c857e',
+      'label': [
+        'Kharkiv',
+        'Харків',
+      ],
+      'list_name': 'office',
+    },
+    {
+      'name': 'mykolaiv',
+      '$kuid': '63cb8da437',
+      'label': [
+        'Mykolaiv',
+        'Миколаїв',
+      ],
+      'list_name': 'office',
+    },
+    {
+      'name': 'sloviansk',
+      '$kuid': 'afc19f1551',
+      'label': [
+        'Sloviansk',
+        'Слов\'янськ ',
+      ],
+      'list_name': 'office',
+    },
+    {
+      'name': 'basic_needs',
+      '$kuid': 'dbfa5be391',
+      'label': [
+        'Basic Needs',
+        'Базові потреби',
+      ],
+      'list_name': 'sector',
+    },
+    {
+      'name': 'protection',
+      '$kuid': '96d58fe908',
+      'label': [
+        'Protection',
+        'Захист',
+      ],
+      'list_name': 'sector',
+    },
+    {
+      'name': 'shelter',
+      '$kuid': '053344cc94',
+      'label': [
+        'Shelter',
+        'Житло',
+      ],
+      'list_name': 'sector',
+    },
+    {
+      'name': 'shelter_repair',
+      '$kuid': '61bdab6111',
+      'label': [
+        'Shelter Repair',
+        'Ремонт житла',
       ],
       'list_name': 'program',
     },
     {
       'name': 'esk',
-      '$kuid': '8dc239da48',
+      '$kuid': 'caf01c74c0',
       'label': [
-        'Emergency Shelter Kits (ESK)',
-        'Комплекти екстреної допомоги (ESK)',
+        'Emergency Shelter Kits',
+        'Аварійні комплекти для житла',
       ],
       'list_name': 'program',
     },
     {
-      'name': 'male',
-      '$kuid': 'a4f6a9195f',
+      'name': 'nfi',
+      '$kuid': '6493a979ce',
       'label': [
-        'Male',
-        'Чоловік',
+        'Non-Food Items',
+        'Нехарчові товари',
       ],
-      'list_name': 'gender',
+      'list_name': 'program',
     },
     {
-      'name': 'female',
-      '$kuid': '047788553c',
+      'name': 'mpca',
+      '$kuid': '2db0d765dd',
       'label': [
-        'Female',
-        'Жінка',
+        'Multipurpose cash assistance',
+        'Багатоцільова грошова допомога',
       ],
-      'list_name': 'gender',
+      'list_name': 'program',
+    },
+    {
+      'name': 'protection_monito',
+      '$kuid': '0d9f37f82d',
+      'label': [
+        'Protection Monitoring',
+        'Моніторинг захисту',
+      ],
+      'list_name': 'program',
     },
     {
       'name': 'other',
-      '$kuid': 'b49d9cb875',
+      '$kuid': '9107d2b509',
       'label': [
         'Other',
         'Інше',
@@ -432,215 +330,26 @@ export const formGlobalSchema = {
       'list_name': 'gender',
     },
     {
-      'name': 'echo',
-      '$kuid': 'f7993ae2cf',
+      'name': 'female',
+      '$kuid': '2f0a32f2b9',
       'label': [
-        'ECHO',
-        'ECHO',
+        'Female',
+        'Жінка',
       ],
-      'list_name': 'donor',
+      'list_name': 'gender',
     },
     {
-      'name': 'bhab',
-      '$kuid': '84e96469e2',
+      'name': 'male',
+      '$kuid': '2224676c3c',
       'label': [
-        'BHA',
-        'BHA',
+        'Male',
+        'Чоловік',
       ],
-      'list_name': 'donor',
-    },
-    {
-      'name': 'uhf',
-      '$kuid': '98585a31cc',
-      'label': [
-        'UHF',
-        'UHF',
-      ],
-      'list_name': 'donor',
-    },
-    {
-      'name': '_3',
-      '$kuid': '12b2635a62',
-      'label': [
-        'Cannot do at all',
-        'Зовсім не можу',
-      ],
-      'list_name': 'disability_level',
-    },
-    {
-      'name': '_2',
-      '$kuid': 'ef94b8d06c',
-      'label': [
-        'Yes, a lot of difficulty',
-        'Так, дуже важко',
-      ],
-      'list_name': 'disability_level',
-    },
-    {
-      'name': '_1',
-      '$kuid': '9452f0de0a',
-      'label': [
-        'Yes, some difficulty',
-        'Так, з деякими труднощами',
-      ],
-      'list_name': 'disability_level',
-    },
-    {
-      'name': '_0',
-      '$kuid': '4602069a92',
-      'label': [
-        'No, no difficulty',
-        'Ні, без труднощів',
-      ],
-      'list_name': 'disability_level',
-    },
-    {
-      'name': 'diff_see',
-      '$kuid': '64f2d29c6e',
-      'label': [
-        'Have difficulty seeing, even if wearing glasses',
-        'Маю проблеми із зором, навіть якщо в окулярах',
-      ],
-      'list_name': 'disability',
-    },
-    {
-      'name': 'diff_hear',
-      '$kuid': '48d997eba0',
-      'label': [
-        'Have difficulty hearing, even if using a hearing aid',
-        'Маю проблеми зі слухом, навіть якщо користуюся слуховим апаратом',
-      ],
-      'list_name': 'disability',
-    },
-    {
-      'name': 'diff_walk',
-      '$kuid': '1b90cac9ce',
-      'label': [
-        'Have difficulty walking or climbing steps',
-        'Маю проблеми з ходьбою або підйомом сходами',
-      ],
-      'list_name': 'disability',
-    },
-    {
-      'name': 'diff_rem',
-      '$kuid': '837fe26d85',
-      'label': [
-        'Have difficulty remembering or concentrating',
-        'Маю проблеми із запам\'ятовуванням або концентрацією уваги',
-      ],
-      'list_name': 'disability',
-    },
-    {
-      'name': 'diff_care',
-      '$kuid': '466e063108',
-      'label': [
-        'Have difficulty with self-care such as washing all over or dressing',
-        'Маю проблеми із самообслуговуванням, наприклад, миттям або одяганням',
-      ],
-      'list_name': 'disability',
-    },
-    {
-      'name': 'diff_comm',
-      '$kuid': 'ae9f3a789c',
-      'label': [
-        'Have difficulty communicating, for example understanding or being understood',
-        'Маю проблеми зі спілкуванням, наприклад, з розумінням або тим, що тебе розуміють',
-      ],
-      'list_name': 'disability',
-    },
-    {
-      'name': 'diff_none',
-      '$kuid': '56aed4cca1',
-      'label': [
-        'None of the above apply',
-        'Жоден з перерахованих вище пунктів не застосовується',
-      ],
-      'list_name': 'disability',
-    },
-    {
-      'name': 'no_damage',
-      '$kuid': '24f61965de',
-      'label': [
-        'No Structural Damage',
-        'Без структурних пошкоджень',
-      ],
-      'list_name': 'shelter_damage',
-    },
-    {
-      'name': 'heavy_damage',
-      '$kuid': '95648c86cf',
-      'label': [
-        'No Structural Damage',
-        'Без структурних пошкоджень',
-      ],
-      'list_name': 'shelter_damage',
-    },
-    {
-      'name': 'minor_damage',
-      '$kuid': '44f04f446c',
-      'label': [
-        'Minor Damage (light or medium damages such as broken windows and doors, minor roof damage)',
-        'Незначні пошкодження (легкі або середні пошкодження, такі як розбиті вікна та двері, незначне пошкодження даху)',
-      ],
-      'list_name': 'shelter_damage',
-    },
-    {
-      'name': 'yes',
-      '$kuid': '8d6dafa109',
-      'label': [
-        'Yes',
-        'Так',
-      ],
-      'list_name': 'yn',
-    },
-    {
-      'name': 'no',
-      '$kuid': 'efad956f8e',
-      'label': [
-        'No',
-        'Ні',
-      ],
-      'list_name': 'yn',
-    },
-    {
-      'name': 'raiff_trans',
-      '$kuid': '09a0f74396',
-      'label': [
-        'Remittance Raiffaisen AVAL',
-        'Грошовий переказ Raiffaisen AVAL',
-      ],
-      'list_name': 'pay_method',
-    },
-    {
-      'name': 'ukrpost',
-      '$kuid': '31738a7302',
-      'label': [
-        'Ukrposhta',
-        'Укрпошта',
-      ],
-      'list_name': 'pay_method',
-    },
-    {
-      'name': 'bank_card',
-      '$kuid': '95e7fa4555',
-      'label': [
-        'Bank card',
-        'Банківська картка',
-      ],
-      'list_name': 'pay_method',
-    },
-    {
-      'name': 'other_pay',
-      '$kuid': '7796b31ca7',
-      'label': [
-        'Other Payment Method',
-        'Інший спосіб оплати',
-      ],
-      'list_name': 'pay_method',
+      'list_name': 'gender',
     },
     {
       'name': 'UA01',
-      '$kuid': '9dffd3f870',
+      '$kuid': 'aef3e69b03',
       'label': [
         'Autonomous Republic of Crimea',
         'Автономна Республіка Крим',
@@ -649,7 +358,7 @@ export const formGlobalSchema = {
     },
     {
       'name': 'UA71',
-      '$kuid': 'f4ff9e7a44',
+      '$kuid': '737e747de5',
       'label': [
         'Cherkaska',
         'Черкаська',
@@ -658,7 +367,7 @@ export const formGlobalSchema = {
     },
     {
       'name': 'UA74',
-      '$kuid': '551cd10ff4',
+      '$kuid': 'a151c7e8dc',
       'label': [
         'Chernihivska',
         'Чернігівська',
@@ -667,7 +376,7 @@ export const formGlobalSchema = {
     },
     {
       'name': 'UA73',
-      '$kuid': 'd25b09b193',
+      '$kuid': '812575a59a',
       'label': [
         'Chernivetska',
         'Чернівецька',
@@ -676,7 +385,7 @@ export const formGlobalSchema = {
     },
     {
       'name': 'UA12',
-      '$kuid': '3b433d6e52',
+      '$kuid': '454abbfca0',
       'label': [
         'Dnipropetrovska',
         'Дніпропетровська',
@@ -685,7 +394,7 @@ export const formGlobalSchema = {
     },
     {
       'name': 'UA14',
-      '$kuid': 'a2fa7d5b91',
+      '$kuid': '6811c71c43',
       'label': [
         'Donetska',
         'Донецька',
@@ -694,7 +403,7 @@ export const formGlobalSchema = {
     },
     {
       'name': 'UA26',
-      '$kuid': '44d04adef5',
+      '$kuid': '0cc5fbf6a6',
       'label': [
         'Ivano-Frankivska',
         'Івано-Франківська',
@@ -703,7 +412,7 @@ export const formGlobalSchema = {
     },
     {
       'name': 'UA63',
-      '$kuid': '92cbee8780',
+      '$kuid': '9e0a06f24c',
       'label': [
         'Kharkivska',
         'Харківська',
@@ -712,7 +421,7 @@ export const formGlobalSchema = {
     },
     {
       'name': 'UA65',
-      '$kuid': '0ece52aa6f',
+      '$kuid': '30988ab34f',
       'label': [
         'Khersonska',
         'Херсонська',
@@ -721,7 +430,7 @@ export const formGlobalSchema = {
     },
     {
       'name': 'UA68',
-      '$kuid': '046dca2aa9',
+      '$kuid': '356115b5c9',
       'label': [
         'Khmelnytska',
         'Хмельницька',
@@ -730,7 +439,7 @@ export const formGlobalSchema = {
     },
     {
       'name': 'UA35',
-      '$kuid': '471b919769',
+      '$kuid': '50447ac66d',
       'label': [
         'Kirovohradska',
         'Кіровоградська',
@@ -739,7 +448,7 @@ export const formGlobalSchema = {
     },
     {
       'name': 'UA80',
-      '$kuid': '25c812f15e',
+      '$kuid': '888d1c8580',
       'label': [
         'Kyiv',
         'Київ',
@@ -748,7 +457,7 @@ export const formGlobalSchema = {
     },
     {
       'name': 'UA32',
-      '$kuid': '554562e68b',
+      '$kuid': '9a5651cf59',
       'label': [
         'Kyivska',
         'Київська',
@@ -757,7 +466,7 @@ export const formGlobalSchema = {
     },
     {
       'name': 'UA44',
-      '$kuid': 'b7445c29e1',
+      '$kuid': '909d9ce612',
       'label': [
         'Luhanska',
         'Луганська',
@@ -766,7 +475,7 @@ export const formGlobalSchema = {
     },
     {
       'name': 'UA46',
-      '$kuid': '1e9da4d242',
+      '$kuid': 'e50b8334c6',
       'label': [
         'Lvivska',
         'Львівська',
@@ -775,7 +484,7 @@ export const formGlobalSchema = {
     },
     {
       'name': 'UA48',
-      '$kuid': 'a9800050f1',
+      '$kuid': 'f6f49ea777',
       'label': [
         'Mykolaivska',
         'Миколаївська',
@@ -784,7 +493,7 @@ export const formGlobalSchema = {
     },
     {
       'name': 'UA51',
-      '$kuid': '904d58c530',
+      '$kuid': '63405f79b2',
       'label': [
         'Odeska',
         'Одеська',
@@ -793,7 +502,7 @@ export const formGlobalSchema = {
     },
     {
       'name': 'UA53',
-      '$kuid': '42bcd86bdc',
+      '$kuid': 'e0a2cf7f67',
       'label': [
         'Poltavska',
         'Полтавська',
@@ -802,7 +511,7 @@ export const formGlobalSchema = {
     },
     {
       'name': 'UA56',
-      '$kuid': '5a5f00ae2f',
+      '$kuid': 'a2da8b3d80',
       'label': [
         'Rivnenska',
         'Рівненська',
@@ -811,7 +520,7 @@ export const formGlobalSchema = {
     },
     {
       'name': 'UA85',
-      '$kuid': 'ab11dce520',
+      '$kuid': '9256c9a158',
       'label': [
         'Sevastopol',
         'Севастополь',
@@ -820,7 +529,7 @@ export const formGlobalSchema = {
     },
     {
       'name': 'UA59',
-      '$kuid': '829c8071d6',
+      '$kuid': '9d1314d044',
       'label': [
         'Sumska',
         'Сумська',
@@ -829,7 +538,7 @@ export const formGlobalSchema = {
     },
     {
       'name': 'UA61',
-      '$kuid': '8a11ea1c5b',
+      '$kuid': 'b0751c0d2e',
       'label': [
         'Ternopilska',
         'Тернопільська',
@@ -838,7 +547,7 @@ export const formGlobalSchema = {
     },
     {
       'name': 'UA05',
-      '$kuid': 'ef23b32ea3',
+      '$kuid': '6ee1ce50f8',
       'label': [
         'Vinnytska',
         'Вінницька',
@@ -847,7 +556,7 @@ export const formGlobalSchema = {
     },
     {
       'name': 'UA07',
-      '$kuid': '8711f04ce5',
+      '$kuid': 'c9904471f6',
       'label': [
         'Volynska',
         'Волинська',
@@ -856,7 +565,7 @@ export const formGlobalSchema = {
     },
     {
       'name': 'UA21',
-      '$kuid': '166a0fa951',
+      '$kuid': '79eaa8a51b',
       'label': [
         'Zakarpatska',
         'Закарпатська',
@@ -865,18 +574,133 @@ export const formGlobalSchema = {
     },
     {
       'name': 'UA23',
-      '$kuid': '1f6eceba2a',
+      '$kuid': '5fac260c38',
       'label': [
         'Zaporizka',
         'Запорізька',
       ],
       'list_name': 'oblast',
     },
+    {
+      'name': 'UA18',
+      '$kuid': '106dc60e7b',
+      'label': [
+        'Zhytomyrska',
+        'Житомирська',
+      ],
+      'list_name': 'oblast',
+    },
+    {
+      'name': 'diff_see',
+      '$kuid': '4af126394d',
+      'label': [
+        'Have difficulty seeing, even if wearing glasses',
+        'Маєте труднощі із зором, навіть якщо носите окуляри',
+      ],
+      'list_name': 'disability',
+    },
+    {
+      'name': 'diff_hear',
+      '$kuid': '8979c874a1',
+      'label': [
+        'Have difficulty hearing, even if using a hearing aid',
+        'Маєте проблеми зі слухом, навіть якщо користуєтеся слуховим апаратом',
+      ],
+      'list_name': 'disability',
+    },
+    {
+      'name': 'diff_walk',
+      '$kuid': '40122e081c',
+      'label': [
+        'Have difficulty walking or climbing steps',
+        'Маєте труднощі з ходьбою або підйомом по сходах',
+      ],
+      'list_name': 'disability',
+    },
+    {
+      'name': 'diff_rem',
+      '$kuid': '039fc21cf2',
+      'label': [
+        'Have difficulty remembering or concentrating',
+        'Маєте труднощі з запам\'ятовуванням або концентрацією уваги',
+      ],
+      'list_name': 'disability',
+    },
+    {
+      'name': 'diff_care',
+      '$kuid': '3acf4b0e8c',
+      'label': [
+        'Have difficulty with self-care such as washing all over or dressing',
+        'Мають труднощі з самообслуговуванням, наприклад, з миттям або одяганням',
+      ],
+      'list_name': 'disability',
+    },
+    {
+      'name': 'diff_comm',
+      '$kuid': '26a95af6ce',
+      'label': [
+        'Have difficulty communicating, for example understanding or being understood',
+        'Маєте труднощі у спілкуванні, наприклад, у розумінні чи розумінні інших людей',
+      ],
+      'list_name': 'disability',
+    },
+    {
+      'name': 'diff_none',
+      '$kuid': '393ec91da0',
+      'label': [
+        'None of the above apply',
+        'Ніщо з перерахованого вище не стосується',
+      ],
+      'list_name': 'disability',
+    },
+    {
+      'name': 'idp',
+      '$kuid': '9590e9f9fc',
+      'label': [
+        'Internally Displaced Person (IDP)',
+        'Внутрішньо-переміщена особа (ВПО)',
+      ],
+      'list_name': 'displacement_status',
+    },
+    {
+      'name': 'long_res',
+      '$kuid': '2ef9f81638',
+      'label': [
+        'Long - Term Resident',
+        'Довгостроковий мешканець',
+      ],
+      'list_name': 'displacement_status',
+    },
+    {
+      'name': 'ret',
+      '$kuid': '5023a9ff42',
+      'label': [
+        'Returnee',
+        'Особа, яка повернулася',
+      ],
+      'list_name': 'displacement_status',
+    },
+    {
+      'name': 'ref_asy',
+      '$kuid': '303b9cc3f8',
+      'label': [
+        'Refugee/asylum seeker',
+        'Біженець/особа, що потребує прихистку',
+      ],
+      'list_name': 'displacement_status',
+    },
+    {
+      'name': 'other',
+      '$kuid': '93c02b3d28',
+      'label': [
+        'Other',
+        'інше',
+      ],
+      'list_name': 'displacement_status',
+    },
   ],
   'translated': [
     'label',
-    'hint',
-    'constraint_message',
   ],
   'translations': [
     'English (en)',

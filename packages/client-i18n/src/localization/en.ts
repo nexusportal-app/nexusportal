@@ -412,6 +412,7 @@ export const en = Object.freeze({
     category: 'Category',
     origin: 'Origin',
     originId: 'Origin ID',
+    bellowNsecond: (n: number) => `< ${n} second${n > 1 ? 's' : ''}`,
     destination: 'Destination',
     invalidUrl: 'Invalid URL',
     mainConcerns: 'Main concern',

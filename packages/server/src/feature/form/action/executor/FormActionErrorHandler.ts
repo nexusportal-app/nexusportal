@@ -7,11 +7,12 @@ export class FormActionErrorHandler {
   constructor(
     private prisma: PrismaClient,
     private log: Logger,
-  ) {}
+  ) {
+  }
 
   async handle(err: unknown, ctx: Context = {}) {
     const error = err instanceof Error ? err : new Error(String(err))
-    this.log.error(error.message + ' ' + JSON.stringify({...ctx, stack: error.stack}))
+    this.log.error((error.name + ': ' + error.message + ' > ' + JSON.stringify({stack: error.stack, ...ctx})).slice(0, 2500))
     if (ctx.actionId) {
       await this.prisma.formActionLog.create({
         data: {
