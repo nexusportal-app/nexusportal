@@ -7,7 +7,7 @@ import {
   useObjectState,
   UseObjectStateReturn,
 } from '@axanc/react-hooks'
-import {Submission} from '@/core/sdk/server/kobo/KoboMapper'
+import {Submission} from '@infoportal/form-helper'
 import {Kobo} from 'kobo-sdk'
 import {SchemaInspector} from '@infoportal/form-helper'
 import {useAppSettings} from '@/core/context/ConfigContext'

@@ -1,6 +1,6 @@
 import {Api} from '@infoportal/api-sdk'
 import {SchemaInspector} from '@infoportal/form-helper'
-import {Submission} from '@/core/sdk/server/kobo/KoboMapper'
+import {Submission} from '@infoportal/form-helper'
 import {Box, Icon, useTheme} from '@mui/material'
 import {useFormContext} from '@/features/Form/Form'
 import {useI18n} from '@infoportal/client-i18n'

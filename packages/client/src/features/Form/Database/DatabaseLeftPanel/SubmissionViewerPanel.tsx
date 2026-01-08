@@ -7,7 +7,7 @@ import {SwitchBox} from '@/shared/customInput/SwitchBox'
 import {Core} from '@/shared'
 import {Api} from '@infoportal/api-sdk'
 import {SchemaInspector} from '@infoportal/form-helper'
-import {Submission} from '@/core/sdk/server/kobo/KoboMapper'
+import {Submission} from '@infoportal/form-helper'
 import {SubmissionContent} from '@/features/Form/Submission/SubmissionContent'
 
 export type DialogAnswerViewProps = {

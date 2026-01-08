@@ -1,4 +1,4 @@
-import {Submission} from '@/core/sdk/server/kobo/KoboMapper'
+import {Submission} from '@infoportal/form-helper'
 import {SchemaInspector} from '@infoportal/form-helper'
 import React from 'react'
 import {Api} from '@infoportal/api-sdk'

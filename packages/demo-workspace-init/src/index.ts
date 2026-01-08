@@ -39,7 +39,7 @@ export class DemoWorkspaceInit {
             formId: fromRrm.id as Api.FormId,
             schemaJson: formRrmSchema,
             version: formRrmVersion.version,
-            count: 300,
+            count: 200,
             startDate: new Date(2024, 0, 1),
             endDate: new Date(2024, 11, 1),
           }),

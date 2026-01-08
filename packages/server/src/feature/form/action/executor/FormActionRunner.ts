@@ -10,6 +10,8 @@ import {Worker} from '@infoportal/form-action-runner'
 import {chunkify, duration, seq} from '@axanc/ts-utils'
 import {PromisePool} from '@supercharge/promise-pool'
 import {appConf} from '../../../../core/AppConf.js'
+import {FormSchemaService} from '../../FormSchemaService.js'
+import {SubmissionMapper} from '@infoportal/form-helper'
 
 export class FormActionRunner {
   private liveReport = FormActionRunningReportManager.getInstance(this.prisma)
@@ -17,6 +19,7 @@ export class FormActionRunner {
 
   constructor(
     private prisma: PrismaClient,
+    private schema = new FormSchemaService(prisma),
     private action = new FormActionService(prisma),
     private submission = new SubmissionService(prisma),
     private event = app.event,
@@ -77,20 +80,31 @@ export class FormActionRunner {
       throw new HttpError.BadRequest(`Cannot run actions on non-smart form ${formId}`)
     }
 
-    await this.prisma.formSubmission.deleteMany({where: {formId}})
-
-    const actions = await this.action.getActivesByForm({formId})
+    const [actions] = await Promise.all([
+      this.action.getActivesByForm({formId}),
+      this.prisma.formSubmission.deleteMany({where: {formId}}),
+    ])
     this.liveReport.start(formId, actions.length, startedBy)
     this.log.info(`Executing ${formId}: ${actions.length} actions...`)
     try {
       await PromisePool.withConcurrency(1)
         .for(actions)
         .process(async (action: Api.Form.Action) => {
+          const schema = await this.getIndexedSchema(action.targetFormId)
           const submissions = await this.submission.searchAnswers({workspaceId, formId: action.targetFormId})
+            .then(_ => _.data.map(_ => {
+              const mapped = SubmissionMapper.mapBySchema(schema, _)
+              console.log(
+                JSON.stringify((_ as any).answers.person?.map((_: any) => _.disability), null, 2), '>>',
+                JSON.stringify((mapped as any).answers.person?.map((_: any) => _.disability), null, 2),
+              )
+              return mapped
+            }))
+
           this.log.info(
-            `Executing ${formId}: Action ${action.id}: ${submissions.total} submissions from Form ${action.targetFormId}`,
+            `Executing ${formId}: Action ${action.id}: ${submissions.length} submissions from Form ${action.targetFormId}`,
           )
-          await this.runActionOnSubmissions({workspaceId, formId, action, submissions: submissions.data})
+          await this.runActionOnSubmissions({workspaceId, formId, action, submissions: submissions})
           this.liveReport.update(formId, prev => ({
             actionExecuted: prev.actionExecuted + 1,
           }))
@@ -111,13 +125,23 @@ export class FormActionRunner {
     submission: Api.Submission
     formId: Api.FormId
   }) => {
-    const actions = await this.findValidActions(formId)
+    const [actions, schema] = await Promise.all([
+      this.findValidActions(formId),
+      this.getIndexedSchema(formId),
+    ])
+    const mappedSubmission = SubmissionMapper.mapBySchema(schema, submission)
     this.log.info(`Run ${actions.length} actions for ${formId}.`)
     return Promise.all(
       actions
         .filter(a => !!a.body)
-        .map(action => this.runActionOnSubmissions({workspaceId, action, formId, submissions: [submission]})),
+        .map(action => this.runActionOnSubmissions({workspaceId, action, formId, submissions: [mappedSubmission]})),
     )
+  }
+
+  private getIndexedSchema = async (formId: Api.FormId) => {
+    const schema = await this.schema.get({formId: formId})
+    if (!schema) throw new HttpError.NotFound(`[FormActionRunner] Schema not found for ${formId}.`)
+    return seq(schema.survey).groupByFirst(_ => _.name)
   }
 
   private readonly runActionOnSubmissions = async ({
@@ -131,13 +155,12 @@ export class FormActionRunner {
     action: Api.Form.Action
     submissions: Api.Submission[]
   }) => {
-    if (!action.body || action.disabled) return
+    if (!action.body || action.disabled || submissions.length === 0) return
 
     if (action.type === 'insert') {
       try {
         const worker = new Worker()
         const jsCode = worker.transpile(action.body).outputText
-
         const results = await PromisePool.withConcurrency(Math.min(100, submissions.length))
           .for(submissions)
           .process(async s => {

@@ -1,6 +1,7 @@
 export {questionTypeMuiIcon} from './QuestionTypeMuiIcon.js'
 export * from './schema/SchemaParser.js'
 export * from './schema/SchemaValidator.js'
+export * from './submission/SubmissionMapper.js'
 export * from './submission/FormDataFlattenRepeatGroup.js'
 export * from './converter/SchemaTsInterfaceBuilder.js'
 export * from './schema/SchemaMetaHelper.js'

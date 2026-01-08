@@ -1,6 +1,6 @@
 import {useAppSettings} from '@/core/context/ConfigContext'
 import {useI18n} from '@infoportal/client-i18n'
-import {Submission} from '@/core/sdk/server/kobo/KoboMapper'
+import {Submission} from '@infoportal/form-helper'
 import {useIpToast} from '@/core/useToast'
 import {DatabaseSelectedRowsAction} from '@/features/Form/Database/DatabaseSelectedRowsAction'
 import {DatabaseImportBtn} from '@/features/Form/Database/DatabaseImportBtn'
