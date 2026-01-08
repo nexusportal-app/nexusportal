@@ -1,4 +1,3 @@
-import {Submission} from '@infoportal/form-helper'
 import {SchemaInspector} from '@infoportal/form-helper'
 import React from 'react'
 import {Api} from '@infoportal/api-sdk'
@@ -11,7 +10,7 @@ export type SubmissionEditorProps = {
   schemaXml: Api.Form.SchemaXml
   workspaceId: Api.WorkspaceId
   formId: Api.FormId
-  submission: Submission
+  submission: Api.Submission
   onSubmit: (_: {answers: Record<string, any>; attachments: File[]}) => Promise<any>
   onClose: () => void
 }

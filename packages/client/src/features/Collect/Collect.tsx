@@ -1,6 +1,5 @@
 import {createRoute} from '@tanstack/react-router'
 import {rootRoute} from '@/Router'
-import {XlsFormFiller} from 'xls-form-filler'
 import {Core, Page} from '@/shared'
 import {UseQueryForm} from '@/core/query/form/useQueryForm'
 import {UseQuerySubmission} from '@/core/query/submission/useQuerySubmission.js'
@@ -9,6 +8,7 @@ import {Api} from '@infoportal/api-sdk'
 import React, {useEffect, useState} from 'react'
 import {UseQuerySchema} from '@/core/query/form/useQuerySchema'
 import {OdkWebForm} from '@infoportal/odk-web-form-wrapper'
+import {SubmissionMapperOdk} from '@infoportal/form-helper'
 
 export const collectRoute = createRoute({
   getParentRoute: () => rootRoute,
@@ -32,7 +32,8 @@ function Collect() {
       position => {
         setGeolocation([position.coords.latitude, position.coords.longitude])
       },
-      err => {},
+      err => {
+      },
     )
   }, [])
 
@@ -48,7 +49,8 @@ function Collect() {
                 questionIndex={querySchemaInspector.data.lookup.questionIndex}
                 formXml={querySchemaXml.data as string}
                 onSubmit={_ => {
-                  querySubmit.mutateAsync({formId, workspaceId, geolocation, ..._}).then(() => toastSuccess(''))
+                  const mappedAnswers = SubmissionMapperOdk.mapAnswers(querySchemaInspector.data!.lookup.questionIndex, _.answers)
+                  querySubmit.mutateAsync({formId, workspaceId, geolocation, ..._, answers: mappedAnswers}).then(() => toastSuccess(''))
                 }}
               />
             )}

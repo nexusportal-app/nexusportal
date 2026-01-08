@@ -1,4 +1,3 @@
-import {DatabaseLeftPanelProps} from '@/features/Form/Database/DatabaseLeftPanel/DatabaseLeftPanel'
 import {useI18n} from '@infoportal/client-i18n'
 import React, {useState} from 'react'
 import {Box} from '@mui/material'
@@ -7,14 +6,13 @@ import {SwitchBox} from '@/shared/customInput/SwitchBox'
 import {Core} from '@/shared'
 import {Api} from '@infoportal/api-sdk'
 import {SchemaInspector} from '@infoportal/form-helper'
-import {Submission} from '@infoportal/form-helper'
 import {SubmissionContent} from '@/features/Form/Submission/SubmissionContent'
 
 export type DialogAnswerViewProps = {
   workspaceId: Api.WorkspaceId
   formId: Api.FormId
   schemaInspector: SchemaInspector
-  submission: Submission
+  submission: Api.Submission
   onClose: () => void
 }
 export const SubmissionViewerPanel = ({

@@ -1,7 +1,7 @@
 import {PrismaClient} from '@infoportal/prisma'
 import {app, AppCacheKey} from '../../../../index.js'
 import {IpEvent} from '@infoportal/common'
-import {HttpError, Api} from '@infoportal/api-sdk'
+import {Api, HttpError} from '@infoportal/api-sdk'
 import {FormActionService} from '../FormActionService.js'
 import {SubmissionService} from '../../submission/SubmissionService.js'
 import {FormActionRunningReportManager} from './FormActionRunningReportManager.js'
@@ -11,7 +11,7 @@ import {chunkify, duration, seq} from '@axanc/ts-utils'
 import {PromisePool} from '@supercharge/promise-pool'
 import {appConf} from '../../../../core/AppConf.js'
 import {FormSchemaService} from '../../FormSchemaService.js'
-import {SubmissionMapper} from '@infoportal/form-helper'
+import {SubmissionMapperRuntime} from '@infoportal/form-helper'
 
 export class FormActionRunner {
   private liveReport = FormActionRunningReportManager.getInstance(this.prisma)
@@ -90,16 +90,9 @@ export class FormActionRunner {
       await PromisePool.withConcurrency(1)
         .for(actions)
         .process(async (action: Api.Form.Action) => {
-          const schema = await this.getIndexedSchema(action.targetFormId)
+          const schema = await this.schema.getOrThrowIndexedSchema(action.targetFormId)
           const submissions = await this.submission.searchAnswers({workspaceId, formId: action.targetFormId})
-            .then(_ => _.data.map(_ => {
-              const mapped = SubmissionMapper.mapBySchema(schema, _)
-              console.log(
-                JSON.stringify((_ as any).answers.person?.map((_: any) => _.disability), null, 2), '>>',
-                JSON.stringify((mapped as any).answers.person?.map((_: any) => _.disability), null, 2),
-              )
-              return mapped
-            }))
+            .then(_ => _.data.map(_ => SubmissionMapperRuntime.map(schema, _)))
 
           this.log.info(
             `Executing ${formId}: Action ${action.id}: ${submissions.length} submissions from Form ${action.targetFormId}`,
@@ -127,21 +120,15 @@ export class FormActionRunner {
   }) => {
     const [actions, schema] = await Promise.all([
       this.findValidActions(formId),
-      this.getIndexedSchema(formId),
+      this.schema.getOrThrowIndexedSchema(formId),
     ])
-    const mappedSubmission = SubmissionMapper.mapBySchema(schema, submission)
+    const mappedSubmission = SubmissionMapperRuntime.map(schema, submission)
     this.log.info(`Run ${actions.length} actions for ${formId}.`)
     return Promise.all(
       actions
         .filter(a => !!a.body)
         .map(action => this.runActionOnSubmissions({workspaceId, action, formId, submissions: [mappedSubmission]})),
     )
-  }
-
-  private getIndexedSchema = async (formId: Api.FormId) => {
-    const schema = await this.schema.get({formId: formId})
-    if (!schema) throw new HttpError.NotFound(`[FormActionRunner] Schema not found for ${formId}.`)
-    return seq(schema.survey).groupByFirst(_ => _.name)
   }
 
   private readonly runActionOnSubmissions = async ({
@@ -185,7 +172,7 @@ export class FormActionRunner {
             await this.submission.createMany({
               skipDuplicates: false,
               data: data.map(d => ({
-                id: SubmissionService.genId(),
+                id: SubmissionMapperRuntime.genId(),
                 originId: d.submissionId,
                 uuid: '',
                 attachments: [],

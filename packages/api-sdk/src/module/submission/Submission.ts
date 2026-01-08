@@ -10,7 +10,9 @@ import {SubmissionHistoryValidation} from './history/SubmissionHistoryValidation
 import {Api} from '../../Api.js'
 
 export type Submission<T extends Record<string, any> = Record<string, any>> = Submission.Meta & {answers: T}
+
 export type SubmissionId = Brand<string, 'submissionId'>
+
 export namespace Submission {
   export const map = (_: Submission): Submission => {
     if (_.start) _.start = new Date(_.start)

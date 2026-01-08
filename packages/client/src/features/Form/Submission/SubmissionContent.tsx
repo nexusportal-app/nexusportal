@@ -1,6 +1,5 @@
 import {Api} from '@infoportal/api-sdk'
 import {SchemaInspector} from '@infoportal/form-helper'
-import {Submission} from '@infoportal/form-helper'
 import {Box, Icon, useTheme} from '@mui/material'
 import {useFormContext} from '@/features/Form/Form'
 import {useI18n} from '@infoportal/client-i18n'
@@ -20,7 +19,7 @@ export const SubmissionContent = ({
   workspaceId: Api.WorkspaceId
   inspector: SchemaInspector
   showQuestionWithoutAnswer?: boolean
-  answer: Submission
+  answer: Api.Submission
   formId: Api.FormId
 }) => {
   return (
@@ -59,7 +58,7 @@ const SubmissionViewQuestion = ({
   formId: Api.FormId
   inspector: SchemaInspector
   questionSchema: Api.Form.Question
-  answer: Submission
+  answer: Api.Submission
 }) => {
   const {apiv2} = useAppSettings()
   const langIndex = useFormContext(_ => _.langIndex)

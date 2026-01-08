@@ -7,10 +7,9 @@ import {Api, HttpError} from '@infoportal/api-sdk'
 import {Util} from '../../../helper/Utils.js'
 import {genUUID, IpEvent, logPerformance} from '@infoportal/common'
 import {FormService} from '../FormService.js'
-import {nanoid} from 'nanoid'
 import {SubmissionAttachmentsService} from './SubmissionAttachmentsService.js'
 import {FormSchemaService} from '../FormSchemaService.js'
-import {SchemaInspector} from '@infoportal/form-helper'
+import {SchemaInspector, SubmissionMapperRuntime} from '@infoportal/form-helper'
 
 export class SubmissionService {
   constructor(
@@ -157,7 +156,7 @@ export class SubmissionService {
   } & Omit<Api.Submission.Payload.Submit, 'attachmentFiles'>): Prisma.FormSubmissionUncheckedCreateInput => {
     return {
       formId: formId,
-      id: this.genId(),
+      id: SubmissionMapperRuntime.genId(),
       start: new Date(),
       end: new Date(),
       uuid: genUUID(),
@@ -282,6 +281,4 @@ export class SubmissionService {
       skipDuplicates,
     })
   }
-
-  static readonly genId = (): Api.SubmissionId => nanoid(10)
 }

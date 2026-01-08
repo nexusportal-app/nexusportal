@@ -1,5 +1,4 @@
 import {UseQuerySubmission} from '@/core/query/submission/useQuerySubmission.js'
-import {Submission} from '@infoportal/form-helper'
 import {DatabaseKoboTableProvider} from '@/features/Form/Database/DatabaseContext'
 import {DatabaseTableContent} from '@/features/Form/Database/DatabaseTableContent'
 import {Skeleton} from '@mui/material'
@@ -24,9 +23,9 @@ export interface DatabaseTableProps {
   form: Api.Form
   formId: Api.FormId
   permission: Api.Permission.Form
-  dataFilter?: (_: Submission) => boolean
+  dataFilter?: (_: Api.Submission) => boolean
   onFiltersChange?: (_: Record<string, Datatable.FilterValue>) => void
-  onDataChange?: (_: {data?: Submission[]; filteredAndSortedData?: Submission[]}) => void
+  onDataChange?: (_: {data?: Api.Submission[]; filteredAndSortedData?: Api.Submission[]}) => void
   overrideEditAccess?: boolean
 }
 

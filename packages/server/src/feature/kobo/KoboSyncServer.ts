@@ -5,45 +5,26 @@ import {app, AppCacheKey, AppLogger} from '../../index.js'
 import {createdBySystem} from '../../core/DbInit.js'
 import {chunkify, seq} from '@axanc/ts-utils'
 import {SubmissionService} from '../form/submission/SubmissionService.js'
-import {HttpError, Api} from '@infoportal/api-sdk'
+import {Api, HttpError} from '@infoportal/api-sdk'
 import {appConf} from '../../core/AppConf.js'
 import {previewList} from '../../helper/Utils.js'
-import {Kobo, KoboSubmissionFormatter} from 'kobo-sdk'
-import {KoboMapper} from './KoboMapper.js'
+import {Kobo} from 'kobo-sdk'
 import {prismaMapper} from '../../core/prismaMapper/PrismaMapper.js'
-
-export type KoboInsert = {
-  id: Api.SubmissionId
-  formId: Api.FormId
-  originId: Kobo.SubmissionId
-  // koboFormId: Kobo.FormId
-  uuid: string
-  start: Date
-  end: Date
-  submissionTime: Date
-  submittedBy?: string
-  version?: string
-  validationStatus?: Api.Submission.Validation
-  validatedBy?: string
-  lastValidatedTimestamp?: number
-  geolocation: [number, number]
-  answers: Record<string, any>
-  attachments: Kobo.Submission.Attachment[]
-  deletedAt?: Date
-  deletedBy?: Api.User.Email
-}
+import {FormSchemaService} from '../form/FormSchemaService.js'
+import {SubmissionKoboMapped, SubmissionMapperKobo} from '@infoportal/form-helper'
 
 export type KoboSyncServerResult = {
   answersIdsDeleted: Kobo.FormId[]
-  answersCreated: KoboInsert[]
-  answersUpdated: KoboInsert[]
-  validationUpdated: KoboInsert[]
+  answersCreated: SubmissionKoboMapped[]
+  answersUpdated: SubmissionKoboMapped[]
+  validationUpdated: SubmissionKoboMapped[]
 }
 
 export class KoboSyncServer {
   constructor(
     private prisma: PrismaClient,
     private service = new SubmissionService(prisma),
+    private schema = new FormSchemaService(prisma),
     private koboSdkGenerator: KoboSdkGenerator = KoboSdkGenerator.getSingleton(prisma),
     private event = app.event,
     private appCache = app.cache,
@@ -52,54 +33,12 @@ export class KoboSyncServer {
   ) {
   }
 
-  private static readonly mapAnswer = (formId: Api.FormId, k: Kobo.Submission.Raw): KoboInsert => {
-    const {
-      ['formhub/uuid']: formhubUuid,
-      ['meta/instanceId']: instanceId,
-      _id,
-      start,
-      end,
-      __version__,
-      _xform_id_string,
-      _uuid,
-      _attachments,
-      _status,
-      _geolocation,
-      _submission_time,
-      _tags,
-      _notes,
-      _validation_status,
-      _submitted_by,
-      ...answers
-    } = k
-    const answersUngrouped = KoboSubmissionFormatter.removePath(answers)
-    const date = answersUngrouped.date ? new Date(answersUngrouped.date as number) : new Date(_submission_time)
-    return {
-      id: SubmissionService.genId(),
-      originId: '' + _id,
-      // koboFormId: _xform_id_string,
-      attachments: _attachments ?? [],
-      geolocation: _geolocation.filter(_ => _ !== null) as [number, number],
-      start: start ?? date,
-      end: end ?? date,
-      submissionTime: new Date(_submission_time),
-      version: __version__,
-      uuid: _uuid,
-      submittedBy: _submitted_by,
-      validationStatus: KoboMapper.mapValidation.fromKobo(k),
-      lastValidatedTimestamp: _validation_status?.timestamp,
-      formId,
-      // validatedBy: _validation_status?.by_whom,
-      answers: answersUngrouped,
-    }
-  }
-
   readonly handleWebhookNewAnswers = async ({
     koboFormId,
-    answer: _answer,
+    submission,
   }: {
     koboFormId?: Kobo.FormId
-    answer: Kobo.Submission
+    submission: Kobo.Submission.Raw
   }) => {
     if (!koboFormId) throw new HttpError.WrongFormat('missing_form_id')
     const connectedForms = await this.prisma.form
@@ -108,13 +47,15 @@ export class KoboSyncServer {
         where: {kobo: {koboId: koboFormId}},
       })
       .then(_ => _.map(prismaMapper.form.mapForm))
-    this.log.info(`Handle webhook for form ${koboFormId}, ${_answer._id}`)
-    connectedForms.map(_ => {
-      const answers = KoboSyncServer.mapAnswer(_.id, _answer)
+    this.log.info(`Handle webhook for form ${koboFormId}, ${submission._id}`)
+    connectedForms.map(async _ => {
+      const schema = await this.schema.get({formId: _.id})
+      const indexedSchema = seq(schema?.survey).groupByFirst(_ => _.name)
+      const data = SubmissionMapperKobo.map(_.id, indexedSchema, submission)
       return this.service.create({
         formId: _.id,
         workspaceId: _.workspaceId as Api.WorkspaceId,
-        data: answers,
+        data,
       })
     })
   }
@@ -198,17 +139,20 @@ export class KoboSyncServer {
     formId: Api.FormId
     koboFormId: Kobo.FormId
   }): Promise<KoboSyncServerResult> => {
-    const sdk = await this.koboSdkGenerator.getBy.koboFormId(koboFormId)
+    const [sdk, indexedSchema] = await Promise.all([
+      this.koboSdkGenerator.getBy.koboFormId(koboFormId),
+      this.schema.getOrThrowIndexedSchema(formId),
+    ])
 
     this.debug(koboFormId, `Fetch remote answers...`)
-    const remoteAnswers = await sdk.v2.submission
+    const remoteSubmissions = await sdk.v2.submission
       .getRaw({formId: koboFormId})
-      .then(_ => _.results.map(_ => KoboSyncServer.mapAnswer(formId, _)))
-    const remoteIdsIndex: Map<Kobo.FormId, KoboInsert> = remoteAnswers.reduce(
+      .then(_ => _.results.map(_ => SubmissionMapperKobo.map(formId, indexedSchema, _)))
+    const remoteIdsIndex: Map<Kobo.FormId, SubmissionKoboMapped> = remoteSubmissions.reduce(
       (map, curr) => map.set(curr.originId, curr),
-      new Map<Kobo.FormId, KoboInsert>(),
+      new Map<Kobo.FormId, SubmissionKoboMapped>(),
     )
-    this.debug(koboFormId, `Fetch remote answers... ${remoteAnswers.length} fetched.`)
+    this.debug(koboFormId, `Fetch remote answers... ${remoteSubmissions.length} fetched.`)
 
     this.debug(koboFormId, `Fetch local answers...`)
     const localAnswersIndex = await this.prisma.formSubmission
@@ -253,7 +197,7 @@ export class KoboSyncServer {
     }
 
     const handleCreate = async () => {
-      const notInsertedAnswers = remoteAnswers.filter(_ => !localAnswersIndex.has(_.originId))
+      const notInsertedAnswers = remoteSubmissions.filter(_ => !localAnswersIndex.has(_.originId))
       this.debug(koboFormId, `Handle create (${notInsertedAnswers.length})...`)
       await this.service.createMany({data: notInsertedAnswers as any, skipDuplicates: true})
       return notInsertedAnswers

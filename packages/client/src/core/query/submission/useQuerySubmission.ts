@@ -1,12 +1,11 @@
 import {QueryClient, useMutation, useQuery, useQueryClient} from '@tanstack/react-query'
 import {useAppSettings} from '../../context/ConfigContext.js'
-import {Submission} from '@infoportal/form-helper'
+import {SubmissionMapperRuntime} from '@infoportal/form-helper'
 import {queryKeys} from '../query.index.js'
 import {Api} from '@infoportal/api-sdk'
 import {produce} from 'immer'
 import {useIpToast} from '@/core/useToast.js'
 import {UseQuerySchema} from '@/core/query/form/useQuerySchema.js'
-import {SubmissionMapper} from '@infoportal/form-helper'
 
 export class UseQuerySubmission {
   static cacheRemove({
@@ -48,7 +47,7 @@ export class UseQuerySubmission {
       console.error('Cannot get schema from store.')
       return
     }
-    const mapped = SubmissionMapper.mapBySchema(schema.lookup.questionIndex, Api.Submission.map(submission))
+    const mapped = SubmissionMapperRuntime.map(schema.lookup.questionIndex, Api.Submission.map(submission))
     queryClient.setQueryData<Api.Paginate<Api.Submission>>(
       queryKeys.submission(formId),
       (old = {data: [], total: 0}) => {
@@ -72,7 +71,7 @@ export class UseQuerySubmission {
     submissionIds: Api.SubmissionId[]
   }) {
     const queryKey = queryKeys.submission(formId)
-    const previousValue = queryClient.getQueryData<Api.Paginate<Submission>>(queryKey)
+    const previousValue = queryClient.getQueryData<Api.Paginate<Api.Submission>>(queryKey)
     queryClient.setQueryData<Api.Paginate<Api.Submission>>(
       queryKeys.submission(formId),
       (old = {data: [], total: 0}) => {
@@ -103,7 +102,7 @@ export class UseQuerySubmission {
     submissionIds: Api.SubmissionId[]
   }) {
     const queryKey = queryKeys.submission(formId)
-    const previousValue = queryClient.getQueryData<Api.Paginate<Submission>>(queryKey)
+    const previousValue = queryClient.getQueryData<Api.Paginate<Api.Submission>>(queryKey)
     queryClient.setQueryData<Api.Paginate<Api.Submission>>(queryKey, (old = {data: [], total: 0}) => {
       return produce(old ?? {data: [], total: 0}, draft => {
         const idsToUpdate = new Set(submissionIds)
@@ -131,7 +130,7 @@ export class UseQuerySubmission {
         const schema = querySchema.data // ?? (await querySchema.refetch().then(r => r.data!))
         const answers = await answersPromise
         return Api.Paginate.map((_: Api.Submission) =>
-          SubmissionMapper.mapBySchema(schema!.lookup.questionIndex, _),
+          SubmissionMapperRuntime.map(schema!.lookup.questionIndex, _),
         )(answers)
       },
     })
@@ -256,8 +255,8 @@ export class UseQuerySubmission {
       },
       onMutate: async ({formId, submissionIds}) => {
         await queryClient.cancelQueries({queryKey: queryKeys.submission(formId)})
-        const previousData = queryClient.getQueryData<Api.Paginate<Submission>>(queryKeys.submission(formId))
-        queryClient.setQueryData<Api.Paginate<Submission>>(queryKeys.submission(formId), old => {
+        const previousData = queryClient.getQueryData<Api.Paginate<Api.Submission>>(queryKeys.submission(formId))
+        queryClient.setQueryData<Api.Paginate<Api.Submission>>(queryKeys.submission(formId), old => {
           if (!old) return old
           const idsIndex = new Set(submissionIds)
           return {

@@ -1,6 +1,5 @@
 import {useAppSettings} from '@/core/context/ConfigContext'
 import {useI18n} from '@infoportal/client-i18n'
-import {Submission} from '@infoportal/form-helper'
 import {useIpToast} from '@/core/useToast'
 import {DatabaseSelectedRowsAction} from '@/features/Form/Database/DatabaseSelectedRowsAction'
 import {DatabaseImportBtn} from '@/features/Form/Database/DatabaseImportBtn'
@@ -60,13 +59,13 @@ export const DatabaseTableContent = ({
 
   const [leftPanelState, setLeftPanelState] = useState<DatabaseLeftPanelState | undefined>()
 
-  const flatData: Submission[] | undefined = useMemo(() => {
+  const flatData: Api.Submission[] | undefined = useMemo(() => {
     if (ctx.groupDisplay.get.repeatAs !== 'rows' || ctx.groupDisplay.get.repeatGroupName === undefined) return ctx.data
     return FormDataFlattenRepeatGroup.run({
       data: ctx.data,
       path: [ctx.groupDisplay.get.repeatGroupName],
       replicateParentData: true,
-    }) as (FormDataFlattenRepeatGroup.Cursor & Submission)[]
+    }) as (FormDataFlattenRepeatGroup.Cursor & Api.Submission)[]
   }, [ctx.data, ctx.groupDisplay.get])
 
   const schemaColumns = useMemo(() => {
@@ -83,7 +82,7 @@ export const DatabaseTableContent = ({
       getFileUrl: ({fileName, formId, submissionId}) =>
         fileName && apiv2.submission.getAttachmentUrl({workspaceId, formId, submissionId, fileName}),
       isReadonly: !ctx.canEdit,
-      getRow: (_: Submission) => _.answers,
+      getRow: (_: Api.Submission) => _.answers,
       formId: ctx.form.id,
       inspector: ctx.inspector,
       externalFilesIndex: ctx.externalFilesIndex,

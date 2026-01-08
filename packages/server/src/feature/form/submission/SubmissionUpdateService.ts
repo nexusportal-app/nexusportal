@@ -1,7 +1,6 @@
-import {PrismaClient, Prisma} from '@infoportal/prisma'
+import {Prisma, PrismaClient} from '@infoportal/prisma'
 import pLimit from 'p-limit'
 import {Api} from '@infoportal/api-sdk'
-import {KoboMapper} from '../../kobo/KoboMapper.js'
 import retry from 'promise-retry'
 import {Util} from '../../../helper/Utils.js'
 import {Kobo} from 'kobo-sdk'
@@ -12,6 +11,7 @@ import {KoboSdkGenerator} from '../../kobo/KoboSdkGenerator.js'
 import {FormService} from '../FormService.js'
 import {IpEvent} from '@infoportal/common'
 import {SubmissionAttachmentsService} from './SubmissionAttachmentsService.js'
+import {SubmissionMapperKobo} from '@infoportal/form-helper'
 
 const RETRIES = 3
 const RETRY_BASE_MS = 200
@@ -177,7 +177,7 @@ export class SubmissionUpdateService {
     status: Api.Submission.Validation
     authorEmail: Api.User.Email
   }): Promise<Api.BulkResponse<Api.SubmissionId>> => {
-    const mapped = KoboMapper.mapValidation.toKobo(status)
+    const mapped = SubmissionMapperKobo.mapValidation.toKobo(status)
 
     await this.prisma.$transaction(async tx => {
       await tx.formSubmission.updateMany({
@@ -212,7 +212,7 @@ export class SubmissionUpdateService {
             ctx.sdk.v2.submission.update({
               formId: ctx.koboFormId,
               submissionIds: ctx.koboSubmissionIds,
-              data: {[KoboMapper._IP_VALIDATION_STATUS_EXTRA]: null},
+              data: {[SubmissionMapperKobo._IP_VALIDATION_STATUS_EXTRA]: null},
             }),
           ])
         }
@@ -220,7 +220,7 @@ export class SubmissionUpdateService {
           ctx.sdk.v2.submission.update({
             formId: ctx.koboFormId,
             submissionIds: ctx.koboSubmissionIds,
-            data: {[KoboMapper._IP_VALIDATION_STATUS_EXTRA]: mapped._IP_VALIDATION_STATUS_EXTRA},
+            data: {[SubmissionMapperKobo._IP_VALIDATION_STATUS_EXTRA]: mapped._IP_VALIDATION_STATUS_EXTRA},
           }),
           ctx.sdk.v2.submission.updateValidation({
             formId: ctx.koboFormId,

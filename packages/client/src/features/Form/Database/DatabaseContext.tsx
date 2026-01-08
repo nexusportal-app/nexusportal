@@ -1,13 +1,5 @@
 import React, {Dispatch, ReactNode, SetStateAction, useContext, useEffect, useState} from 'react'
-import {
-  FetchParams,
-  useAsync,
-  UseAsyncSimple,
-  useFetcher,
-  useObjectState,
-  UseObjectStateReturn,
-} from '@axanc/react-hooks'
-import {Submission} from '@infoportal/form-helper'
+import {FetchParams, useAsync, UseAsyncSimple, useFetcher, useObjectState, UseObjectStateReturn} from '@axanc/react-hooks'
 import {Kobo} from 'kobo-sdk'
 import {SchemaInspector} from '@infoportal/form-helper'
 import {useAppSettings} from '@/core/context/ConfigContext'
@@ -25,9 +17,9 @@ export interface DatabaseContext {
   canEdit: boolean
   asyncRefresh: UseAsyncSimple<() => Promise<void>>
   koboEditEnketoUrl?: (answerId: Kobo.SubmissionId) => string
-  data?: Submission[]
+  data?: Api.Submission[]
   loading?: boolean
-  setData: Dispatch<SetStateAction<Submission[]>>
+  setData: Dispatch<SetStateAction<Api.Submission[]>>
   externalFilesIndex?: KoboExternalFilesIndex
   view: UseDatabaseView
   groupDisplay: UseObjectStateReturn<DatabaseDisplay>
@@ -39,13 +31,13 @@ const Context = React.createContext({} as DatabaseContext)
 export const useDatabaseKoboTableContext = () => useContext<DatabaseContext>(Context)
 
 export const DatabaseKoboTableProvider = (props: {
-  dataFilter?: (_: Submission) => boolean
+  dataFilter?: (_: Api.Submission) => boolean
   children: ReactNode
   loading?: boolean
   permission: Api.Permission.Form
   refetch: (p?: FetchParams) => Promise<void>
   form: Api.Form
-  data?: Submission[]
+  data?: Api.Submission[]
   inspector: SchemaInspector<false>
 }) => {
   const {form, data, children, refetch} = props
@@ -98,7 +90,7 @@ export const DatabaseKoboTableProvider = (props: {
     koboId => (answerId: Kobo.SubmissionId) => api.koboApi.getEditUrl({formId: koboId, answerId}),
   )
 
-  const [mappedData, setMappedData] = useState<Submission[] | undefined>(undefined)
+  const [mappedData, setMappedData] = useState<Api.Submission[] | undefined>(undefined)
 
   useEffect(() => {
     if (data) setMappedData(data)
@@ -122,7 +114,7 @@ export const DatabaseKoboTableProvider = (props: {
         view,
         groupDisplay,
         data: mappedData,
-        setData: setMappedData as Dispatch<SetStateAction<Submission[]>>,
+        setData: setMappedData as Dispatch<SetStateAction<Api.Submission[]>>,
       }}
     >
       {children}
