@@ -142,7 +142,7 @@ export function TableWidget({widget}: {widget: Api.Dashboard.Widget}) {
     <Datatable.Component
       id={'widget-' + widget.id}
       data={data}
-      header={<WidgetTitle>{widget.i18n_title?.[langIndex]}</WidgetTitle>}
+      header={<WidgetTitle sx={{pt: 1, px: 1}}>{widget.i18n_title?.[langIndex]}</WidgetTitle>}
       getRowKey={_ => '' + _.row}
       rowHeight={32}
       module={{

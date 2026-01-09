@@ -7,11 +7,14 @@ export type UseDashboardGridLayoutResponsive = Pick<
   'layouts' | 'breakpoints' | 'cols' | 'margin' | 'rowHeight' | 'width'
 >
 
+const getSpacing = (spacing?: number) => spacing ? spacing * 2 : 16
+const rowHeight = 1
+
 export const useDashboardGridLayoutResponsive = (
   widgets: Api.Dashboard.Widget[],
   dashboard: Api.Dashboard,
 ): UseDashboardGridLayoutResponsive => {
-  const spacing = dashboard.theme.spacing ?? 8
+  const spacing = getSpacing(dashboard.theme.spacing )
 
   const layouts = useMemo(() => {
     const lg = widgets.map(_ => ({i: _.id, ..._.position}))
@@ -37,7 +40,7 @@ export const useDashboardGridLayoutResponsive = (
     breakpoints: {lg: 1200, md: 769, sm: 768, xs: 480, xxs: 0},
     cols: {lg: 12, md: 12, sm: 6, xs: 6, xxs: 6},
     margin: [spacing, spacing],
-    rowHeight: 10,
+    rowHeight,
     width: 1200,
   }
 }
@@ -48,7 +51,7 @@ export const useDashboardGridLayoutStatic = (
   widgets: Api.Dashboard.Widget[],
   dashboard: Api.Dashboard,
 ): UseDashboardGridLayoutStatic => {
-  const spacing = dashboard.theme.spacing ?? 8
+  const spacing = getSpacing(dashboard.theme.spacing )
 
   const layout = useMemo(() => {
     return widgets.map(w => ({
@@ -61,7 +64,7 @@ export const useDashboardGridLayoutStatic = (
     layout,
     cols: 12,
     margin: [spacing, spacing] as [number, number],
-    rowHeight: 10,
+    rowHeight,
     width: 1200,
   }
 }

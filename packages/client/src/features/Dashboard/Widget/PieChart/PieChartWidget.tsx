@@ -42,7 +42,7 @@ export function PieChartWidget({widget}: {widget: Api.Dashboard.Widget}) {
   if (!config.questionName) return <WidgetCardPlaceholder type={widget.type} />
 
   return (
-    <Box sx={{p: 1, display: 'flex', alignItems: 'center', height: '100%'}}>
+    <Box sx={{p: 2, display: 'flex', alignItems: 'center', height: '100%'}}>
       <Core.ChartPieWidgetBy<any>
         title={widget.i18n_title?.[langIndex]}
         data={filteredData}

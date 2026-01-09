@@ -6,6 +6,7 @@ import {Obj, seq} from '@axanc/ts-utils'
 import {Api} from '@infoportal/api-sdk'
 import {useCallback, useMemo} from 'react'
 import {normalizeIsoRegion} from '@infoportal/client-core'
+import {Box} from '@mui/material'
 
 export const GeoChartWidget = ({widget}: {widget: Api.Dashboard.Widget}) => {
   const config = widget.config as Api.Dashboard.Widget.Config['GeoChart']
@@ -72,14 +73,14 @@ export const GeoChartWidget = ({widget}: {widget: Api.Dashboard.Widget}) => {
   if (!config.questionName) return <WidgetCardPlaceholder type={widget.type} />
 
   return (
-    <>
-      <WidgetTitle sx={{mx: 1, mt: 1}}>{widget.i18n_title?.[langIndex]}</WidgetTitle>
+    <Box sx={{p: 2}}>
+      <WidgetTitle>{widget.i18n_title?.[langIndex]}</WidgetTitle>
       <Core.ChartGeo
         data={data}
         country={config.countryIsoCode as any}
         onRegionClick={handleChoiceClick}
         selected={selectedRegions}
       />
-    </>
+    </Box>
   )
 }

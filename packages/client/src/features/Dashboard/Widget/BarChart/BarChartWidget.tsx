@@ -99,7 +99,7 @@ export function BarChartWidget({widget, inEditor}: {inEditor?: boolean; widget: 
   if (!config.questionName || !question) return <WidgetCardPlaceholder type={widget.type} />
 
   return (
-    <Box sx={{p: 1}}>
+    <Box sx={{p: 2}}>
       <WidgetTitle>{widget.i18n_title?.[langIndex]}</WidgetTitle>
       <Core.ChartBarBy
         checked={filter.questions[config.questionName]}
