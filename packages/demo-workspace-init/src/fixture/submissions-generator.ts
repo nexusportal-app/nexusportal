@@ -1,10 +1,6 @@
 import {Api} from '@infoportal/api-sdk'
 import {Prisma} from '@infoportal/prisma'
 
-/* ------------------------------------------------------------------ */
-/* Types */
-/* ------------------------------------------------------------------ */
-
 type SurveyNode = {
   name: string
   type: string
@@ -19,10 +15,6 @@ type Choice = {
 }
 
 type NumericRanges = Record<string, [number, number]>
-
-/* ------------------------------------------------------------------ */
-/* Utils */
-/* ------------------------------------------------------------------ */
 
 const pick = <T>(arr: T[]): T =>
   arr[Math.floor(Math.random() * arr.length)]
@@ -45,48 +37,17 @@ function indexChoices(choices: Choice[]) {
   }, {})
 }
 
-/* ------------------------------------------------------------------ */
-/* Trend engine (NON repeat fields only) */
-/* ------------------------------------------------------------------ */
+const idHistory = new Map<string, string[]>()
 
-type Trend = {
-  base: number
-  slope: number
-  noise: number
-}
-
-const trendByField = new Map<string, Trend>()
-
-function getTrend(field: string, min: number, max: number): Trend {
-  if (!trendByField.has(field)) {
-    trendByField.set(field, {
-      base: randomInt(min, max),
-      slope: randomInt(-2, 4),
-      noise: Math.max(1, Math.floor((max - min) * 0.05)),
-    })
+function biasedId(field: string) {
+  const h = idHistory.get(field) ?? []
+  if (h.length > 0 && Math.random() < 0.2) {
+    return pick(h)
   }
-  return trendByField.get(field)!
+  const v = String(randomInt(1_000_000_000, 9_999_999_999))
+  idHistory.set(field, [...h, v])
+  return v
 }
-
-function trendValue(
-  field: string,
-  step: number,
-  min: number,
-  max: number,
-) {
-  const t = getTrend(field, min, max)
-  const v =
-    t.base +
-    t.slope * step +
-    randomInt(-t.noise, t.noise)
-
-  return Math.max(min, Math.min(max, Math.round(v)))
-}
-
-/* ------------------------------------------------------------------ */
-/* Relevance */
-
-/* ------------------------------------------------------------------ */
 
 function isRelevant(q: SurveyNode, answers: Record<string, any>) {
   if (!q.relevant) return true
@@ -94,11 +55,6 @@ function isRelevant(q: SurveyNode, answers: Record<string, any>) {
   if (!m) return true
   return answers[m[1]] === m[2]
 }
-
-/* ------------------------------------------------------------------ */
-/* Repeat helpers */
-
-/* ------------------------------------------------------------------ */
 
 function isRepeatCountField(
   field: string,
@@ -125,10 +81,8 @@ function resolveRepeatCount(
   return Math.min(Math.floor(v), max)
 }
 
-/* ------------------------------------------------------------------ */
-/* Value generator */
-
-/* ------------------------------------------------------------------ */
+const randomWord = () =>
+  Math.random().toString(36).slice(2, randomInt(5, 10))
 
 function generateValue(
   q: SurveyNode,
@@ -136,12 +90,14 @@ function generateValue(
   choiceIndex: Record<string, string[]>,
   step: number,
   numericRanges: NumericRanges,
+  startDate: Date,
+  endDate: Date,
 ) {
   switch (q.type) {
     case 'text':
       return q.name.includes('id')
-        ? String(randomInt(1_000_000_000, 9_999_999_999))
-        : 'demo'
+        ? biasedId(q.name)
+        : randomWord()
 
     case 'integer':
     case 'decimal': {
@@ -154,7 +110,9 @@ function generateValue(
         return randomInt(min, max)
       }
 
-      return trendValue(q.name, step, min, max)
+      return q.type === 'integer'
+        ? randomInt(min, max)
+        : min + Math.random() * (max - min)
     }
 
     case 'select_one':
@@ -163,7 +121,15 @@ function generateValue(
     case 'select_multiple':
       return choiceIndex[q.select_from_list_name!]
         .filter(() => Math.random() > 0.6)
-        .join(' ')
+
+    case 'date': {
+      const d = randomDateBetween(startDate, endDate)
+      return d.toISOString().slice(0, 10) // YYYY-MM-DD (XLSForm compliant)
+    }
+
+    case 'datetime': {
+      return randomDateBetween(startDate, endDate).toISOString()
+    }
 
     case 'image':
       return ''
@@ -172,11 +138,6 @@ function generateValue(
       return null
   }
 }
-
-/* ------------------------------------------------------------------ */
-/* Main generator */
-
-/* ------------------------------------------------------------------ */
 
 export function generateRandomSubmissions({
   formId,
@@ -237,6 +198,8 @@ export function generateRandomSubmissions({
               choiceIndex,
               step,
               numericRanges,
+              startDate,
+              endDate,
             )
           }
           return row
@@ -255,6 +218,8 @@ export function generateRandomSubmissions({
         choiceIndex,
         step,
         numericRanges,
+        startDate,
+        endDate,
       )
     }
 

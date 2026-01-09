@@ -2,58 +2,6 @@ import {createdBySystem, demoWorkspaceId} from '../utils.js'
 import {Api} from '@infoportal/api-sdk'
 import {Prisma} from '@infoportal/prisma'
 
-// // Write your transformation here
-// return {
-//   oblast: submission.answers.oblast,
-//   office: getOffice(submission.answers.oblast),
-//   sector: getSector(submission.answers.program),
-//   program: submission.answers.program,
-//   persons: submission.answers.person?.map((person, index) => {
-//     return {
-//       age: person.age,
-//       disability: person.disability?.filter(dis => dis !== 'diff_none'),
-//       gender: person.gender,
-//       tax_id: index === 0 ? submission.answers.taxid : undefined,
-//     }
-//   })
-// }
-// }
-//
-// function getSector(program:  Input.Choice<'program'>): Output.Choice<'sector'> {
-//   switch(program) {
-//     case 'esk': {
-//       return 'shelter'
-//     }
-//     case 'mpca':
-//     case 'nfi': {
-//       return 'basic_needs'
-//     }
-//   }
-// }
-//
-// function getOffice(oblast: Input.Choice<'oblast'>): Output.Choice<'office'> | undefined {
-//   switch(oblast) {
-//     case 'UA74': {
-//       return 'chernihiv'
-//     }
-//     case 'UA59': {
-//       return 'sumy'
-//     }
-//     case 'UA12':
-//     case 'UA23': {
-//       return 'dnipro'
-//     }
-//     case 'UA48':
-//     case 'UA65': {
-//       return 'mykolaiv'
-//     }
-//     case 'UA63':
-//     case 'UA53': {
-//       return 'kharkiv'
-//     }
-//   }
-// }
-
 export const formHhs: Prisma.FormCreateManyInput = {
   name: 'Household Survey',
   type: 'internal',
@@ -69,7 +17,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'name': 'context',
       'type': 'begin_group',
-      '$kuid': '37b939bb3f',
+      '$kuid': 'de4c0a3837',
       'label': [
         'Context',
         'Контекст',
@@ -79,7 +27,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'name': 'back_office',
       'type': 'select_one',
-      '$kuid': '677fbc6b91',
+      '$kuid': '5e9d55d5f7',
       'label': [
         'Office',
         'Оберіть офіс',
@@ -91,7 +39,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'name': 'donor',
       'type': 'select_one',
-      '$kuid': '6e7a69e9e8',
+      '$kuid': '2e9979a382',
       'label': [
         'Donor',
         'Донор',
@@ -102,12 +50,12 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'type': 'end_group',
-      '$kuid': '7833d2339b',
+      '$kuid': 'f523d82805',
     },
     {
       'name': 'bio',
       'type': 'begin_group',
-      '$kuid': '9f5d9d1a98',
+      '$kuid': 'b857f5553a',
       'label': [
         'Basic bio data',
         'Основні біодані',
@@ -117,7 +65,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'name': 'current_oblast',
       'type': 'select_one',
-      '$kuid': '549eaca2e2',
+      '$kuid': '23f8b7f1d3',
       'label': [
         'Current living Oblast',
         'Область',
@@ -130,7 +78,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'name': 'current_raion',
       'type': 'select_one',
-      '$kuid': '5dbe3d1334',
+      '$kuid': '83d4f78c95',
       'label': [
         'Current living Raion',
         'Район',
@@ -148,7 +96,7 @@ export const formHhsSchema: Api.Form.Schema = {
       ],
       'name': 'citizenship',
       'type': 'select_one',
-      '$kuid': '33d74d6b9f',
+      '$kuid': 'dd458868b5',
       'label': [
         'Citizenship',
         'Громадянство',
@@ -159,7 +107,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'name': 'citizen_foreign',
       'type': 'select_one',
-      '$kuid': 'c23506c8c4',
+      '$kuid': '807a5d34d9',
       'label': [
         'If non-Ukrainian, what is your citizenship?',
         'Якщо ви не українець, яке ваше громадянство/країна походження?',
@@ -171,12 +119,12 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'type': 'end_group',
-      '$kuid': 'e8d7a8ea58',
+      '$kuid': '067dd8beab',
     },
     {
       'name': 'household ',
       'type': 'begin_group',
-      '$kuid': '610791a54d',
+      '$kuid': 'db288c27ac',
       'label': [
         'Household composition',
         'Склад домогосподарства',
@@ -190,7 +138,7 @@ export const formHhsSchema: Api.Form.Schema = {
       ],
       'name': 'household_type',
       'type': 'select_one',
-      '$kuid': 'aff6d62883',
+      '$kuid': 'a5cb1efe16',
       'label': [
         'What is the type of your household?',
         'Який тип вашого домогосподарства?',
@@ -206,7 +154,7 @@ export const formHhsSchema: Api.Form.Schema = {
       ],
       'name': 'household_size',
       'type': 'integer',
-      '$kuid': 'fe85fe11f3',
+      '$kuid': '51b9ba198c',
       'label': [
         'How many individuals, including the respondent, are in the household?',
         'Скільки осіб, включно з респондентом, входить до складу домогосподарства?',
@@ -218,9 +166,24 @@ export const formHhsSchema: Api.Form.Schema = {
       'constraint_message:ua (ua)': 'Значення не відповідає питанню "тип домогосподарства"',
     },
     {
+      'name': 'head_hh_specific_needs',
+      'type': 'select_multiple',
+      '$kuid': 'd22b6d266c',
+      'label': [
+        'Do any of these specifics needs categories apply to the head(s) of this household?',
+        'Чи властиві (чи має голова) голові цього домогосподарства наведені характеристики (or вразливості)?',
+      ],
+      '$xpath': 'household /head_hh_specific_needs',
+      'required': true,
+      'constraint': 'not(selected(., \'unable_unwilling_to_answer\') and (selected(., \'pregnant_and_lactating_woman\') or selected(., \'child_headed_household\') or selected(., \'elder__headed_household\') or selected(., \'person_with_disability_headed_household\') or selected(., \'chronicallyill_headed_household\') or selected(., \'no_specific_needs\') or selected(., \'other_specify\'))) and not(selected(., \'no_specific_needs\') and (selected(., \'pregnant_and_lactating_woman\') or selected(., \'child_headed_household\') or selected(., \'elder__headed_household\') or selected(., \'person_with_disability_headed_household\') or selected(., \'chronicallyill_headed_household\') or selected(., \'unable_unwilling_to_answer\') or selected(., \'other_specify\')))',
+      'select_from_list_name': 'specfic_needs',
+      'constraint_message:en (en)': 'Cannot have these options checked together.',
+      'constraint_message:ua (ua)': 'Ці параметри не можна перевіряти разом.',
+    },
+    {
       'name': 'persons',
       'type': 'begin_repeat',
-      '$kuid': '0c7a3a4423',
+      '$kuid': '696a4363c3',
       '$xpath': 'household /persons',
       'appearance': 'field-list',
       'repeat_count': '${household_size}',
@@ -228,10 +191,10 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'name': 'gender',
       'type': 'select_one',
-      '$kuid': 'a1ab9f2318',
+      '$kuid': '676bb50172',
       'label': [
-        '3.2.1 Select the GENDER of HH member',
-        '3.2.1 Bкажіть СТАТЬ члена домогосподарства',
+        'Select the GENDER of HH member',
+        'Bкажіть СТАТЬ члена домогосподарства',
       ],
       '$xpath': 'household /persons/gender',
       'required': 'true',
@@ -241,10 +204,10 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'name': 'age',
       'type': 'integer',
-      '$kuid': 'c5c39cae8c',
+      '$kuid': 'e6273a4bfa',
       'label': [
-        '3.2.2 Indicate the AGE of HH member',
-        '3.2.2 Bкажіть ВІК члена домогосподарства',
+        'Indicate the AGE of HH member',
+        'Bкажіть ВІК члена домогосподарства',
       ],
       '$xpath': 'household /persons/age',
       'required': 'true',
@@ -257,10 +220,10 @@ export const formHhsSchema: Api.Form.Schema = {
       ],
       'name': 'disability',
       'type': 'select_multiple',
-      '$kuid': '41088d87f6',
+      '$kuid': '8f786ee41f',
       'label': [
-        '3.2.3 Indicate if HH member has a lot of difficulty (or cannot do at all) any of the following?',
-        '3.2.3. Чи є у вас член сім\'ї, який відчуває великі труднощі (або повністю не спроможний) з чимось з наведеного переліку?',
+        'Indicate if HH member has a lot of difficulty (or cannot do at all) any of the following?',
+        'Чи є у вас член сім\'ї, який відчуває великі труднощі (або повністю не спроможний) з чимось з наведеного переліку?',
       ],
       '$xpath': 'household /persons/disability',
       'required': 'true',
@@ -271,12 +234,12 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'type': 'end_repeat',
-      '$kuid': '559ed7d359',
+      '$kuid': '16e6cc3406',
     },
     {
       'name': 'separated_any',
       'type': 'select_one',
-      '$kuid': '8817188979',
+      '$kuid': '1d3b935ed5',
       'label': [
         '3.3 Are you separated from any household member?',
         '3.3 Ви відокремлені від когось із членів родини?',
@@ -287,7 +250,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'name': 'separated_member',
       'type': 'begin_repeat',
-      '$kuid': '5a6c683bff',
+      '$kuid': '52779f1f8c',
       'label': [
         'Separated member',
         'Відокремлений член',
@@ -298,7 +261,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'name': 'relative_role',
       'type': 'select_one',
-      '$kuid': '8239dc26d9',
+      '$kuid': '95ac926742',
       'label': [
         'Who is this household member?',
         'Хто цей член родини?',
@@ -309,7 +272,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'name': 'current_location',
       'type': 'select_one',
-      '$kuid': '6c9838ce8e',
+      '$kuid': 'c2fb6c4fec',
       'label': [
         'Where is this person currently?',
         'Де зараз знаходиться ця особа?',
@@ -320,7 +283,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'name': 'reason_left_behind',
       'type': 'select_one',
-      '$kuid': 'd8eefb38f5',
+      '$kuid': 'e395fcd4f3',
       'label': [
         'Why did this person remain in the area of origin?',
         'Чому ця особа залишилася в районі походження? ${current_location}=\'area_of_origin\'',
@@ -330,16 +293,16 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'type': 'end_repeat',
-      '$kuid': '718060940d',
+      '$kuid': 'efbe566c03',
     },
     {
       'type': 'end_group',
-      '$kuid': 'cd04ba080a',
+      '$kuid': 'b34d4b7c27',
     },
     {
       'name': 'disp_info',
       'type': 'begin_group',
-      '$kuid': '1df9dc1f5e',
+      '$kuid': '36448bb4a9',
       'label': [
         'Displacement status and intentions',
         'Статус переміщення та наміри',
@@ -350,7 +313,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'name': 'disp_status',
       'type': 'select_one',
-      '$kuid': '91b8d607a1',
+      '$kuid': 'fc3c71f4e1',
       'label': [
         'What is your displacement status?',
         'Який ваш статус переміщення?',
@@ -362,7 +325,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'name': 'returnee_type',
       'type': 'select_one',
-      '$kuid': '84d905691d',
+      '$kuid': 'c845e25c71',
       'label': [
         'You are:',
         'Ви:',
@@ -375,7 +338,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'name': 'origin_label',
       'type': 'note',
-      '$kuid': '15566a3547',
+      '$kuid': 'c804748a04',
       'label': [
         'Place of habitual residence (before displacement)',
         'Місце походження',
@@ -386,7 +349,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'name': 'origin_oblast',
       'type': 'select_one',
-      '$kuid': '7adcf9aae3',
+      '$kuid': '291eb81bd5',
       'label': [
         'Oblast of origin',
         'Область',
@@ -400,7 +363,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'name': 'origin_raion',
       'type': 'select_one',
-      '$kuid': '0be1854b3f',
+      '$kuid': '79bb642650',
       'label': [
         'Raion of origin',
         'Район',
@@ -415,7 +378,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'name': 'leave_reason',
       'type': 'select_multiple',
-      '$kuid': '48faffdcee',
+      '$kuid': 'b5bc07b733',
       'label': [
         'Why did you leave?',
         'Чому ви виїхали?',
@@ -428,7 +391,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'name': 'leave_reason_other',
       'type': 'text',
-      '$kuid': '23e424aa4c',
+      '$kuid': '2cc62f8597',
       'label': [
         'Please specify',
         'Будь ласка уточніть',
@@ -443,7 +406,7 @@ export const formHhsSchema: Api.Form.Schema = {
       ],
       'name': 'leave_date',
       'type': 'date',
-      '$kuid': '4032b6a845',
+      '$kuid': 'd8ddf94365',
       'label': [
         'When did you leave?',
         'Коли ви виїхали?',
@@ -459,7 +422,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'name': 'travel_mode',
       'type': 'select_multiple',
-      '$kuid': 'ef74670f5e',
+      '$kuid': '181a71fcc8',
       'label': [
         'How did you travel?',
         'Як ви подорожували?',
@@ -470,13 +433,29 @@ export const formHhsSchema: Api.Form.Schema = {
       'select_from_list_name': 'travel_mode',
     },
     {
+      'name': 'security_concerns_during_displacement',
+      'type': 'select_multiple',
+      '$kuid': 'd228832b6f',
+      'label': [
+        'Did you or any member of your household experience safety or security concerns on your displacement journey?',
+        'Чи відчували ви чи хтось із членів вашої сім’ї проблеми з безпекою під час переміщення?',
+      ],
+      '$xpath': 'disp_info/security_concerns_during_displacement',
+      'relevant': '${disp_status}=\'idp\'',
+      'required': true,
+      'constraint': 'not(selected(., \'none\') and (selected(., \'looting_robbery\') or selected(., \'physical_assault\') or selected(., \'abduction\') or selected(., \'arbitrary_detention\') or selected(., \'shelling_or_missile_attacks\') or selected(., \'harassment_at_checkpoints\') or selected(., \'movement_restrictions\') or selected(., \'gbv_incident\') or selected(., \'extortion\') or selected(., \'hate_speech\') or selected(., \'unable_unwilling_to_answer\') or selected(., \'other_specify\'))) and not(selected(., \'unable_unwilling_to_answer\') and (selected(., \'none\') or selected(., \'looting_robbery\') or selected(., \'physical_assault\') or selected(., \'abduction\') or selected(., \'arbitrary_detention\') or selected(., \'shelling_or_missile_attacks\') or selected(., \'harassment_at_checkpoints\') or selected(., \'movement_restrictions\') or selected(., \'gbv_incident\') or selected(., \'extortion\') or selected(., \'hate_speech\') or selected(., \'other_specify\')))',
+      'select_from_list_name': 'security_concerns_during_displacement',
+      'constraint_message:en (en)': 'Cannot have these options checked together.',
+      'constraint_message:ua (ua)': 'Ці параметри не можна перевіряти разом.',
+    },
+    {
       'hint': [
         'Approximate date',
         'Приблизна дата',
       ],
       'name': 'first_displacement_date',
       'type': 'date',
-      '$kuid': '9686ff976a',
+      '$kuid': '52d6c646f4',
       'label': [
         'When did you first leave?',
         'Коли ви вперше виїхали?',
@@ -496,7 +475,7 @@ export const formHhsSchema: Api.Form.Schema = {
       ],
       'name': 'return_date',
       'type': 'date',
-      '$kuid': 'b319655bf2',
+      '$kuid': '6b74bc5ba4',
       'label': [
         'When did you return?',
         'Коли ви повернулися?',
@@ -512,7 +491,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'name': 'return_reason',
       'type': 'select_multiple',
-      '$kuid': 'ada410fcda',
+      '$kuid': '2a29b7bff8',
       'label': [
         'Why did you return?',
         'Чому ви повернулися?',
@@ -525,7 +504,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'name': 'compensation',
       'type': 'select_one',
-      '$kuid': '101eb2aad1',
+      '$kuid': '69d9d5db53',
       'label': [
         'Did you receive any compensation?',
         'Чи отримували ви компенсацію?',
@@ -539,7 +518,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'name': 'intentions',
       'type': 'select_one',
-      '$kuid': 'e92568ff1e',
+      '$kuid': '8a53163d66',
       'label': [
         'Household intention regarding place of residence',
         'Намір домогосподарства щодо місця проживання',
@@ -551,7 +530,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'name': 'integrate_needs',
       'type': 'select_multiple',
-      '$kuid': 'b9ae09dfe2',
+      '$kuid': 'bafdb32e21',
       'label': [
         'What would support local integration?',
         'Що допоможе локальній інтеграції?',
@@ -564,7 +543,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'name': 'return_conditions',
       'type': 'select_multiple',
-      '$kuid': 'e6fed98700',
+      '$kuid': '423f9395ac',
       'label': [
         'What would enable return?',
         'Що дозволить повернення?',
@@ -577,7 +556,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'name': 'relocate_reason',
       'type': 'select_multiple',
-      '$kuid': '29518e9745',
+      '$kuid': 'd7114c0f27',
       'label': [
         'Why are you planning to relocate?',
         'Чому ви плануєте переїзд?',
@@ -589,12 +568,12 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'type': 'end_group',
-      '$kuid': 'fa07df067a',
+      '$kuid': 'bf27e24444',
     },
     {
       'name': 'reg_doc',
       'type': 'begin_group',
-      '$kuid': '377049d397',
+      '$kuid': '4589a5eb37',
       'label': [
         'Registration and documentation',
         'Реєстрація та документація',
@@ -605,7 +584,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'name': 'non_ua_docs',
       'type': 'select_multiple',
-      '$kuid': '33d3ff41f3',
+      '$kuid': '973675f167',
       'label': [
         'As a non-Ukrainian do you have documentation?',
         'Як неукраїнець чи маєте ви документи?',
@@ -621,7 +600,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'name': 'stateless_cert',
       'type': 'select_one',
-      '$kuid': '5167bac417',
+      '$kuid': 'de8546a42a',
       'label': [
         'Do you have a stateless registration certificate?',
         'Чи маєте ви свідоцтво реєстрації особи без громадянства?',
@@ -634,7 +613,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'name': 'idp_registered',
       'type': 'select_one',
-      '$kuid': 'bc4200843a',
+      '$kuid': 'c6f489f67a',
       'label': [
         'Are you and your household members registered as IDPs?',
         'Чи зареєстровані ви та ваше домогосподарство як ВПО?',
@@ -646,7 +625,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'name': 'hh_doc',
       'type': 'begin_repeat',
-      '$kuid': '7ca728482b',
+      '$kuid': 'da63e4361d',
       'label': [
         'Household member documentation',
         'Документи члена домогосподарства',
@@ -659,7 +638,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'name': 'member_registered',
       'type': 'select_one',
-      '$kuid': 'a2db1e7420',
+      '$kuid': 'f4cefceafd',
       'label': [
         'Is the member registered as IDP?',
         'Чи зареєстрований член?',
@@ -672,7 +651,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'name': 'missing_doc',
       'type': 'select_multiple',
-      '$kuid': 'f4ff8f7081',
+      '$kuid': 'f64e1303ec',
       'label': [
         'Which documents does the member lack?',
         'Яких документів бракує?',
@@ -683,12 +662,12 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'type': 'end_repeat',
-      '$kuid': 'e05fdacc43',
+      '$kuid': 'cd57e50c06',
     },
     {
       'name': 'idp_docs',
       'type': 'select_multiple',
-      '$kuid': 'd2caf7de60',
+      '$kuid': '3d5a0c7b64',
       'label': [
         'Do you have any of the following IDP documents?',
         'Чи маєте ви будь-які з таких документів?',
@@ -701,7 +680,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'name': 'idp_allowance',
       'type': 'select_one',
-      '$kuid': 'e1efc870e7',
+      '$kuid': '51418ac7f3',
       'label': [
         'Do you receive the IDP allowance?',
         'Чи отримуєте ви допомогу ВПО?',
@@ -715,7 +694,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'name': 'no_allowance_reason',
       'type': 'select_one',
-      '$kuid': '68223d298d',
+      '$kuid': 'afe54da19e',
       'label': [
         'Why do you not receive the IDP allowance?',
         'Чому ви не отримуєте допомогу ВПО?',
@@ -728,7 +707,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'name': 'no_allowance_other',
       'type': 'text',
-      '$kuid': '975f3a7941',
+      '$kuid': '64647ecf71',
       'label': [
         'Please specify',
         'Будь ласка уточніть',
@@ -739,7 +718,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'name': 'not_registered_reason',
       'type': 'select_multiple',
-      '$kuid': '3cfb7ad4cc',
+      '$kuid': '59a669b203',
       'label': [
         'Why are you not registered as an IDP?',
         'Чому ви не зареєстровані як ВПО?',
@@ -752,7 +731,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'name': 'not_registered_other',
       'type': 'text',
-      '$kuid': '9c76f34fa6',
+      '$kuid': '159377b404',
       'label': [
         'Please specify',
         'Будь ласка уточніть',
@@ -763,7 +742,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'name': 'rejected_reason',
       'type': 'select_one',
-      '$kuid': '7eb73833ae',
+      '$kuid': 'f5e06a7ce0',
       'label': [
         'Why was registration rejected or not allowed?',
         'Чому було відмовлено або немає права реєстрації?',
@@ -776,7 +755,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'name': 'rejected_other',
       'type': 'text',
-      '$kuid': 'dedb2e26ae',
+      '$kuid': '5e8412cc69',
       'label': [
         'Please specify',
         'Будь ласка уточніть',
@@ -787,7 +766,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'name': 'hlp_missing',
       'type': 'select_multiple',
-      '$kuid': 'e4c052d4ce',
+      '$kuid': '90893f6f21',
       'label': [
         'Which housing land or property documents do you lack?',
         'Яких документів на житло землю або майно бракує?',
@@ -803,7 +782,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'name': 'hlp_missing_other',
       'type': 'text',
-      '$kuid': 'b4a3246bc9',
+      '$kuid': '9dbd768b44',
       'label': [
         'Please specify',
         'Будь ласка уточніть',
@@ -814,7 +793,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'name': 'doc_barriers',
       'type': 'select_multiple',
-      '$kuid': 'e38fffa956',
+      '$kuid': 'da23d55e3b',
       'label': [
         'Have you faced barriers accessing documentation?',
         'Чи стикалися ви з перешкодами в отриманні документів?',
@@ -828,7 +807,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'name': 'doc_barriers_other',
       'type': 'text',
-      '$kuid': '9bae953032',
+      '$kuid': '26a591ad3e',
       'label': [
         'Please specify',
         'Будь ласка уточніть',
@@ -838,12 +817,12 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'type': 'end_group',
-      '$kuid': '78626c1e65',
+      '$kuid': '9b2b1d9629',
     },
     {
       'name': 'safety_move',
       'type': 'begin_group',
-      '$kuid': '523bdb4bff',
+      '$kuid': 'bde86ad147',
       'label': [
         'Safety & Movement',
         'Безпека та пересування',
@@ -859,7 +838,7 @@ export const formHhsSchema: Api.Form.Schema = {
       ],
       'name': 'safety_level',
       'type': 'select_one',
-      '$kuid': '32bec29401',
+      '$kuid': '8a207dfd41',
       'label': [
         'Please rate your sense of safety in this location',
         'Будь ласка оцініть своє відчуття безпеки в цьому місці',
@@ -875,7 +854,7 @@ export const formHhsSchema: Api.Form.Schema = {
       ],
       'name': 'unsafe_factors',
       'type': 'select_multiple',
-      '$kuid': 'f6c86d2be4',
+      '$kuid': '83bcb85426',
       'label': [
         'Main factors making this location unsafe',
         'Основні фактори небезпеки в цьому місці',
@@ -895,7 +874,7 @@ export const formHhsSchema: Api.Form.Schema = {
       ],
       'name': 'community_rel',
       'type': 'select_one',
-      '$kuid': '0c7df344c3',
+      '$kuid': '7228327a5a',
       'label': [
         'Relations between host community and IDPs/returnees',
         'Стосунки між приймаючою громадою та ВПО/поверненими',
@@ -907,7 +886,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'name': 'rel_factors',
       'type': 'select_multiple',
-      '$kuid': 'aaa0ab976b',
+      '$kuid': '8233558728',
       'label': [
         'Factors affecting community relations',
         'Фактори що впливають на відносини між громадами',
@@ -923,7 +902,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'name': 'community_incidents',
       'type': 'select_multiple',
-      '$kuid': '51b6bbeb26',
+      '$kuid': '009ec0f556',
       'label': [
         'Incidents experienced with other groups',
         'Інциденти з іншими групами',
@@ -939,7 +918,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'name': 'move_barriers',
       'type': 'select_multiple',
-      '$kuid': 'c1ce30952c',
+      '$kuid': 'bc932a32d8',
       'label': [
         'Barriers to movement in or around the area',
         'Перешкоди для пересування в цій місцевості',
@@ -953,12 +932,12 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'type': 'end_group',
-      '$kuid': 'e482de3ead',
+      '$kuid': 'db4b1d2f6b',
     },
     {
       'name': 'violence',
       'type': 'begin_group',
-      '$kuid': 'dcf513c857',
+      '$kuid': '0877ebc8e4',
       'label': [
         'Violence & Deprivation',
         'Насильство та позбавлення',
@@ -970,7 +949,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'name': 'violence_type',
       'type': 'select_multiple',
-      '$kuid': '3b88a23e21',
+      '$kuid': '7502997b1d',
       'label': [
         'What types of violence or abuse has the member experienced?',
         'Які види насильства або зловживань зазнав член домогосподарства?',
@@ -985,7 +964,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'name': 'discrimination_ground',
       'type': 'select_multiple',
-      '$kuid': '5ef79b99f7',
+      '$kuid': '573004885d',
       'label': [
         'On what grounds has the member experienced discrimination?',
         'За якою ознакою член домогосподарства зазнав дискримінації?',
@@ -1000,7 +979,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'name': 'distress_signs',
       'type': 'select_multiple',
-      '$kuid': 'cf49f875b6',
+      '$kuid': '00943babbb',
       'label': [
         'What signs of psychological distress are observed?',
         'Які ознаки психологічного стресу спостерігаються?',
@@ -1015,7 +994,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'name': 'care_barriers',
       'type': 'select_multiple',
-      '$kuid': 'ee9e1efdc3',
+      '$kuid': 'c8360fffce',
       'label': [
         'What barriers limit access to services?',
         'Які бар’єри обмежують доступ до послуг?',
@@ -1030,7 +1009,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'name': 'stress_factors',
       'type': 'select_multiple',
-      '$kuid': 'c2d6072dce',
+      '$kuid': '7065056125',
       'label': [
         'What factors currently cause stress?',
         'Які фактори наразі спричиняють стрес?',
@@ -1044,12 +1023,12 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'type': 'end_group',
-      '$kuid': '7ceda4b83d',
+      '$kuid': 'a65d0681ae',
     },
     {
       'name': 'coping',
       'type': 'begin_group',
-      '$kuid': '9521eebc78',
+      '$kuid': '13db770331',
       'label': [
         'Coping strategies',
         'Стратегії подолання',
@@ -1061,7 +1040,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'name': 'income_sources',
       'type': 'select_multiple',
-      '$kuid': '9bcd0ef8a5',
+      '$kuid': '549b8070e4',
       'label': [
         'Main household income sources',
         'Основні джерела доходу домогосподарства',
@@ -1076,7 +1055,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'name': 'social_support',
       'type': 'select_multiple',
-      '$kuid': '8b0ab3ecfc',
+      '$kuid': 'cc55e6eef5',
       'label': [
         'Types of social protection received',
         'Отримувані види соціального захисту',
@@ -1092,7 +1071,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'name': 'monthly_income',
       'type': 'select_one',
-      '$kuid': 'b7272f589e',
+      '$kuid': '1fee90d45f',
       'label': [
         'Average monthly household income',
         'Середньомісячний дохід домогосподарства',
@@ -1104,7 +1083,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'name': 'unemployment_reasons',
       'type': 'select_multiple',
-      '$kuid': 'cfe27b9b47',
+      '$kuid': 'fd7a36b4bd',
       'label': [
         'Reasons household members are not working',
         'Причини безробіття в домогосподарстві',
@@ -1119,7 +1098,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'name': 'coping_strategies',
       'type': 'select_multiple',
-      '$kuid': 'ea0d6a3c12',
+      '$kuid': '5a9c3c0b8c',
       'label': [
         'Household coping strategies',
         'Стратегії подолання труднощів',
@@ -1134,12 +1113,12 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'type': 'end_group',
-      '$kuid': 'd32422944e',
+      '$kuid': 'e4d8686dc6',
     },
     {
       'name': 'education',
       'type': 'begin_group',
-      '$kuid': 'ed995d3aa7',
+      '$kuid': 'e9050682e9',
       'label': [
         'Education access',
         'Доступ до освіти',
@@ -1151,7 +1130,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'name': 'school_attendance_status',
       'type': 'select_multiple',
-      '$kuid': 'dd8d91f618',
+      '$kuid': '797bdc2ffd',
       'label': [
         'School attendance status of children',
         'Статус відвідування школи дітьми',
@@ -1166,7 +1145,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'name': 'education_barriers',
       'type': 'select_multiple',
-      '$kuid': '1ff955682e',
+      '$kuid': 'e7b8c3cb88',
       'label': [
         'Barriers to education',
         'Бар’єри доступу до освіти',
@@ -1182,12 +1161,12 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'type': 'end_group',
-      '$kuid': 'a954d6a57e',
+      '$kuid': 'd7d67e6f64',
     },
     {
       'name': 'housing',
       'type': 'begin_group',
-      '$kuid': '0b8cb621ff',
+      '$kuid': 'd306e2baec',
       'label': [
         'Housing',
         'Житло',
@@ -1199,7 +1178,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'name': 'housing_type',
       'type': 'select_one',
-      '$kuid': '83730e7aeb',
+      '$kuid': '169b286c09',
       'label': [
         'Current housing type',
         'Тип поточного житла',
@@ -1211,7 +1190,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'name': 'tenure_status',
       'type': 'select_one',
-      '$kuid': 'e5110b3ce3',
+      '$kuid': 'e988296233',
       'label': [
         'Housing tenure status',
         'Статус користування житлом',
@@ -1223,7 +1202,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'name': 'housing_condition',
       'type': 'select_one',
-      '$kuid': '3bc80d51d0',
+      '$kuid': '8af302ca9e',
       'label': [
         'Overall housing condition',
         'Загальний стан житла',
@@ -1235,7 +1214,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'name': 'housing_concerns',
       'type': 'select_multiple',
-      '$kuid': '537dd265b1',
+      '$kuid': 'ac17507e05',
       'label': [
         'Main housing concerns',
         'Основні проблеми житла',
@@ -1249,13 +1228,13 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'type': 'end_group',
-      '$kuid': '7590892f0b',
+      '$kuid': '508533be2d',
     },
   ],
   'choices': [
     {
       'name': 'ukrainian',
-      '$kuid': 'aced346f92',
+      '$kuid': '26cb28ef97',
       'label': [
         'Ukrainian',
         'Українська',
@@ -1264,7 +1243,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'stateless',
-      '$kuid': 'c6247ca721',
+      '$kuid': 'c6a38f32c8',
       'label': [
         'Stateless',
         'Без громадянства',
@@ -1273,7 +1252,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'non_ukrainian',
-      '$kuid': '6d99f6128d',
+      '$kuid': '07f30e6bc7',
       'label': [
         'Non-Ukrainian',
         'Неукраїнське громадянство',
@@ -1282,7 +1261,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'unable_unwilling_to_answer',
-      '$kuid': 'b30040677f',
+      '$kuid': 'ea6665b1ba',
       'label': [
         'Unable/unwilling to answer',
         'Не можу/не хочу відповідати',
@@ -1291,7 +1270,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'UA01',
-      '$kuid': 'f396ff0371',
+      '$kuid': 'b782492e19',
       'label': [
         'Autonomous Republic of Crimea',
         'Автономна Республіка Крим',
@@ -1300,7 +1279,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'UA71',
-      '$kuid': '92b69ca8c8',
+      '$kuid': 'b0271b167d',
       'label': [
         'Cherkaska',
         'Черкаська',
@@ -1309,7 +1288,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'UA74',
-      '$kuid': '29aa493013',
+      '$kuid': 'a57e0a7f35',
       'label': [
         'Chernihivska',
         'Чернігівська',
@@ -1318,7 +1297,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'UA73',
-      '$kuid': '3348f62850',
+      '$kuid': '85ccabdcc8',
       'label': [
         'Chernivetska',
         'Чернівецька',
@@ -1327,7 +1306,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'UA12',
-      '$kuid': 'd7835087fc',
+      '$kuid': 'f3916970bb',
       'label': [
         'Dnipropetrovska',
         'Дніпропетровська',
@@ -1336,7 +1315,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'UA14',
-      '$kuid': '7dbcfc795c',
+      '$kuid': '843eb37a06',
       'label': [
         'Donetska',
         'Донецька',
@@ -1345,7 +1324,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'UA26',
-      '$kuid': '4c27ec69fa',
+      '$kuid': '54e33c614c',
       'label': [
         'Ivano-Frankivska',
         'Івано-Франківська',
@@ -1354,7 +1333,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'UA63',
-      '$kuid': '527902cf7b',
+      '$kuid': 'dc6ea787b5',
       'label': [
         'Kharkivska',
         'Харківська',
@@ -1363,7 +1342,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'UA65',
-      '$kuid': 'e9d8454a72',
+      '$kuid': '2f1084c3b1',
       'label': [
         'Khersonska',
         'Херсонська',
@@ -1372,7 +1351,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'UA68',
-      '$kuid': 'f01b17f85e',
+      '$kuid': 'a1a0b43a9f',
       'label': [
         'Khmelnytska',
         'Хмельницька',
@@ -1381,7 +1360,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'UA35',
-      '$kuid': '3a0dc79d9c',
+      '$kuid': '2b09caf8b0',
       'label': [
         'Kirovohradska',
         'Кіровоградська',
@@ -1390,7 +1369,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'UA80',
-      '$kuid': 'de41c9fbc3',
+      '$kuid': 'a5caf4ae89',
       'label': [
         'Kyiv',
         'Київ',
@@ -1399,7 +1378,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'UA32',
-      '$kuid': '1609d74ade',
+      '$kuid': '34087b9523',
       'label': [
         'Kyivska',
         'Київська',
@@ -1408,7 +1387,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'UA44',
-      '$kuid': '2604062258',
+      '$kuid': '0a3b43baa3',
       'label': [
         'Luhanska',
         'Луганська',
@@ -1417,7 +1396,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'UA46',
-      '$kuid': 'c36ea64e49',
+      '$kuid': '0917f9de0c',
       'label': [
         'Lvivska',
         'Львівська',
@@ -1426,7 +1405,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'UA48',
-      '$kuid': '5295eb2628',
+      '$kuid': '1571edc3c0',
       'label': [
         'Mykolaivska',
         'Миколаївська',
@@ -1435,7 +1414,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'UA51',
-      '$kuid': 'ff0708bcb4',
+      '$kuid': '887ade4a57',
       'label': [
         'Odeska',
         'Одеська',
@@ -1444,7 +1423,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'UA53',
-      '$kuid': '4deffd9506',
+      '$kuid': '6c72879b13',
       'label': [
         'Poltavska',
         'Полтавська',
@@ -1453,7 +1432,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'UA56',
-      '$kuid': '70fb6dcaa5',
+      '$kuid': '1bef95ea5a',
       'label': [
         'Rivnenska',
         'Рівненська',
@@ -1462,7 +1441,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'UA85',
-      '$kuid': '99ade3f441',
+      '$kuid': 'a0b499e7d6',
       'label': [
         'Sevastopol',
         'Севастополь',
@@ -1471,7 +1450,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'UA59',
-      '$kuid': '0e1e3ea51b',
+      '$kuid': 'cdb2631dbc',
       'label': [
         'Sumska',
         'Сумська',
@@ -1480,7 +1459,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'UA61',
-      '$kuid': '764518f424',
+      '$kuid': '0cdde87eb5',
       'label': [
         'Ternopilska',
         'Тернопільська',
@@ -1489,7 +1468,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'UA05',
-      '$kuid': '32ca2c5c51',
+      '$kuid': '0be25ada18',
       'label': [
         'Vinnytska',
         'Вінницька',
@@ -1498,7 +1477,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'UA07',
-      '$kuid': '1a1b47a4a1',
+      '$kuid': 'a081e62ee2',
       'label': [
         'Volynska',
         'Волинська',
@@ -1507,7 +1486,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'UA21',
-      '$kuid': '2a4a2420ef',
+      '$kuid': '844d5e037b',
       'label': [
         'Zakarpatska',
         'Закарпатська',
@@ -1516,7 +1495,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'UA23',
-      '$kuid': 'f3eb7a8d70',
+      '$kuid': '02fe8e839f',
       'label': [
         'Zaporizka',
         'Запорізька',
@@ -1525,7 +1504,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'UA18',
-      '$kuid': '869911617a',
+      '$kuid': '49d93f49a2',
       'label': [
         'Zhytomyrska',
         'Житомирська',
@@ -1535,7 +1514,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA01',
       'name': 'UA0102',
-      '$kuid': '35b42963cb',
+      '$kuid': '0bbdd6477e',
       'label': [
         'Bakhchysaraiskyi',
         'Бахчисарайський',
@@ -1545,7 +1524,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA01',
       'name': 'UA0104',
-      '$kuid': '612f9cb96a',
+      '$kuid': 'b18522c96d',
       'label': [
         'Bilohirskyi',
         'Білогірський',
@@ -1555,7 +1534,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA01',
       'name': 'UA0106',
-      '$kuid': '31bda0f70f',
+      '$kuid': 'a743651e4b',
       'label': [
         'Dzhankoiskyi',
         'Джанкойський',
@@ -1565,7 +1544,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA01',
       'name': 'UA0118',
-      '$kuid': '88fdaa5608',
+      '$kuid': '7dfcb06c54',
       'label': [
         'Feodosiiskyi',
         'Феодосійський',
@@ -1575,7 +1554,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA01',
       'name': 'UA0110',
-      '$kuid': '4faf7f6407',
+      '$kuid': 'bae8a44f6a',
       'label': [
         'Kerchynskyi',
         'Керченський',
@@ -1585,7 +1564,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA01',
       'name': 'UA0112',
-      '$kuid': '10dc8c593b',
+      '$kuid': '8193bd597a',
       'label': [
         'Krasnohvardiiskyi',
         'Красногвардійський',
@@ -1595,7 +1574,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA01',
       'name': 'UA0114',
-      '$kuid': 'de4b9db030',
+      '$kuid': '727973b834',
       'label': [
         'Krasnoperekopskyi',
         'Красноперекопський',
@@ -1605,7 +1584,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA01',
       'name': 'UA0116',
-      '$kuid': '2849797098',
+      '$kuid': '3694996c05',
       'label': [
         'Simferopolskyi',
         'Сімферопольський',
@@ -1615,7 +1594,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA01',
       'name': 'UA0120',
-      '$kuid': 'df80dcb656',
+      '$kuid': '420cfa2fd2',
       'label': [
         'Yaltynskyi',
         'Ялтинський',
@@ -1625,7 +1604,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA01',
       'name': 'UA0108',
-      '$kuid': 'c0404f5402',
+      '$kuid': 'a71aa3679c',
       'label': [
         'Yevpatoriiskyi',
         'Євпаторійський',
@@ -1635,7 +1614,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA71',
       'name': 'UA7108',
-      '$kuid': '0e71813470',
+      '$kuid': 'd08f9bb7fe',
       'label': [
         'Cherkaskyi',
         'Черкаський',
@@ -1645,7 +1624,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA71',
       'name': 'UA7106',
-      '$kuid': '899da96142',
+      '$kuid': '2daaed03db',
       'label': [
         'Umanskyi',
         'Уманський',
@@ -1655,7 +1634,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA71',
       'name': 'UA7104',
-      '$kuid': '030900a914',
+      '$kuid': '9f466d2579',
       'label': [
         'Zolotoniskyi',
         'Золотоніський',
@@ -1665,7 +1644,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA71',
       'name': 'UA7102',
-      '$kuid': 'f5a6eb36f4',
+      '$kuid': 'c581bf5094',
       'label': [
         'Zvenyhorodskyi',
         'Звенигородський',
@@ -1675,7 +1654,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA74',
       'name': 'UA7410',
-      '$kuid': '5e2f58a3a7',
+      '$kuid': '02a86b3f1e',
       'label': [
         'Chernihivskyi',
         'Чернігівський',
@@ -1685,7 +1664,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA74',
       'name': 'UA7402',
-      '$kuid': 'd960d00d25',
+      '$kuid': 'a65c298118',
       'label': [
         'Koriukivskyi',
         'Корюківський',
@@ -1695,7 +1674,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA74',
       'name': 'UA7404',
-      '$kuid': '69bcbeaed5',
+      '$kuid': '5c24ee6c7b',
       'label': [
         'Nizhynskyi',
         'Ніжинський',
@@ -1705,7 +1684,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA74',
       'name': 'UA7406',
-      '$kuid': '4952274747',
+      '$kuid': 'df71a43580',
       'label': [
         'Novhorod-Siverskyi',
         'Новгород-Сіверський',
@@ -1715,7 +1694,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA74',
       'name': 'UA7408',
-      '$kuid': '8bd1ad8e92',
+      '$kuid': '7d61f7dd52',
       'label': [
         'Prylutskyi',
         'Прилуцький',
@@ -1725,7 +1704,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA73',
       'name': 'UA7306',
-      '$kuid': '65d26c42c2',
+      '$kuid': '19476c5670',
       'label': [
         'Chernivetskyi',
         'Чернівецький',
@@ -1735,7 +1714,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA73',
       'name': 'UA7304',
-      '$kuid': 'e3942cf76e',
+      '$kuid': 'bf24435b28',
       'label': [
         'Dnistrovskyi',
         'Дністровський',
@@ -1745,7 +1724,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA73',
       'name': 'UA7302',
-      '$kuid': '6d9905b613',
+      '$kuid': 'f919e76372',
       'label': [
         'Vyzhnytskyi',
         'Вижницький',
@@ -1755,7 +1734,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA12',
       'name': 'UA1202',
-      '$kuid': 'a5c41ad41a',
+      '$kuid': 'b613809e86',
       'label': [
         'Dniprovskyi',
         'Дніпровський',
@@ -1765,7 +1744,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA12',
       'name': 'UA1204',
-      '$kuid': '864b708860',
+      '$kuid': '8409445478',
       'label': [
         'Kamianskyi',
         'Кам’янський',
@@ -1775,7 +1754,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA12',
       'name': 'UA1206',
-      '$kuid': '32cfa94e6a',
+      '$kuid': '50dffe8dae',
       'label': [
         'Kryvorizkyi',
         'Криворізький',
@@ -1785,7 +1764,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA12',
       'name': 'UA1208',
-      '$kuid': '64698bb78a',
+      '$kuid': '3346688ebc',
       'label': [
         'Nikopolskyi',
         'Нікопольський',
@@ -1795,7 +1774,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA12',
       'name': 'UA1210',
-      '$kuid': 'c14b974253',
+      '$kuid': '9ef9f952b6',
       'label': [
         'Novomoskovskyi',
         'Новомосковський',
@@ -1805,7 +1784,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA12',
       'name': 'UA1212',
-      '$kuid': 'c0869ca3d6',
+      '$kuid': '516a707d0f',
       'label': [
         'Pavlohradskyi',
         'Павлоградський',
@@ -1815,7 +1794,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA12',
       'name': 'UA1214',
-      '$kuid': '1490fbbb2e',
+      '$kuid': 'd55b18da74',
       'label': [
         'Synelnykivskyi',
         'Синельниківський',
@@ -1825,7 +1804,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA14',
       'name': 'UA1402',
-      '$kuid': '63a0a6303b',
+      '$kuid': 'd4b5d9d1b3',
       'label': [
         'Bakhmutskyi',
         'Бахмутський',
@@ -1835,7 +1814,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA14',
       'name': 'UA1408',
-      '$kuid': '6b166ad43d',
+      '$kuid': '9ada612c2e',
       'label': [
         'Donetskyi',
         'Донецький',
@@ -1845,7 +1824,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA14',
       'name': 'UA1406',
-      '$kuid': '92c146a6d8',
+      '$kuid': '5b3648fff0',
       'label': [
         'Horlivskyi',
         'Горлівський',
@@ -1855,7 +1834,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA14',
       'name': 'UA1410',
-      '$kuid': '5fd664d8bd',
+      '$kuid': 'cc8229ad2d',
       'label': [
         'Kalmiuskyi',
         'Кальміуський',
@@ -1865,7 +1844,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA14',
       'name': 'UA1412',
-      '$kuid': 'e4b0eb7dd5',
+      '$kuid': 'f371c6b2e9',
       'label': [
         'Kramatorskyi',
         'Краматорський',
@@ -1875,7 +1854,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA14',
       'name': 'UA1414',
-      '$kuid': '2750c7e2fb',
+      '$kuid': '1046e2118c',
       'label': [
         'Mariupolskyi',
         'Маріупольський',
@@ -1885,7 +1864,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA14',
       'name': 'UA1416',
-      '$kuid': '49b9e659ef',
+      '$kuid': '8bb6f53e73',
       'label': [
         'Pokrovskyi',
         'Покровський',
@@ -1895,7 +1874,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA14',
       'name': 'UA1404',
-      '$kuid': 'cb5f1dd32a',
+      '$kuid': '7d3e722d31',
       'label': [
         'Volnovaskyi',
         'Волноваський',
@@ -1905,7 +1884,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA26',
       'name': 'UA2604',
-      '$kuid': 'ce357922ac',
+      '$kuid': '959d0df558',
       'label': [
         'Ivano-Frankivskyi',
         'Івано-Франківський',
@@ -1915,7 +1894,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA26',
       'name': 'UA2606',
-      '$kuid': 'ff2906500a',
+      '$kuid': '42bdd70eba',
       'label': [
         'Kaluskyi',
         'Калуський',
@@ -1925,7 +1904,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA26',
       'name': 'UA2608',
-      '$kuid': 'c12430eac4',
+      '$kuid': '0005d55b3c',
       'label': [
         'Kolomyiskyi',
         'Коломийський',
@@ -1935,7 +1914,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA26',
       'name': 'UA2610',
-      '$kuid': '10e2ee6612',
+      '$kuid': '728f671f2a',
       'label': [
         'Kosivskyi',
         'Косівський',
@@ -1945,7 +1924,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA26',
       'name': 'UA2612',
-      '$kuid': 'ccc6ba2da7',
+      '$kuid': '3421386d4a',
       'label': [
         'Nadvirnianskyi',
         'Надвірнянський',
@@ -1955,7 +1934,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA26',
       'name': 'UA2602',
-      '$kuid': '22147dce4e',
+      '$kuid': '8fd78be235',
       'label': [
         'Verkhovynskyi',
         'Верховинський',
@@ -1965,7 +1944,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA63',
       'name': 'UA6302',
-      '$kuid': 'f83439c733',
+      '$kuid': '2cbf231a4e',
       'label': [
         'Bohodukhivskyi',
         'Богодухівський',
@@ -1975,7 +1954,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA63',
       'name': 'UA6314',
-      '$kuid': '03061dc781',
+      '$kuid': 'f3293b64a1',
       'label': [
         'Chuhuivskyi',
         'Чугуївський',
@@ -1985,7 +1964,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA63',
       'name': 'UA6304',
-      '$kuid': '091c3301cb',
+      '$kuid': 'd609348542',
       'label': [
         'Iziumskyi',
         'Ізюмський',
@@ -1995,7 +1974,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA63',
       'name': 'UA6312',
-      '$kuid': '3a28f6718f',
+      '$kuid': '94941e508b',
       'label': [
         'Kharkivskyi',
         'Харківський',
@@ -2005,7 +1984,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA63',
       'name': 'UA6306',
-      '$kuid': '43643314e7',
+      '$kuid': '76a9cdeeb2',
       'label': [
         'Krasnohradskyi',
         'Красноградський',
@@ -2015,7 +1994,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA63',
       'name': 'UA6308',
-      '$kuid': 'e2b636bf12',
+      '$kuid': '287d063792',
       'label': [
         'Kupianskyi',
         'Куп\'янський',
@@ -2025,7 +2004,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA63',
       'name': 'UA6310',
-      '$kuid': '0856f0e525',
+      '$kuid': '5f2d44dbc7',
       'label': [
         'Lozivskyi',
         'Лозівський',
@@ -2035,7 +2014,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA65',
       'name': 'UA6502',
-      '$kuid': '15c60f7a61',
+      '$kuid': 'fe2d55742d',
       'label': [
         'Beryslavskyi',
         'Бериславський',
@@ -2045,7 +2024,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA65',
       'name': 'UA6504',
-      '$kuid': '167ea9bfa2',
+      '$kuid': '8800596c02',
       'label': [
         'Henicheskyi',
         'Генічеський',
@@ -2055,7 +2034,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA65',
       'name': 'UA6506',
-      '$kuid': '975ce40631',
+      '$kuid': 'df66ca71b6',
       'label': [
         'Kakhovskyi',
         'Каховський',
@@ -2065,7 +2044,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA65',
       'name': 'UA6510',
-      '$kuid': '0a5cf7d7ac',
+      '$kuid': '20328bdd00',
       'label': [
         'Khersonskyi',
         'Херсонський',
@@ -2075,7 +2054,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA65',
       'name': 'UA6508',
-      '$kuid': '45142414da',
+      '$kuid': '4ed71e5da1',
       'label': [
         'Skadovskyi',
         'Скадовський',
@@ -2085,7 +2064,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA68',
       'name': 'UA6802',
-      '$kuid': '635dc1aaf9',
+      '$kuid': '7a26f8c7bb',
       'label': [
         'Kamianets-Podilskyi',
         'Кам\'янець-Подільський',
@@ -2095,7 +2074,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA68',
       'name': 'UA6804',
-      '$kuid': 'ed2ebac12c',
+      '$kuid': '6ad68b4ebe',
       'label': [
         'Khmelnytskyi',
         'Хмельницький',
@@ -2105,7 +2084,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA68',
       'name': 'UA6806',
-      '$kuid': 'e49edd336f',
+      '$kuid': 'f8c34a6398',
       'label': [
         'Shepetivskyi',
         'Шепетівський',
@@ -2115,7 +2094,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA35',
       'name': 'UA3502',
-      '$kuid': '85092904a2',
+      '$kuid': '9d85c0b8e4',
       'label': [
         'Holovanivskyi',
         'Голованівський',
@@ -2125,7 +2104,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA35',
       'name': 'UA3504',
-      '$kuid': '79853225c2',
+      '$kuid': 'b2bbe7bba6',
       'label': [
         'Kropyvnytskyi',
         'Кропивницький',
@@ -2135,7 +2114,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA35',
       'name': 'UA3506',
-      '$kuid': '2057d549dc',
+      '$kuid': '908fb801df',
       'label': [
         'Novoukrainskyi',
         'Новоукраїнський',
@@ -2145,7 +2124,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA35',
       'name': 'UA3508',
-      '$kuid': 'a1f33f7c1e',
+      '$kuid': '6c04575212',
       'label': [
         'Oleksandriiskyi',
         'Олександрійський',
@@ -2155,7 +2134,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA80',
       'name': 'UA8000',
-      '$kuid': 'fb639887e3',
+      '$kuid': '8068897e5b',
       'label': [
         'Kyiv',
         'Київ',
@@ -2165,7 +2144,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA32',
       'name': 'UA3202',
-      '$kuid': 'ca5c1f89fd',
+      '$kuid': 'ab32e32ce1',
       'label': [
         'Bilotserkivskyi',
         'Білоцерківський',
@@ -2175,7 +2154,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA32',
       'name': 'UA3204',
-      '$kuid': 'd43d9fb907',
+      '$kuid': 'f02476a15e',
       'label': [
         'Boryspilskyi',
         'Бориспільський',
@@ -2185,7 +2164,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA32',
       'name': 'UA3206',
-      '$kuid': 'e7e4c21ebf',
+      '$kuid': '79479fd566',
       'label': [
         'Brovarskyi',
         'Броварський',
@@ -2195,7 +2174,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA32',
       'name': 'UA3208',
-      '$kuid': '74eb731791',
+      '$kuid': 'aabbc18c9c',
       'label': [
         'Buchanskyi',
         'Бучанський',
@@ -2205,7 +2184,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA32',
       'name': 'UA3200',
-      '$kuid': '95d2b8a167',
+      '$kuid': '2ebee8bb59',
       'label': [
         'Chornobyl Exclusion Zone',
         'Чорнобильська зона відчуження',
@@ -2215,7 +2194,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA32',
       'name': 'UA3214',
-      '$kuid': '54e5e8b232',
+      '$kuid': 'c82d88f545',
       'label': [
         'Fastivskyi',
         'Фастівський',
@@ -2225,7 +2204,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA32',
       'name': 'UA3212',
-      '$kuid': '318c361ef6',
+      '$kuid': '2d06d0611d',
       'label': [
         'Obukhivskyi',
         'Обухівський',
@@ -2235,7 +2214,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA32',
       'name': 'UA3210',
-      '$kuid': '0a62df8efe',
+      '$kuid': '4c4be60dfc',
       'label': [
         'Vyshhorodskyi',
         'Вишгородський',
@@ -2245,7 +2224,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA44',
       'name': 'UA4402',
-      '$kuid': 'f7ff689d8f',
+      '$kuid': '638080980e',
       'label': [
         'Alchevskyi',
         'Алчевський',
@@ -2255,7 +2234,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA44',
       'name': 'UA4404',
-      '$kuid': '100bec643c',
+      '$kuid': '12a96d15bb',
       'label': [
         'Dovzhanskyi',
         'Довжанський',
@@ -2265,7 +2244,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA44',
       'name': 'UA4406',
-      '$kuid': '0b1db28749',
+      '$kuid': '21c4b58ba3',
       'label': [
         'Luhanskyi',
         'Луганський',
@@ -2275,7 +2254,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA44',
       'name': 'UA4408',
-      '$kuid': '3e1fcd0b66',
+      '$kuid': '028a660155',
       'label': [
         'Rovenkivskyi',
         'Ровеньківський',
@@ -2285,7 +2264,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA44',
       'name': 'UA4416',
-      '$kuid': '0620562e74',
+      '$kuid': '5cb7c01f23',
       'label': [
         'Shchastynskyi',
         'Щастинський',
@@ -2295,7 +2274,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA44',
       'name': 'UA4412',
-      '$kuid': '07b6480a92',
+      '$kuid': '130d3447d6',
       'label': [
         'Sievierodonetskyi',
         'Сєвєродонецький',
@@ -2305,7 +2284,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA44',
       'name': 'UA4414',
-      '$kuid': 'b96211fea3',
+      '$kuid': 'ad0620ce1f',
       'label': [
         'Starobilskyi',
         'Старобільський',
@@ -2315,7 +2294,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA44',
       'name': 'UA4410',
-      '$kuid': '37e2cd7cb6',
+      '$kuid': '5c2488614c',
       'label': [
         'Svativskyi',
         'Сватівський',
@@ -2325,7 +2304,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA46',
       'name': 'UA4612',
-      '$kuid': '93f3ee5691',
+      '$kuid': '80d7bf5c5c',
       'label': [
         'Chervonohradskyi',
         'Червоноградський',
@@ -2335,7 +2314,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA46',
       'name': 'UA4602',
-      '$kuid': '6263d6a12e',
+      '$kuid': '1d5494540b',
       'label': [
         'Drohobytskyi',
         'Дрогобицький',
@@ -2345,7 +2324,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA46',
       'name': 'UA4606',
-      '$kuid': '5e1ec1c5a1',
+      '$kuid': 'a8e18bb1b1',
       'label': [
         'Lvivskyi',
         'Львівський',
@@ -2355,7 +2334,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA46',
       'name': 'UA4608',
-      '$kuid': '1bc55afafe',
+      '$kuid': '3af03cbbca',
       'label': [
         'Sambirskyi',
         'Самбірський',
@@ -2365,7 +2344,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA46',
       'name': 'UA4610',
-      '$kuid': '1f18477eac',
+      '$kuid': '9b3f178890',
       'label': [
         'Stryiskyi',
         'Стрийський',
@@ -2375,7 +2354,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA46',
       'name': 'UA4614',
-      '$kuid': '95847179c6',
+      '$kuid': 'b1bfa46a4c',
       'label': [
         'Yavorivskyi',
         'Яворівський',
@@ -2385,7 +2364,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA46',
       'name': 'UA4604',
-      '$kuid': 'c00f073a7c',
+      '$kuid': 'cba311dec6',
       'label': [
         'Zolochivskyi',
         'Золочівський',
@@ -2395,7 +2374,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA48',
       'name': 'UA4802',
-      '$kuid': 'bd26777c24',
+      '$kuid': '84c1e99c93',
       'label': [
         'Bashtanskyi',
         'Баштанський',
@@ -2405,7 +2384,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA48',
       'name': 'UA4806',
-      '$kuid': 'd3ebf47ee5',
+      '$kuid': 'a9c2d31b85',
       'label': [
         'Mykolaivskyi',
         'Миколаївський',
@@ -2415,7 +2394,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA48',
       'name': 'UA4808',
-      '$kuid': 'a543d578be',
+      '$kuid': '7d93fe6a24',
       'label': [
         'Pervomaiskyi',
         'Первомайський',
@@ -2425,7 +2404,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA48',
       'name': 'UA4804',
-      '$kuid': 'e05aba6e2a',
+      '$kuid': '971a130cd0',
       'label': [
         'Voznesenskyi',
         'Вознесенський',
@@ -2435,7 +2414,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA51',
       'name': 'UA5102',
-      '$kuid': '0b501bc625',
+      '$kuid': 'db27de6691',
       'label': [
         'Berezivskyi',
         'Березівський',
@@ -2445,7 +2424,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA51',
       'name': 'UA5104',
-      '$kuid': '63df4797a7',
+      '$kuid': 'd22bd874d0',
       'label': [
         'Bilhorod-Dnistrovskyi',
         'Білгород-Дністровський',
@@ -2455,7 +2434,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA51',
       'name': 'UA5106',
-      '$kuid': '06b9cdf4a6',
+      '$kuid': '926ee0607c',
       'label': [
         'Bolhradskyi',
         'Болградський',
@@ -2465,7 +2444,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA51',
       'name': 'UA5108',
-      '$kuid': '764f7cc5a1',
+      '$kuid': 'a1fc9f1173',
       'label': [
         'Izmailskyi',
         'Ізмаїльський',
@@ -2475,7 +2454,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA51',
       'name': 'UA5110',
-      '$kuid': '103c411049',
+      '$kuid': 'a1648e627d',
       'label': [
         'Odeskyi',
         'Одеський',
@@ -2485,7 +2464,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA51',
       'name': 'UA5112',
-      '$kuid': '08392fc52d',
+      '$kuid': '9ab620c7fa',
       'label': [
         'Podilskyi',
         'Подільський',
@@ -2495,7 +2474,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA51',
       'name': 'UA5114',
-      '$kuid': '20f106d081',
+      '$kuid': '189290d307',
       'label': [
         'Rozdilnianskyi',
         'Роздільнянський',
@@ -2505,7 +2484,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA53',
       'name': 'UA5302',
-      '$kuid': '192cbe87a3',
+      '$kuid': '84657cb698',
       'label': [
         'Kremenchutskyi',
         'Кременчуцький',
@@ -2515,7 +2494,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA53',
       'name': 'UA5304',
-      '$kuid': 'ef8632a6f4',
+      '$kuid': '06201e1193',
       'label': [
         'Lubenskyi',
         'Лубенський',
@@ -2525,7 +2504,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA53',
       'name': 'UA5306',
-      '$kuid': '08ab914f4e',
+      '$kuid': '3639990145',
       'label': [
         'Myrhorodskyi',
         'Миргородський',
@@ -2535,7 +2514,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA53',
       'name': 'UA5308',
-      '$kuid': 'aac91f577e',
+      '$kuid': '9823b24e95',
       'label': [
         'Poltavskyi',
         'Полтавський',
@@ -2545,7 +2524,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA56',
       'name': 'UA5604',
-      '$kuid': '98ff108632',
+      '$kuid': 'f3f3001f0f',
       'label': [
         'Dubenskyi',
         'Дубенський',
@@ -2555,7 +2534,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA56',
       'name': 'UA5606',
-      '$kuid': '170b96b2ae',
+      '$kuid': '7ad8158768',
       'label': [
         'Rivnenskyi',
         'Рівненський',
@@ -2565,7 +2544,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA56',
       'name': 'UA5608',
-      '$kuid': '53c4cdd54f',
+      '$kuid': '0709f00c29',
       'label': [
         'Sarnenskyi',
         'Сарненський',
@@ -2575,7 +2554,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA56',
       'name': 'UA5602',
-      '$kuid': '13a2aa3605',
+      '$kuid': 'cf782217b7',
       'label': [
         'Varaskyi',
         'Вараський',
@@ -2585,7 +2564,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA85',
       'name': 'UA8500',
-      '$kuid': 'dfad30d371',
+      '$kuid': '90d795b6ca',
       'label': [
         'Sevastopol',
         'Севастополь',
@@ -2595,7 +2574,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA59',
       'name': 'UA5902',
-      '$kuid': 'ff37e427fb',
+      '$kuid': 'a2a46659a1',
       'label': [
         'Konotopskyi',
         'Конотопський',
@@ -2605,7 +2584,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA59',
       'name': 'UA5904',
-      '$kuid': '6eb3e86b02',
+      '$kuid': '509cd35021',
       'label': [
         'Okhtyrskyi',
         'Охтирський',
@@ -2615,7 +2594,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA59',
       'name': 'UA5906',
-      '$kuid': 'b059ff04c3',
+      '$kuid': 'faf6c1b9e1',
       'label': [
         'Romenskyi',
         'Роменський',
@@ -2625,7 +2604,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA59',
       'name': 'UA5910',
-      '$kuid': '3f2c685754',
+      '$kuid': '5c01ea5bba',
       'label': [
         'Shostkynskyi',
         'Шосткинський',
@@ -2635,7 +2614,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA59',
       'name': 'UA5908',
-      '$kuid': 'dd9b98a268',
+      '$kuid': '0e2d337604',
       'label': [
         'Sumskyi',
         'Сумський',
@@ -2645,7 +2624,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA61',
       'name': 'UA6106',
-      '$kuid': '8005cec43f',
+      '$kuid': '59aff21c48',
       'label': [
         'Chortkivskyi',
         'Чортківський',
@@ -2655,7 +2634,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA61',
       'name': 'UA6102',
-      '$kuid': '968d3167ca',
+      '$kuid': '64bf115349',
       'label': [
         'Kremenetskyi',
         'Кременецький',
@@ -2665,7 +2644,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA61',
       'name': 'UA6104',
-      '$kuid': '8b7fa3810d',
+      '$kuid': 'ea923c75df',
       'label': [
         'Ternopilskyi',
         'Тернопільський',
@@ -2675,7 +2654,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA05',
       'name': 'UA0504',
-      '$kuid': '94ff4630d1',
+      '$kuid': '8ee934d008',
       'label': [
         'Haisynskyi',
         'Гайсинський',
@@ -2685,7 +2664,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA05',
       'name': 'UA0512',
-      '$kuid': 'fcabd6fee1',
+      '$kuid': '4061f81a41',
       'label': [
         'Khmilnytskyi',
         'Хмільницький',
@@ -2695,7 +2674,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA05',
       'name': 'UA0508',
-      '$kuid': '768fb921c2',
+      '$kuid': '2c2760c15e',
       'label': [
         'Mohyliv-Podilskyi',
         'Могилів-Подільський',
@@ -2705,7 +2684,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA05',
       'name': 'UA0510',
-      '$kuid': 'f79aa201fb',
+      '$kuid': '13b3205e7e',
       'label': [
         'Tulchynskyi',
         'Тульчинський',
@@ -2715,7 +2694,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA05',
       'name': 'UA0502',
-      '$kuid': 'dce324fb9d',
+      '$kuid': '262f4de9ce',
       'label': [
         'Vinnytskyi',
         'Вінницький',
@@ -2725,7 +2704,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA05',
       'name': 'UA0506',
-      '$kuid': 'c655d38057',
+      '$kuid': '6f7bfa418a',
       'label': [
         'Zhmerynskyi',
         'Жмеринський',
@@ -2735,7 +2714,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA07',
       'name': 'UA0704',
-      '$kuid': 'd3f684bf62',
+      '$kuid': 'd5fa560267',
       'label': [
         'Kamin-Kashyrskyi',
         'Камінь-Каширський',
@@ -2745,7 +2724,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA07',
       'name': 'UA0706',
-      '$kuid': 'c91eb025cb',
+      '$kuid': 'd5e72051da',
       'label': [
         'Kovelskyi',
         'Ковельський',
@@ -2755,7 +2734,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA07',
       'name': 'UA0708',
-      '$kuid': 'eddb06ca66',
+      '$kuid': 'c23d230971',
       'label': [
         'Lutskyi',
         'Луцький',
@@ -2765,7 +2744,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA07',
       'name': 'UA0702',
-      '$kuid': 'd6c8a3f14e',
+      '$kuid': '1080318818',
       'label': [
         'Volodymyrskyi',
         'Володимирський',
@@ -2775,7 +2754,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA21',
       'name': 'UA2102',
-      '$kuid': '14113a08ba',
+      '$kuid': 'd9f533c133',
       'label': [
         'Berehivskyi',
         'Берегівський',
@@ -2785,7 +2764,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA21',
       'name': 'UA2112',
-      '$kuid': 'ad00c31c55',
+      '$kuid': '738a188d75',
       'label': [
         'Khustskyi',
         'Хустський',
@@ -2795,7 +2774,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA21',
       'name': 'UA2104',
-      '$kuid': '56282a7795',
+      '$kuid': 'ce2946d9c4',
       'label': [
         'Mukachivskyi',
         'Мукачівський',
@@ -2805,7 +2784,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA21',
       'name': 'UA2106',
-      '$kuid': 'ca7844d511',
+      '$kuid': '6aa778702a',
       'label': [
         'Rakhivskyi',
         'Рахівський',
@@ -2815,7 +2794,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA21',
       'name': 'UA2108',
-      '$kuid': 'ce111a5c70',
+      '$kuid': '4901471c82',
       'label': [
         'Tiachivskyi',
         'Тячівський',
@@ -2825,7 +2804,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA21',
       'name': 'UA2110',
-      '$kuid': 'f8d39842a6',
+      '$kuid': '8f55b2d5aa',
       'label': [
         'Uzhhorodskyi',
         'Ужгородський',
@@ -2835,7 +2814,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA23',
       'name': 'UA2302',
-      '$kuid': '228c9df8a0',
+      '$kuid': 'ba8191c43a',
       'label': [
         'Berdianskyi',
         'Бердянський',
@@ -2845,7 +2824,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA23',
       'name': 'UA2308',
-      '$kuid': 'b8dc66c2fc',
+      '$kuid': '34624d9f88',
       'label': [
         'Melitopolskyi',
         'Мелітопольський',
@@ -2855,7 +2834,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA23',
       'name': 'UA2310',
-      '$kuid': '47ddc57166',
+      '$kuid': '558445c635',
       'label': [
         'Polohivskyi',
         'Пологівський',
@@ -2865,7 +2844,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA23',
       'name': 'UA2304',
-      '$kuid': '29f77b49fc',
+      '$kuid': '55981721db',
       'label': [
         'Vasylivskyi',
         'Василівський',
@@ -2875,7 +2854,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA23',
       'name': 'UA2306',
-      '$kuid': 'f22ec9c66a',
+      '$kuid': '1b79d953cd',
       'label': [
         'Zaporizkyi',
         'Запорізький',
@@ -2885,7 +2864,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA18',
       'name': 'UA1802',
-      '$kuid': 'a9efc305b5',
+      '$kuid': 'bfb849b4f9',
       'label': [
         'Berdychivskyi',
         'Бердичівський',
@@ -2895,7 +2874,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA18',
       'name': 'UA1806',
-      '$kuid': '251ff7b46e',
+      '$kuid': '4656a12872',
       'label': [
         'Korostenskyi',
         'Коростенський',
@@ -2905,7 +2884,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA18',
       'name': 'UA1804',
-      '$kuid': '99884f8e59',
+      '$kuid': 'b839806012',
       'label': [
         'Zhytomyrskyi',
         'Житомирський',
@@ -2915,7 +2894,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'UA18',
       'name': 'UA1808',
-      '$kuid': '8985517ba6',
+      '$kuid': '79baf732a3',
       'label': [
         'Zviahelskyi',
         'Звягельський',
@@ -2924,7 +2903,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'russian_masculine',
-      '$kuid': '54ebc7a635',
+      '$kuid': 'd4ea17a2d0',
       'label': [
         'Russian',
         'Російський',
@@ -2933,7 +2912,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'country_of_origin_azerbaijan',
-      '$kuid': '10b03222ea',
+      '$kuid': '6074999116',
       'label': [
         'Azerbaijani',
         'Азербайджан',
@@ -2942,7 +2921,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'country_of_origin_moldovan',
-      '$kuid': '06761e4414',
+      '$kuid': '95463cf63a',
       'label': [
         'Moldovan',
         'Молдова',
@@ -2951,7 +2930,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'country_of_origin_romanian',
-      '$kuid': 'c0e155e1b3',
+      '$kuid': 'eeb73750ed',
       'label': [
         'Romanian',
         'Румунія',
@@ -2960,7 +2939,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'unable_unwilling_to_answer',
-      '$kuid': '194f22503b',
+      '$kuid': '2825b51c62',
       'label': [
         'Unable/unwilling to answer',
         'Не можу/не хочу відповідати',
@@ -2969,7 +2948,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'other_specify',
-      '$kuid': '71f700cd48',
+      '$kuid': '0cf095e0dd',
       'label': [
         'Other (specify)',
         'Інше (вказати)',
@@ -2978,7 +2957,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'one_person_household',
-      '$kuid': 'fe3436ef64',
+      '$kuid': '300ca3e134',
       'label': [
         'One person household (any person living alone)',
         'Домогосподарство з однією особою (будь-яка самотня особа)',
@@ -2987,7 +2966,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'couple_without_children',
-      '$kuid': 'aa497b24c4',
+      '$kuid': '0b0f9ce82a',
       'label': [
         'Couple without children (2 members)',
         'Пара без дітей (2 члени)',
@@ -2996,7 +2975,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'couple_with_children',
-      '$kuid': '06b6ebfb5c',
+      '$kuid': '1371f833c4',
       'label': [
         'Couple with children (3+ members)',
         'Пара з дітьми (3+ члени)',
@@ -3005,7 +2984,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'mother_with_children',
-      '$kuid': 'ef16ca2d3f',
+      '$kuid': '053df31a6d',
       'label': [
         'Mother with children (2+ members)',
         'Мати з дітьми (2+ члени)',
@@ -3014,7 +2993,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'father_with_children',
-      '$kuid': '2ed06d7e9d',
+      '$kuid': 'ae3bd07fda',
       'label': [
         'Father with children (2+ members)',
         'Батько з дітьми (2+ члени)',
@@ -3023,7 +3002,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'extended_family',
-      '$kuid': 'edd1331c9d',
+      '$kuid': 'daac405ef8',
       'label': [
         'Extended family (2+ members – may contain partners, children and any other familial relative but must not include any extra-familial members)',
         'Розширена сім \'я (2+ члени – може містити партнерів, дітей та будь-яких інших сімейних родичів, але не має включати будь-яких позасімейних членів)',
@@ -3032,7 +3011,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'male',
-      '$kuid': 'ccaed57369',
+      '$kuid': 'b526f4b8f7',
       'label': [
         'Male',
         'Чоловік',
@@ -3041,7 +3020,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'female',
-      '$kuid': 'd8753c675b',
+      '$kuid': '154e7e1454',
       'label': [
         'Female',
         'Жінка',
@@ -3050,7 +3029,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'other',
-      '$kuid': '8e3d25019b',
+      '$kuid': 'c0b757ce26',
       'label': [
         'Other',
         'Інше',
@@ -3059,7 +3038,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'unable_unwilling_to_answer',
-      '$kuid': '7f047d6770',
+      '$kuid': '1b469883bd',
       'label': [
         'Unable/unwilling to answer',
         'Не можу/не хочу відповідати',
@@ -3068,7 +3047,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'no',
-      '$kuid': 'f04c3e21a0',
+      '$kuid': '9928854956',
       'label': [
         'No',
         'Hi',
@@ -3077,7 +3056,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'diff_see',
-      '$kuid': '3fb5b11a95',
+      '$kuid': '616c364fec',
       'label': [
         'Seeing, even if wearing glasses',
         'Зір, навіть якщо в окулярах',
@@ -3086,7 +3065,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'diff_hear',
-      '$kuid': '498fb2c57e',
+      '$kuid': '413d786514',
       'label': [
         'Hearing, even if using a hearing aid',
         'Слух, навіть якщо зі слуховим апаратом',
@@ -3095,7 +3074,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'diff_walk',
-      '$kuid': '926a05c282',
+      '$kuid': 'f6aa76c390',
       'label': [
         'Walking or climbing steps',
         'Ходьба або сходження по сходах',
@@ -3104,7 +3083,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'diff_rem',
-      '$kuid': '66f1d5a624',
+      '$kuid': 'a57dbd48e7',
       'label': [
         'Remembering or concentrating',
         'Пам\'ять або концентрація',
@@ -3113,7 +3092,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'diff_care',
-      '$kuid': '1df4950dc6',
+      '$kuid': '6e3fa6e562',
       'label': [
         'Self-care, such as washing all over or dressing',
         'Догляд за собою, наприклад миття тіла або одягання',
@@ -3122,7 +3101,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'diff_comm',
-      '$kuid': '9643d9cd1a',
+      '$kuid': '4a21ce18e0',
       'label': [
         'Using your usual (customary) language, have difficulty communicating, for example understanding or being understood?',
         'Використання звичної (звичайної) мови, виникають труднощі у спілкуванні, наприклад, з розумінням або з можливістю бути зрозумілим?',
@@ -3131,7 +3110,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'diff_none',
-      '$kuid': '7474d003d0',
+      '$kuid': '3a3387d826',
       'label': [
         'Unable/unwilling to answer',
         'Не можу/не хочу відповідати',
@@ -3140,7 +3119,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'name',
-      '$kuid': '6e06dd510b',
+      '$kuid': '5345278f14',
       'label': [
         'label::en',
         'label::uk',
@@ -3149,7 +3128,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'yes',
-      '$kuid': '8d82b33b3d',
+      '$kuid': 'f09d26211a',
       'label': [
         'Yes',
         'Так',
@@ -3158,7 +3137,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'no',
-      '$kuid': 'ee10a7d051',
+      '$kuid': '3f4704f6eb',
       'label': [
         'No',
         'Ні',
@@ -3167,7 +3146,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'unable_unwilling_to_answer',
-      '$kuid': '99f1988a3b',
+      '$kuid': '0011f049df',
       'label': [
         'Unable/unwilling to answer',
         'Не можу/не хочу відповідати',
@@ -3176,7 +3155,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'partner',
-      '$kuid': 'e0fc33472d',
+      '$kuid': 'eb779eaf00',
       'label': [
         'Partner',
         'Партнер',
@@ -3185,7 +3164,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'child_lt_18',
-      '$kuid': 'a5cc771a83',
+      '$kuid': '822aed1b9f',
       'label': [
         'Child (<18)',
         'Дитина (<18)',
@@ -3194,7 +3173,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'child_gte_18',
-      '$kuid': 'df87f5acd6',
+      '$kuid': 'd6f692a979',
       'label': [
         'Child (≥18)',
         'Дитина (≥18)',
@@ -3203,7 +3182,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'mother',
-      '$kuid': 'cc6fb1582c',
+      '$kuid': 'af92b777d5',
       'label': [
         'Mother',
         'Мати',
@@ -3212,7 +3191,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'father',
-      '$kuid': 'e12b3d161c',
+      '$kuid': '4233f3ca76',
       'label': [
         'Father',
         'Батько',
@@ -3221,7 +3200,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'caregiver',
-      '$kuid': 'e9c4b3a374',
+      '$kuid': '6ecf5f53d6',
       'label': [
         'Caregiver',
         'Опікун',
@@ -3230,7 +3209,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'other',
-      '$kuid': '438229e5ca',
+      '$kuid': '099960ec46',
       'label': [
         'Other relative',
         'Інший родич',
@@ -3239,7 +3218,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'with_respondent',
-      '$kuid': '30e9b869aa',
+      '$kuid': '56cbbf31d0',
       'label': [
         'With respondent',
         'З респондентом',
@@ -3248,7 +3227,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'area_of_origin',
-      '$kuid': '61ffa6a047',
+      '$kuid': '758a02236f',
       'label': [
         'Area of origin',
         'Район походження',
@@ -3257,7 +3236,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'elsewhere_country',
-      '$kuid': '870ccd075d',
+      '$kuid': 'efdea905d4',
       'label': [
         'Elsewhere in the',
         'В іншому місці країни',
@@ -3266,7 +3245,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'abroad',
-      '$kuid': 'c23ffae7da',
+      '$kuid': '84a8fc92c3',
       'label': [
         'Abroad',
         'За кордоном',
@@ -3275,7 +3254,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'unknown',
-      '$kuid': '4034c667d9',
+      '$kuid': 'd48ab652e4',
       'label': [
         'Unknown',
         'Невідомо',
@@ -3284,7 +3263,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'other',
-      '$kuid': '21bdd28d76',
+      '$kuid': '2b37991988',
       'label': [
         'Other',
         'Інше',
@@ -3293,7 +3272,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'security',
-      '$kuid': '7fa7d60d1a',
+      '$kuid': 'd751561edd',
       'label': [
         'Security situation',
         'Безпекова ситуація',
@@ -3302,7 +3281,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'health',
-      '$kuid': '7d185b522e',
+      '$kuid': '5044715acb',
       'label': [
         'Health reasons',
         'Причини здоров’я',
@@ -3311,7 +3290,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'work',
-      '$kuid': '8c89abfeb1',
+      '$kuid': '2b3ead4ee7',
       'label': [
         'Work or livelihood',
         'Робота / засоби існування',
@@ -3320,7 +3299,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'caregiving',
-      '$kuid': '6d27acd5af',
+      '$kuid': '07aceb976a',
       'label': [
         'Caring for others',
         'Догляд за іншими',
@@ -3329,7 +3308,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'documentation',
-      '$kuid': 'a4589e3937',
+      '$kuid': 'cd5c18ff20',
       'label': [
         'Lack of documents',
         'Відсутність документів',
@@ -3338,7 +3317,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'travel_restrictions',
-      '$kuid': '2fa4136807',
+      '$kuid': '0f08166c39',
       'label': [
         'Movement / travel restrictions',
         'Обмеження пересування',
@@ -3347,7 +3326,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'other',
-      '$kuid': 'a365c3a475',
+      '$kuid': 'c8b81a3dfd',
       'label': [
         'Other',
         'Інше',
@@ -3356,7 +3335,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'idp',
-      '$kuid': 'ee2d2b9dd3',
+      '$kuid': '9ac418f016',
       'label': [
         'Internally Displaced Person (IDP)',
         'Внутрішньо переміщена особа',
@@ -3366,7 +3345,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'що повернулася',
       'name': 'returnee',
-      '$kuid': 'a3769933ce',
+      '$kuid': 'ec7f3ad9fa',
       'label': [
         'Returnee',
         'Особа',
@@ -3375,7 +3354,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'non_displaced',
-      '$kuid': '321b768c97',
+      '$kuid': '67acbd2180',
       'label': [
         'Non-displaced',
         'Не переміщувався',
@@ -3384,7 +3363,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'recent',
-      '$kuid': '7e810e356e',
+      '$kuid': '99f83eadb4',
       'label': [
         'Recently returned',
         'Нещодавно повернувся',
@@ -3393,7 +3372,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'long_term',
-      '$kuid': 'e2653d47b6',
+      '$kuid': '317f61173e',
       'label': [
         'Returned long ago',
         'Повернувся давно',
@@ -3402,7 +3381,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'insecurity',
-      '$kuid': '19578feed9',
+      '$kuid': '3e2a83868d',
       'label': [
         'Insecurity / conflict',
         'Небезпека / конфлікт',
@@ -3411,7 +3390,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'housing_damage',
-      '$kuid': '7776f09652',
+      '$kuid': 'a43679f4d6',
       'label': [
         'Housing damaged or destroyed',
         'Житло пошкоджене або зруйноване',
@@ -3420,7 +3399,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'lack_services',
-      '$kuid': '615dde2900',
+      '$kuid': '17df84d072',
       'label': [
         'Lack of basic services',
         'Відсутність базових послуг',
@@ -3429,7 +3408,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'livelihoods',
-      '$kuid': '6bc3368c87',
+      '$kuid': '6a59db19a7',
       'label': [
         'Lack of livelihoods',
         'Відсутність засобів до існування',
@@ -3438,7 +3417,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'family',
-      '$kuid': '07486bc04e',
+      '$kuid': 'b4f387ee49',
       'label': [
         'Family reunification',
         'Возз’єднання з родиною',
@@ -3447,7 +3426,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'other',
-      '$kuid': 'fdf9882629',
+      '$kuid': '074065f840',
       'label': [
         'Other',
         'Інше',
@@ -3456,7 +3435,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'own_vehicle',
-      '$kuid': '3b46322cb3',
+      '$kuid': '9e962a0e02',
       'label': [
         'Own vehicle',
         'Власний транспорт',
@@ -3465,7 +3444,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'public_transport',
-      '$kuid': '8d209595a6',
+      '$kuid': 'c2fc5f685f',
       'label': [
         'Public transport',
         'Громадський транспорт',
@@ -3474,7 +3453,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'humanitarian_transport',
-      '$kuid': '78c5c0ac0d',
+      '$kuid': 'a9f503e5ed',
       'label': [
         'Humanitarian transport',
         'Гуманітарний транспорт',
@@ -3483,7 +3462,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'walking',
-      '$kuid': '9634d276b6',
+      '$kuid': 'e9793c459c',
       'label': [
         'On foot',
         'Пішки',
@@ -3492,7 +3471,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'other',
-      '$kuid': '0b4e205491',
+      '$kuid': 'a202b093c2',
       'label': [
         'Other',
         'Інше',
@@ -3501,7 +3480,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'improved_security',
-      '$kuid': 'ad5d97b918',
+      '$kuid': 'f59eddb65f',
       'label': [
         'Improved security',
         'Покращення безпеки',
@@ -3510,7 +3489,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'housing_repaired',
-      '$kuid': '2927450b88',
+      '$kuid': '6d34b372b9',
       'label': [
         'Housing repaired or compensated',
         'Житло відремонтоване або компенсоване',
@@ -3519,7 +3498,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'services_restored',
-      '$kuid': 'fdb687be2d',
+      '$kuid': 'e729dd0ccc',
       'label': [
         'Services restored',
         'Відновлення послуг',
@@ -3528,7 +3507,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'livelihoods',
-      '$kuid': '9e3c2d413f',
+      '$kuid': 'b3b17a4648',
       'label': [
         'Livelihood opportunities',
         'Можливості заробітку',
@@ -3537,7 +3516,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'family',
-      '$kuid': '0d831a4979',
+      '$kuid': 'cbf53eab06',
       'label': [
         'Family reasons',
         'Сімейні причини',
@@ -3546,7 +3525,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'other',
-      '$kuid': '7c33e88f0b',
+      '$kuid': '819f2aa454',
       'label': [
         'Other',
         'Інше',
@@ -3555,7 +3534,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'yes',
-      '$kuid': 'd4b2dfbdb9',
+      '$kuid': '5ddb2b9a53',
       'label': [
         'Yes',
         'Так',
@@ -3564,7 +3543,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'no',
-      '$kuid': '16edb8792b',
+      '$kuid': '7a081f3bc0',
       'label': [
         'No',
         'Ні',
@@ -3573,7 +3552,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'unknown',
-      '$kuid': '3a9ca88fa5',
+      '$kuid': '4db14b230c',
       'label': [
         'Do not know / prefer not to say',
         'Важко сказати / не бажаю відповідати',
@@ -3582,7 +3561,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'stay',
-      '$kuid': '17a502c8d7',
+      '$kuid': '2c2010a915',
       'label': [
         'Stay in current location',
         'Залишитися на поточному місці',
@@ -3591,7 +3570,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'integrate',
-      '$kuid': 'fc39f3ce75',
+      '$kuid': '50ebcfb745',
       'label': [
         'Integrate locally',
         'Інтегруватися локально',
@@ -3600,7 +3579,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'return_origin',
-      '$kuid': '4ce0fbecbb',
+      '$kuid': '9b9891d591',
       'label': [
         'Return to place of origin',
         'Повернутися до місця походження',
@@ -3609,7 +3588,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'relocate_ukraine',
-      '$kuid': '1828e4bb08',
+      '$kuid': 'b9c25a4baa',
       'label': [
         'Relocate elsewhere in Ukraine',
         'Переїхати в інший регіон України',
@@ -3618,7 +3597,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'relocate_abroad',
-      '$kuid': '94ce20dc5c',
+      '$kuid': '6954a1c2e6',
       'label': [
         'Relocate outside Ukraine',
         'Переїхати за межі України',
@@ -3627,7 +3606,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'housing',
-      '$kuid': '7586f2320e',
+      '$kuid': '258e46803b',
       'label': [
         'Housing support',
         'Підтримка з житлом',
@@ -3636,7 +3615,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'jobs',
-      '$kuid': '7534175fa8',
+      '$kuid': '9e5983d3b1',
       'label': [
         'Employment opportunities',
         'Можливості працевлаштування',
@@ -3645,7 +3624,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'services',
-      '$kuid': '7c14cf8421',
+      '$kuid': 'bcb9d02ad5',
       'label': [
         'Access to services',
         'Доступ до послуг',
@@ -3654,7 +3633,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'social',
-      '$kuid': '798a3a419b',
+      '$kuid': 'ffce33d916',
       'label': [
         'Social integration',
         'Соціальна інтеграція',
@@ -3663,7 +3642,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'legal',
-      '$kuid': 'fb7af67da6',
+      '$kuid': 'abf73915b9',
       'label': [
         'Legal assistance',
         'Юридична допомога',
@@ -3672,7 +3651,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'other',
-      '$kuid': 'dbb22594ea',
+      '$kuid': '414617dc40',
       'label': [
         'Other',
         'Інше',
@@ -3681,7 +3660,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'security',
-      '$kuid': '54012da5e6',
+      '$kuid': '38f1b8ecbc',
       'label': [
         'Improved security situation',
         'Покращення безпеки',
@@ -3690,7 +3669,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'housing',
-      '$kuid': '4e3467f454',
+      '$kuid': '3ecf500099',
       'label': [
         'Repaired housing',
         'Відновлене житло',
@@ -3699,7 +3678,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'services',
-      '$kuid': '1dea46a6cc',
+      '$kuid': '1c49dc6037',
       'label': [
         'Restored services',
         'Відновлення послуг',
@@ -3708,7 +3687,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'livelihoods',
-      '$kuid': '8045ec37b4',
+      '$kuid': '9e344f0f4e',
       'label': [
         'Access to livelihoods',
         'Доступ до засобів до існування',
@@ -3717,7 +3696,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'insecurity',
-      '$kuid': 'd1ab9a7f32',
+      '$kuid': 'edf8b4c6ff',
       'label': [
         'Insecurity',
         'Небезпека',
@@ -3726,7 +3705,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'housing',
-      '$kuid': '96daff3e53',
+      '$kuid': '7e8f1815d8',
       'label': [
         'Housing issues',
         'Проблеми з житлом',
@@ -3735,7 +3714,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'services',
-      '$kuid': '5e0ac99c99',
+      '$kuid': '05ead6ee40',
       'label': [
         'Lack of services',
         'Відсутність послуг',
@@ -3744,7 +3723,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'livelihoods',
-      '$kuid': 'f9472e01a1',
+      '$kuid': '0d20ab8702',
       'label': [
         'Lack of livelihoods',
         'Відсутність роботи',
@@ -3753,7 +3732,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'family',
-      '$kuid': '0495c69b79',
+      '$kuid': 'dca7c4406b',
       'label': [
         'Family reasons',
         'Сімейні причини',
@@ -3762,7 +3741,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'other',
-      '$kuid': '3ecb1da55b',
+      '$kuid': 'aa2555542a',
       'label': [
         'Other',
         'Інше',
@@ -3771,7 +3750,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'yes_refugee_status',
-      '$kuid': 'cc852cf3f3',
+      '$kuid': '7bf6aed5fc',
       'label': [
         'Refugee or protection status',
         'Статус біженця або захисту',
@@ -3780,7 +3759,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'yes_asylum_request_registrated',
-      '$kuid': '74299d2f1c',
+      '$kuid': 'd01465e9bc',
       'label': [
         'Asylum request registered',
         'Зареєстрований запит на притулок',
@@ -3789,7 +3768,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'yes_residence_permit',
-      '$kuid': '4f149e0b8c',
+      '$kuid': '0f960e0f91',
       'label': [
         'Residence permit',
         'Посвідка на проживання',
@@ -3798,7 +3777,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'no',
-      '$kuid': 'd41db134e2',
+      '$kuid': '30965fc16d',
       'label': [
         'No documentation',
         'Немає документів',
@@ -3807,7 +3786,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'unable_unwilling_to_answer',
-      '$kuid': '487a109bf5',
+      '$kuid': '2c5bf6cce5',
       'label': [
         'Unable/unwilling to answer',
         'Не можу/не хочу відповідати',
@@ -3816,7 +3795,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'yes',
-      '$kuid': '22e3b19f3b',
+      '$kuid': '3a5e0f5885',
       'label': [
         'Yes',
         'Так',
@@ -3825,7 +3804,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'no',
-      '$kuid': 'd324fd01fd',
+      '$kuid': 'd9253eaae0',
       'label': [
         'No',
         'Ні',
@@ -3834,7 +3813,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'unable_unwilling_to_answer',
-      '$kuid': '44ea0f870f',
+      '$kuid': '3657c67e8d',
       'label': [
         'Unable/unwilling to answer',
         'Не можу/не хочу відповідати',
@@ -3845,7 +3824,7 @@ export const formHhsSchema: Api.Form.Schema = {
       'tag': 'Так',
       'name': 'yes_all',
       'tag1': 'усі члени домогосподарства',
-      '$kuid': '91a0ef3123',
+      '$kuid': '4185111c80',
       'label': [
         'Yes',
         'all household members',
@@ -3856,7 +3835,7 @@ export const formHhsSchema: Api.Form.Schema = {
       'tag': 'Ні',
       'name': 'no_some',
       'tag1': 'деякі не зареєстровані',
-      '$kuid': '25fc228819',
+      '$kuid': 'bc8890756d',
       'label': [
         'No',
         'some members not registered',
@@ -3865,7 +3844,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'none',
-      '$kuid': '2e8434b557',
+      '$kuid': '623247a301',
       'label': [
         'None registered',
         'Ніхто не зареєстрований',
@@ -3874,7 +3853,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'unable_unwilling_to_answer',
-      '$kuid': '7c7061b8ff',
+      '$kuid': '966eba4e4d',
       'label': [
         'Unable/unwilling to answer',
         'Не можу/не хочу відповідати',
@@ -3883,7 +3862,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'yes',
-      '$kuid': '55af26b73c',
+      '$kuid': '4ef71101db',
       'label': [
         'Yes',
         'Так',
@@ -3892,7 +3871,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'no',
-      '$kuid': '6e33aaa340',
+      '$kuid': '80e9c91b4a',
       'label': [
         'No',
         'Ні',
@@ -3901,7 +3880,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'unable_unwilling_to_answer',
-      '$kuid': 'd99d81c746',
+      '$kuid': '02243c8f50',
       'label': [
         'Unable/unwilling to answer',
         'Не можу/не хочу відповідати',
@@ -3910,7 +3889,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'birth_certificate',
-      '$kuid': 'a76aed3979',
+      '$kuid': '32d42ebea2',
       'label': [
         'Birth certificate',
         'Свідоцтво про народження',
@@ -3919,7 +3898,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'tin',
-      '$kuid': '0bbf548b10',
+      '$kuid': 'f57ff8a268',
       'label': [
         'TIN – tax identification number',
         'ІПН – податковий номер',
@@ -3928,7 +3907,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'pensioner_cert_social',
-      '$kuid': 'b06e673dc8',
+      '$kuid': '60e65a452a',
       'label': [
         'Pensioner certificate (social)',
         'Пенсійне посвідчення (соціальне)',
@@ -3937,7 +3916,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'pensioner_cert_retirement',
-      '$kuid': '6a498858e9',
+      '$kuid': 'f2b7090cd0',
       'label': [
         'Pensioner certificate (retirement)',
         'Пенсійне посвідчення (пенсійне)',
@@ -3946,7 +3925,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'passport',
-      '$kuid': 'fef2082d04',
+      '$kuid': '5c647029ca',
       'label': [
         'National passport',
         'Національний паспорт',
@@ -3955,7 +3934,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'none',
-      '$kuid': 'adcce1d88c',
+      '$kuid': 'c5c8d977c0',
       'label': [
         'None',
         'Жодного',
@@ -3964,7 +3943,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'unable_unwilling_to_answer',
-      '$kuid': '99dbc6b60a',
+      '$kuid': '6f24413784',
       'label': [
         'Unable/unwilling to answer',
         'Не можу/не хочу відповідати',
@@ -3973,7 +3952,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'other_specify',
-      '$kuid': 'de8109d49d',
+      '$kuid': 'a43901e9eb',
       'label': [
         'Other',
         'Інше',
@@ -3982,7 +3961,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'idp_certificate',
-      '$kuid': 'ddec6f9e26',
+      '$kuid': '46e5aa542d',
       'label': [
         'IDP certificate (paper-based)',
         'Довідка ВПО (у паперовому вигляді)',
@@ -3991,7 +3970,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'idp_eregistration',
-      '$kuid': 'ac75866598',
+      '$kuid': '6345db9df9',
       'label': [
         'IDP e-registration',
         'Електронна реєстрація ВПО',
@@ -4000,7 +3979,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'no_proof_of_registration',
-      '$kuid': 'f6ed5263d2',
+      '$kuid': '4b9e1687fb',
       'label': [
         'No proof of registration',
         'Немає підтвердження реєстрації',
@@ -4009,7 +3988,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'unable_unwilling_to_answer',
-      '$kuid': '3a32822903',
+      '$kuid': '84673d568c',
       'label': [
         'Unable/unwilling to answer',
         'Не можу/не хочу відповідати',
@@ -4018,7 +3997,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'yes',
-      '$kuid': '3e853847c5',
+      '$kuid': 'fba6c7fdba',
       'label': [
         'Yes',
         'Так',
@@ -4027,7 +4006,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'no',
-      '$kuid': '1606dc23f8',
+      '$kuid': '92995834e3',
       'label': [
         'No',
         'Ні',
@@ -4036,7 +4015,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'unable_unwilling_to_answer',
-      '$kuid': '8beee2ae97',
+      '$kuid': 'b8f9a46eb1',
       'label': [
         'Unable/unwilling to answer',
         'Не можу/не хочу відповідати',
@@ -4045,7 +4024,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'delays_in_allowances_payment',
-      '$kuid': '322dcf20fc',
+      '$kuid': '83455cadf2',
       'label': [
         'Delays in allowance payment',
         'Затримки виплати допомоги',
@@ -4054,7 +4033,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'change_of_place_of_residence',
-      '$kuid': '2dfece285b',
+      '$kuid': 'a6960420db',
       'label': [
         'Change of place of residence',
         'Зміна місця проживання',
@@ -4063,7 +4042,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'unable_unwilling_to_answer',
-      '$kuid': '13baa86da9',
+      '$kuid': '3938c091a9',
       'label': [
         'Unable/unwilling to answer',
         'Не можу/не хочу відповідати',
@@ -4072,7 +4051,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'other_specify',
-      '$kuid': 'd1923f1ea3',
+      '$kuid': 'c99886e7d0',
       'label': [
         'Other (specify)',
         'Інше (вказати)',
@@ -4081,7 +4060,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'registration_was_rejected',
-      '$kuid': '86c8bfc8fd',
+      '$kuid': '6d8c77a1be',
       'label': [
         'Registration was rejected',
         'Реєстрацію відхилено',
@@ -4090,7 +4069,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'delays_in_registration_process',
-      '$kuid': 'b9979999d7',
+      '$kuid': '750c06f411',
       'label': [
         'Delays in registration process',
         'Затримки в процесі реєстрації',
@@ -4099,7 +4078,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'unaware_of_registration_process',
-      '$kuid': 'f2edb83d96',
+      '$kuid': '06fcebc830',
       'label': [
         'Unaware of the registration process',
         'Не обізнаний з процесом реєстрації',
@@ -4108,7 +4087,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'unable_to_access_registration_center',
-      '$kuid': '6aa7a07a6f',
+      '$kuid': '3dd5198dcf',
       'label': [
         'Unable to access registration center',
         'Неможливо отримати доступ до центру реєстрації',
@@ -4117,7 +4096,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'costly_process',
-      '$kuid': '6585bd4a68',
+      '$kuid': '2536e1bd56',
       'label': [
         'Costly process',
         'Витратний процес',
@@ -4126,7 +4105,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'not_entitled_to_register_as_an_idp',
-      '$kuid': '66cd1545ec',
+      '$kuid': '668afc0aef',
       'label': [
         'Not entitled to register as IDP',
         'Немає права реєструватися як ВПО',
@@ -4135,7 +4114,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'fear_of_conscription',
-      '$kuid': '7ae393031e',
+      '$kuid': 'ad1e3fa969',
       'label': [
         'Fear of conscription',
         'Страх призову',
@@ -4144,7 +4123,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'lack_of_required_documentation',
-      '$kuid': 'b8236d7f01',
+      '$kuid': '9ec08ed581',
       'label': [
         'Lack of required documentation',
         'Відсутність необхідних документів',
@@ -4153,7 +4132,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'unable_unwilling_to_answer',
-      '$kuid': '5ed279fd7d',
+      '$kuid': '9461f766a0',
       'label': [
         'Unable/unwilling to answer',
         'Не можу/не хочу відповідати',
@@ -4162,7 +4141,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'other_specify',
-      '$kuid': '2162669f0a',
+      '$kuid': 'bb1661ef1c',
       'label': [
         'Other (specify)',
         'Інше (вказати)',
@@ -4171,7 +4150,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'multiple_displacements',
-      '$kuid': '8f9de1f098',
+      '$kuid': '0febe9deb6',
       'label': [
         'Multiple displacements',
         'Багаторазові переміщення',
@@ -4180,7 +4159,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'lack_of_personal_documentation',
-      '$kuid': '58977e90ba',
+      '$kuid': 'd69748b115',
       'label': [
         'Lack of personal documentation',
         'Відсутність особистих документів',
@@ -4189,7 +4168,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'area_not_eligible',
-      '$kuid': 'd16ce7e11e',
+      '$kuid': '9eda9ee2d5',
       'label': [
         'Area of displacement not eligible for IDP registration',
         'Територія переміщення не підпадає під критерії реєстрації ВПО',
@@ -4198,7 +4177,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'area_too_close_to_origin',
-      '$kuid': '41a438da0e',
+      '$kuid': '0a2d30c092',
       'label': [
         'Displacement area too close to place of origin',
         'Район переміщення занадто близький до місця походження',
@@ -4207,7 +4186,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'unable_unwilling_to_answer',
-      '$kuid': '7fe083428c',
+      '$kuid': 'a542554cc6',
       'label': [
         'Unable/unwilling to answer',
         'Не можу/не хочу відповідати',
@@ -4216,7 +4195,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'other_specify',
-      '$kuid': 'ed93903948',
+      '$kuid': '0109de1094',
       'label': [
         'Other (specify)',
         'Інше (вказати)',
@@ -4225,7 +4204,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'none',
-      '$kuid': '9d82964c50',
+      '$kuid': '0bd2953e90',
       'label': [
         'None',
         'Жодного',
@@ -4234,7 +4213,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'property_ownership_for_apartment_house',
-      '$kuid': '7ed8c570a5',
+      '$kuid': '16cfe39ae4',
       'label': [
         'Property ownership for apartment/house',
         'Право власності на квартиру/будинок',
@@ -4243,7 +4222,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'property_ownership_certificate_for_land',
-      '$kuid': 'd1d3f1aade',
+      '$kuid': 'ff8c8d2bb4',
       'label': [
         'Property ownership certificate for land',
         'Свідоцтво про право власності на землю',
@@ -4252,7 +4231,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'lease_agreement_for_house_apartment',
-      '$kuid': '31108aeea2',
+      '$kuid': '99a548f454',
       'label': [
         'Lease agreement for house/apartment',
         'Договір оренди будинку/квартири',
@@ -4261,7 +4240,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'bti_certificate',
-      '$kuid': '37c6d6fdb0',
+      '$kuid': 'c28ef162e8',
       'label': [
         'BTI certificate',
         'Довідка БТІ',
@@ -4270,7 +4249,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'inheritance_certificate',
-      '$kuid': 'ec286b2699',
+      '$kuid': '4ec498310f',
       'label': [
         'Inheritance certificate',
         'Свідоцтво про право на спадщину',
@@ -4279,7 +4258,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'death_certificate_of_predecessor',
-      '$kuid': 'd82209760a',
+      '$kuid': '87a98580c3',
       'label': [
         'Death certificate of predecessor',
         'Свідоцтво про смерть попередника',
@@ -4288,7 +4267,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'unable_unwilling_to_answer',
-      '$kuid': '453601b3e6',
+      '$kuid': '43e74464b8',
       'label': [
         'Unable/unwilling to answer',
         'Не можу/не хочу відповідати',
@@ -4297,7 +4276,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'other_specify',
-      '$kuid': '16a3c54953',
+      '$kuid': '571b7385db',
       'label': [
         'Other (specify)',
         'Інше (вказати)',
@@ -4306,7 +4285,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'length_of_administrative_procedures',
-      '$kuid': '7905a48210',
+      '$kuid': 'f37edc3a94',
       'label': [
         'Length of administrative procedures',
         'Тривалість адміністративних процедур',
@@ -4315,7 +4294,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'cost_of_administrative_procedures',
-      '$kuid': 'ee26e1c6b6',
+      '$kuid': '288f91d769',
       'label': [
         'Cost of administrative procedures',
         'Вартість адміністративних процедур',
@@ -4324,7 +4303,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'lack_of_information',
-      '$kuid': '324ffa067d',
+      '$kuid': 'eec9a2a50f',
       'label': [
         'Lack of information',
         'Відсутність інформації',
@@ -4333,7 +4312,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'distance_or_cost_of_transportation',
-      '$kuid': 'e2851d8b21',
+      '$kuid': 'ff79e72434',
       'label': [
         'Distance or cost of transportation',
         'Відстань або вартість транспортування',
@@ -4342,7 +4321,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'lack_of_devices_or_internet',
-      '$kuid': '33229db1cd',
+      '$kuid': '17d312ad7e',
       'label': [
         'Lack of devices or internet connectivity',
         'Відсутність пристроїв або Інтернету',
@@ -4351,7 +4330,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'lack_of_legal_support',
-      '$kuid': '1c743602dc',
+      '$kuid': 'f4441c6327',
       'label': [
         'Lack of legal support',
         'Відсутність правової допомоги',
@@ -4360,7 +4339,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'inability_of_service',
-      '$kuid': 'dbc767a152',
+      '$kuid': '56cfdb933a',
       'label': [
         'Inability of the service to provide documentation',
         'Нездатність служби надати документацію',
@@ -4369,7 +4348,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'discrimination',
-      '$kuid': 'fe02e62d5b',
+      '$kuid': '525d6cc736',
       'label': [
         'Discrimination',
         'Дискримінація',
@@ -4378,7 +4357,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'distrust_of_authorities',
-      '$kuid': '6022a762ff',
+      '$kuid': '8ff9ad315a',
       'label': [
         'Distrust of public institutions and authorities',
         'Недовіра до державних інститутів та влади',
@@ -4387,7 +4366,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'no',
-      '$kuid': 'c03bc50e3a',
+      '$kuid': 'ac9e3169ae',
       'label': [
         'No',
         'Ні',
@@ -4396,7 +4375,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'unable_unwilling_to_answer',
-      '$kuid': '8e694732a5',
+      '$kuid': 'aef8174c07',
       'label': [
         'Unable/unwilling to answer',
         'Не можу/не хочу відповідати',
@@ -4405,7 +4384,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'presence_of_armed_or_security_actors',
-      '$kuid': '47ac7773b5',
+      '$kuid': 'ba7a4f9a17',
       'label': [
         'Presence of armed or security actors',
         'Присутність озброєних суб\'єктів або силових структур',
@@ -4414,7 +4393,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'bombardment_shelling_or_threat_of_shelling',
-      '$kuid': 'c690ed08e5',
+      '$kuid': '85d7dd2e81',
       'label': [
         'Bombardment/shelling or threat of shelling',
         'Бомбардування/обстріл або загроза обстрілу',
@@ -4423,7 +4402,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'fighting_between_armed_or_security_actors',
-      '$kuid': 'cfad9a75a2',
+      '$kuid': '62e881461a',
       'label': [
         'Fighting between armed or security actors',
         'Бійки між озброєними суб\'єктами або представниками силових структур',
@@ -4432,7 +4411,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'landmines_or_uxos_contamination',
-      '$kuid': '7275071ed2',
+      '$kuid': '7c239148dd',
       'label': [
         'Landmines or UXOs contamination',
         'Забруднення наземними мінами або вибухонебезпечними залишками війни',
@@ -4441,7 +4420,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'criminality',
-      '$kuid': 'ab275933a2',
+      '$kuid': '71801c9234',
       'label': [
         'Criminality',
         'Злочинність',
@@ -4450,7 +4429,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'intercommunity_tensions',
-      '$kuid': '45630c938a',
+      '$kuid': '39d4365e4c',
       'label': [
         'Intercommunity tensions',
         'Міжсуспільна напруга',
@@ -4459,7 +4438,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'risks_of_eviction',
-      '$kuid': 'c4991cd93a',
+      '$kuid': 'fec3a8bb73',
       'label': [
         'Risks of eviction',
         'Ризики виселення',
@@ -4468,7 +4447,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'risks_of_arbitrary_arrest_detention',
-      '$kuid': 'e6253d9720',
+      '$kuid': 'b6a7493b04',
       'label': [
         'Risks of arbitrary arrest/detention',
         'Ризики свавільного арешту/затримання',
@@ -4477,7 +4456,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'risks_of_abduction_or_enforced_disappearance',
-      '$kuid': '134868270d',
+      '$kuid': '42e9b2c6ea',
       'label': [
         'Risks of abduction or enforced disappearance',
         'Ризики викрадення або насильницького зникнення',
@@ -4486,7 +4465,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'risks_of_sexual_violence_and_exploitation',
-      '$kuid': '7b45e86400',
+      '$kuid': '4f20cf8878',
       'label': [
         'Risks of sexual violence and exploitation',
         'Ризики сексуального насильства та експлуатації',
@@ -4495,7 +4474,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'unable_unwilling_to_answer',
-      '$kuid': 'a7c6c97f60',
+      '$kuid': '1c48b7b88a',
       'label': [
         'Unable/unwilling to answer',
         'Не можу/не хочу відповідати',
@@ -4504,7 +4483,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'other',
-      '$kuid': 'd8f7dada07',
+      '$kuid': '487100a69f',
       'label': [
         'Other',
         'Інше',
@@ -4513,7 +4492,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': '_1_very_bad',
-      '$kuid': 'd44d89d45a',
+      '$kuid': 'af6aa754ef',
       'label': [
         '1 - Very bad',
         '1 - Дуже погано',
@@ -4522,7 +4501,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': '_2_bad',
-      '$kuid': '904c58b4e4',
+      '$kuid': 'b9ea1b807c',
       'label': [
         '2 - Bad',
         '2 - Погано',
@@ -4531,7 +4510,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': '_3_acceptable',
-      '$kuid': '53239c4f82',
+      '$kuid': 'bf27572ed9',
       'label': [
         '3 - Acceptable',
         '3 - Прийнятно',
@@ -4540,7 +4519,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': '_4_good',
-      '$kuid': 'ae6207b5f0',
+      '$kuid': '6c8027ca4d',
       'label': [
         '4 - Good',
         '4 - Добре',
@@ -4549,7 +4528,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': '_5_very_good',
-      '$kuid': '50e5712c35',
+      '$kuid': '3a008f9afc',
       'label': [
         '5 - Very good',
         '5 - Дуже добре',
@@ -4558,7 +4537,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'language_difference',
-      '$kuid': '011f6aa694',
+      '$kuid': 'ec359e5c05',
       'label': [
         'Language difference',
         'Мовна різниця',
@@ -4567,7 +4546,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'tension_over_access_to_humanitarian_assistance',
-      '$kuid': 'dd162ffcfb',
+      '$kuid': 'ce9b670dd2',
       'label': [
         'Tension over access to humanitarian assistance',
         'Напруга навколо доступу до гуманітарної допомоги',
@@ -4576,7 +4555,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'tension_over_access_to_services_and_or_employment_opportunities',
-      '$kuid': '9ad95db2ed',
+      '$kuid': '403c67d703',
       'label': [
         'Tension over access to services and/or employment opportunities',
         'Напруга щодо доступу до послуг та/або можливостей працевлаштування',
@@ -4585,7 +4564,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'tension_over_conscription_procedures',
-      '$kuid': 'ba1b0f8db3',
+      '$kuid': 'bc63905986',
       'label': [
         'Tension over conscription procedures',
         'Напруга навколо призову на військову службу',
@@ -4594,7 +4573,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'unable_unwilling_to_answer',
-      '$kuid': '1e5be226f9',
+      '$kuid': 'ec51c644eb',
       'label': [
         'Unable/unwilling to answer',
         'Не можу/не хочу відповідати',
@@ -4603,7 +4582,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'other_specify',
-      '$kuid': 'c6527e560d',
+      '$kuid': '9f6fb7e601',
       'label': [
         'Other (specify)',
         'Інше (вказати)',
@@ -4612,7 +4591,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'harassment_violence_or_abuse',
-      '$kuid': '2409c6002d',
+      '$kuid': '0c6c83e076',
       'label': [
         'Harassment, violence or abuse',
         'Переслідування, насильство або образа',
@@ -4621,7 +4600,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'discrimination_over_access_to_basic_services',
-      '$kuid': 'b36cc92c1d',
+      '$kuid': '8c10132427',
       'label': [
         'Discrimination over access to basic services',
         'Дискримінація щодо доступу до основних послуг',
@@ -4630,7 +4609,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'restrictions_on_participation_in_public_affairs_and_community_events',
-      '$kuid': '8fbd242eff',
+      '$kuid': 'ac1989929b',
       'label': [
         'Restrictions on participation in public affairs and community events',
         'Обмеження на участь у громадських справах та громадських заходах',
@@ -4639,7 +4618,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'dispute_over_access_to_humanitarian_assistance',
-      '$kuid': '278dca646b',
+      '$kuid': '77b46c4425',
       'label': [
         'Dispute over access to humanitarian assistance',
         'Суперечки щодо доступу до гуманітарної допомоги',
@@ -4648,7 +4627,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'dispute_or_conflict_over_land_shelter_property',
-      '$kuid': 'cac5750e9a',
+      '$kuid': 'bd20380f49',
       'label': [
         'Dispute or conflict over land, shelter, property',
         'Суперечки або конфлікт щодо землі, житла, власності',
@@ -4657,7 +4636,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'dispute_or_conflict_over_livelihood_or_other_financial_resources',
-      '$kuid': 'fa8f4374e7',
+      '$kuid': 'd6ad261894',
       'label': [
         'Dispute or conflict over livelihood or other financial resources',
         'Суперечки або конфлікт щодо засобів до існування чи інших фінансових ресурсів',
@@ -4666,7 +4645,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'dispute_or_conflict_over_ethic_political_or_social_issues',
-      '$kuid': 'b99d3d76ac',
+      '$kuid': '3e77e02e2a',
       'label': [
         'Dispute or conflict over ethic, political or social issues',
         'Суперечки або конфлікт з етичних, політичних чи соціальних питань',
@@ -4675,7 +4654,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'no_incident_experienced',
-      '$kuid': 'b0b86ad627',
+      '$kuid': 'e137de21ea',
       'label': [
         'No incident experienced',
         'Жодного інциденту не було',
@@ -4684,7 +4663,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'unable_unwilling_to_answer',
-      '$kuid': 'f2c43ff65e',
+      '$kuid': 'bc4f24f4ec',
       'label': [
         'Unable/unwilling to answer',
         'Не можу/не хочу відповідати',
@@ -4693,7 +4672,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'other_specify',
-      '$kuid': 'ddd8f329ca',
+      '$kuid': '813e3b1879',
       'label': [
         'Other (specify)',
         'Інше (вказати)',
@@ -4702,7 +4681,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'no',
-      '$kuid': 'af7979dfd1',
+      '$kuid': 'e5311415e7',
       'label': [
         'No',
         'Hi',
@@ -4711,7 +4690,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'fear_of_conscription_including_selfrestriction_of_movement',
-      '$kuid': 'e527cc5582',
+      '$kuid': '15deb59a97',
       'label': [
         'Fear of conscription, including self-restriction of movement',
         'Страх призову, в тому числі самообмеження пересування',
@@ -4720,7 +4699,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'lack_of_documentation',
-      '$kuid': 'ece60dfa93',
+      '$kuid': 'c10aef7016',
       'label': [
         'Lack of documentation',
         'Відсутність документації',
@@ -4729,7 +4708,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'armed_conflict_including_shelling',
-      '$kuid': '2875702448',
+      '$kuid': 'b88a55b187',
       'label': [
         'Armed conflict, including shelling',
         'Збройний конфлікт, включно з обстрілами',
@@ -4738,7 +4717,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'presence_of_explosive_ordnance',
-      '$kuid': 'd06fb8c4c2',
+      '$kuid': '74a08a815c',
       'label': [
         'Presence of explosive ordnance',
         'Наявність вибухонебезпечних предметів',
@@ -4747,7 +4726,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'risks_of_sexual_violence_and_exploitation',
-      '$kuid': '73566c5870',
+      '$kuid': 'ca733fdc0b',
       'label': [
         'Risks of sexual violence and exploitation',
         'Ризики сексуального насильства та експлуатації',
@@ -4756,7 +4735,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'discrimination',
-      '$kuid': '23e97dcd18',
+      '$kuid': '72a6310170',
       'label': [
         'Discrimination',
         'Дискримінація',
@@ -4765,7 +4744,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'intercommunity_tensions',
-      '$kuid': '91553f49db',
+      '$kuid': 'bc854b857e',
       'label': [
         'Intercommunity tensions',
         'Міжсуспільна напруга',
@@ -4774,7 +4753,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'lack_of_transportationfinancial_resources_to_pay_transportation',
-      '$kuid': 'd28496a43a',
+      '$kuid': '3df6a4bf64',
       'label': [
         'Lack of transportation/financial resources to pay transportation',
         'Відсутність транспортних/фінансових ресурсів для оплати проїзду',
@@ -4783,7 +4762,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'reduced_mobility_linked_with_health_issues_or_disability',
-      '$kuid': '333767e827',
+      '$kuid': '48389b4e8a',
       'label': [
         'Reduced mobility linked with health issues or disability',
         'Обмеження рухливості, пов’язане з проблемами зі здоров’ям або інвалідністю',
@@ -4792,7 +4771,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'unable_unwilling_to_answer',
-      '$kuid': '3064d6cf47',
+      '$kuid': 'd11b4c6472',
       'label': [
         'Unable/unwilling to answer',
         'Не можу/не хочу відповідати',
@@ -4801,7 +4780,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'other_specify',
-      '$kuid': '8afd93371a',
+      '$kuid': '3e1134ae72',
       'label': [
         'Other (specify)',
         'Інше (вказати)',
@@ -4810,7 +4789,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': '_1_very_unsafe',
-      '$kuid': '82d94ae6fa',
+      '$kuid': '180cf75c1a',
       'label': [
         '1 - Very unsafe',
         '1 - Дуже небезпечно',
@@ -4819,7 +4798,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': '_2_unsafe',
-      '$kuid': 'a62620c29d',
+      '$kuid': 'c4f101c47e',
       'label': [
         '2 - Unsafe',
         '2 - Небезпечно',
@@ -4828,7 +4807,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': '_3_safe',
-      '$kuid': 'd6923d0230',
+      '$kuid': '59a805ca0a',
       'label': [
         '3 - Safe',
         '3 - Безпечно',
@@ -4837,7 +4816,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': '_4_very_safe',
-      '$kuid': '29a693e650',
+      '$kuid': '0109cd6c72',
       'label': [
         '4 - Very safe',
         '4 - Дуже безпечно',
@@ -4846,7 +4825,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'unable_unwilling_to_answer',
-      '$kuid': 'fe47276b4c',
+      '$kuid': '55312a40cd',
       'label': [
         'Unable/unwilling to answer',
         'Не можу/не хочу відповідати',
@@ -4855,7 +4834,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'killing',
-      '$kuid': '9201c9b90a',
+      '$kuid': 'bc94a17c91',
       'label': [
         'Killing',
         'Вбивство',
@@ -4864,7 +4843,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'injury_indiscriminate_attack',
-      '$kuid': '640894e3d3',
+      '$kuid': '540c5a2f30',
       'label': [
         'Injury due to indiscriminate attacks',
         'Поранення внаслідок невибіркових нападів',
@@ -4873,7 +4852,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'abduction',
-      '$kuid': '6b93cfb973',
+      '$kuid': 'e69a863e93',
       'label': [
         'Abduction or enforced disappearance',
         'Викрадення або насильницьке зникнення',
@@ -4882,7 +4861,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'arbitrary_detention',
-      '$kuid': '7158bb75f6',
+      '$kuid': '9582854b74',
       'label': [
         'Arbitrary arrest or detention',
         'Безпідставний арешт або затримання',
@@ -4891,7 +4870,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'forced_recruitment',
-      '$kuid': 'e211a50f5a',
+      '$kuid': 'fc46fdbb11',
       'label': [
         'Forced recruitment',
         'Примусова вербовка',
@@ -4900,7 +4879,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'physical_assault',
-      '$kuid': '3c0b97d2a7',
+      '$kuid': '40ca2d24a1',
       'label': [
         'Physical assault',
         'Фізичний напад',
@@ -4909,7 +4888,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'sexual_violence',
-      '$kuid': '7b495cb45e',
+      '$kuid': 'e2c86a30c5',
       'label': [
         'Sexual violence',
         'Сексуальне насильство',
@@ -4918,7 +4897,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'forced_labour',
-      '$kuid': '7c5a434898',
+      '$kuid': '78e4a68472',
       'label': [
         'Forced or exploitative labour',
         'Примусова або експлуататорська праця',
@@ -4927,7 +4906,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'property_destruction',
-      '$kuid': '270a3c2169',
+      '$kuid': '412cb407ab',
       'label': [
         'Destruction of property',
         'Знищення майна',
@@ -4936,7 +4915,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'theft_robbery',
-      '$kuid': 'b8b4b8856d',
+      '$kuid': '4c2ce1c0f9',
       'label': [
         'Theft or robbery',
         'Крадіжка або грабіж',
@@ -4945,7 +4924,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'denial_basic_services',
-      '$kuid': 'd2a88be995',
+      '$kuid': '9518224251',
       'label': [
         'Denial of basic services or aid',
         'Відмова в доступі до базових послуг або допомоги',
@@ -4954,7 +4933,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'unable_unwilling_to_answer',
-      '$kuid': '51ce54ae8a',
+      '$kuid': '59d9e594da',
       'label': [
         'Unable/unwilling to answer',
         'Не можу/не хочу відповідати',
@@ -4963,7 +4942,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'none',
-      '$kuid': 'e61ebab8bc',
+      '$kuid': '3f45113bce',
       'label': [
         'None',
         'Немає',
@@ -4972,7 +4951,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'other_specify',
-      '$kuid': 'e023f18865',
+      '$kuid': 'b82901f7e9',
       'label': [
         'Other (specify)',
         'Інше (вказати)',
@@ -4981,7 +4960,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'age',
-      '$kuid': '3c24ca2589',
+      '$kuid': '39eaee4902',
       'label': [
         'Age',
         'Вік',
@@ -4990,7 +4969,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'gender',
-      '$kuid': 'ee5a0e38a1',
+      '$kuid': '2af9ceffe9',
       'label': [
         'Gender',
         'Стать',
@@ -4999,7 +4978,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'disability',
-      '$kuid': '3857a993ec',
+      '$kuid': 'df44b8eb40',
       'label': [
         'Disability',
         'Інвалідність',
@@ -5008,7 +4987,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'nationality',
-      '$kuid': 'f1e66a4468',
+      '$kuid': '190d126c7b',
       'label': [
         'Nationality',
         'Національність',
@@ -5017,7 +4996,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'ethnicity',
-      '$kuid': 'a06e8bb3f0',
+      '$kuid': 'f7bf7b5ba1',
       'label': [
         'Ethnicity',
         'Етнічна приналежність',
@@ -5026,7 +5005,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'religion',
-      '$kuid': '02abc1a437',
+      '$kuid': '171a798216',
       'label': [
         'Religion',
         'Релігія',
@@ -5035,7 +5014,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'language',
-      '$kuid': 'e0eb33a698',
+      '$kuid': '164fd4c690',
       'label': [
         'Language',
         'Мова',
@@ -5044,7 +5023,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'political_opinion',
-      '$kuid': '0e8bd7aef2',
+      '$kuid': 'ed3613c597',
       'label': [
         'Political opinions',
         'Політичні погляди',
@@ -5053,7 +5032,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'medical_condition',
-      '$kuid': '59d60f125d',
+      '$kuid': '9d95c72693',
       'label': [
         'Medical condition',
         'Стан здоров\'я',
@@ -5062,7 +5041,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'unable_unwilling_to_answer',
-      '$kuid': '13fe1c503c',
+      '$kuid': '7d6d2adb3f',
       'label': [
         'Unable/unwilling to answer',
         'Не можу/не хочу відповідати',
@@ -5071,7 +5050,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'none',
-      '$kuid': 'f6d5863f22',
+      '$kuid': 'de22a265f5',
       'label': [
         'None',
         'Немає',
@@ -5080,7 +5059,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'other_specify',
-      '$kuid': '67a1a4596a',
+      '$kuid': '3499646f51',
       'label': [
         'Other (specify)',
         'Інше (вказати)',
@@ -5089,7 +5068,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'feeling_sad_depressed_tired',
-      '$kuid': '36f82fcefb',
+      '$kuid': '3cf902b19d',
       'label': [
         'Feeling sad or depressed or tired',
         'Почуття смутку або депресії або втоми',
@@ -5098,7 +5077,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'withdrawal_isolation',
-      '$kuid': '176858a007',
+      '$kuid': 'e2b2cc01f3',
       'label': [
         'Withdrawal or isolation',
         'Відсторонення або ізоляція',
@@ -5107,7 +5086,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'anxiety',
-      '$kuid': '7a60b6b04a',
+      '$kuid': '56f1e52b51',
       'label': [
         'Anxiety',
         'Тривога',
@@ -5116,7 +5095,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'anger',
-      '$kuid': 'b49c9c710f',
+      '$kuid': '01fb1acaf3',
       'label': [
         'Anger',
         'Гнів',
@@ -5125,7 +5104,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'fear',
-      '$kuid': 'fbb0698752',
+      '$kuid': '7632860788',
       'label': [
         'Fear',
         'Страх',
@@ -5134,7 +5113,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'agitation_moodiness',
-      '$kuid': 'faa8086146',
+      '$kuid': '50a3ee2992',
       'label': [
         'Agitation or moodiness',
         'Неспокій або мінливість настрою',
@@ -5143,7 +5122,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'feeling_hopeless',
-      '$kuid': '97fdfb97a1',
+      '$kuid': '55e101b5cc',
       'label': [
         'Feeling hopeless',
         'Почуття безнадії',
@@ -5152,7 +5131,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'no_sign_of_distress',
-      '$kuid': '59b13f25f5',
+      '$kuid': '78061a72ad',
       'label': [
         'No sign of psychological distress',
         'Жодних ознак психологічного розладу',
@@ -5161,7 +5140,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'unable_unwilling_to_answer',
-      '$kuid': '79bb397e6e',
+      '$kuid': '9734625256',
       'label': [
         'Unable/unwilling to answer',
         'Не можу/не хочу відповідати',
@@ -5170,7 +5149,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'none',
-      '$kuid': 'a369d9c4be',
+      '$kuid': '69935dde9f',
       'label': [
         'None',
         'Немає',
@@ -5179,7 +5158,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'other_specify',
-      '$kuid': '03f688324a',
+      '$kuid': '4f0087c559',
       'label': [
         'Other (specify)',
         'Інше (вказати)',
@@ -5188,7 +5167,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'lack_services',
-      '$kuid': 'cd677f70fc',
+      '$kuid': 'f3874df781',
       'label': [
         'Lack of available services',
         'Відсутність доступних послуг',
@@ -5197,7 +5176,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'lack_information',
-      '$kuid': '3a26440c8d',
+      '$kuid': '1769c6456a',
       'label': [
         'Lack of information about services',
         'Відсутність інформації про послуги',
@@ -5206,7 +5185,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'distance_transport',
-      '$kuid': '102a9d8524',
+      '$kuid': 'e05d2a4339',
       'label': [
         'Distance or lack of transportation',
         'Відстань або відсутність транспорту',
@@ -5215,7 +5194,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'cost_transport',
-      '$kuid': 'b4c1d489c1',
+      '$kuid': '4fc68d6f06',
       'label': [
         'Cost of transportation',
         'Витрати на транспорт',
@@ -5224,7 +5203,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'cost_services',
-      '$kuid': '467924e0f8',
+      '$kuid': '60d6afef5a',
       'label': [
         'Cost of services or medication',
         'Вартість послуг або ліків',
@@ -5233,7 +5212,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'language_barrier',
-      '$kuid': '17358ac807',
+      '$kuid': '30cdec849b',
       'label': [
         'Language barriers',
         'Мовні бар\'єри',
@@ -5242,7 +5221,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'documentation_required',
-      '$kuid': 'f008a1164d',
+      '$kuid': '7b5758a747',
       'label': [
         'Documentation requirements',
         'Вимоги до документації',
@@ -5251,7 +5230,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'poor_quality',
-      '$kuid': 'bec1276c16',
+      '$kuid': '573343eadb',
       'label': [
         'Poor quality of services',
         'Низька якість послуг',
@@ -5260,7 +5239,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'unable_unwilling_to_answer',
-      '$kuid': '5966c3caa1',
+      '$kuid': '2007041e27',
       'label': [
         'Unable/unwilling to answer',
         'Не можу/не хочу відповідати',
@@ -5269,7 +5248,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'none',
-      '$kuid': 'def0a4942a',
+      '$kuid': 'b5d86693df',
       'label': [
         'None',
         'Немає',
@@ -5278,7 +5257,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'other_specify',
-      '$kuid': '6be66d7339',
+      '$kuid': '2ab2a384a6',
       'label': [
         'Other (specify)',
         'Інше (вказати)',
@@ -5287,7 +5266,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'displacement_stress',
-      '$kuid': '4a9c161691',
+      '$kuid': '97e46b8c99',
       'label': [
         'Displacement-related stress',
         'Стрес пов’язаний з переміщенням',
@@ -5296,7 +5275,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'fear_armed_violence',
-      '$kuid': 'a2d78acfb8',
+      '$kuid': '07d16a3954',
       'label': [
         'Fear of armed violence',
         'Страх збройного насильства',
@@ -5305,7 +5284,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'property_damage_fear',
-      '$kuid': '0c3203be98',
+      '$kuid': '2f7206575f',
       'label': [
         'Fear of property damage',
         'Страх пошкодження майна',
@@ -5314,7 +5293,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'fear_sexual_violence',
-      '$kuid': '773e9df982',
+      '$kuid': '225f9ee13d',
       'label': [
         'Fear of sexual violence',
         'Страх сексуального насильства',
@@ -5323,7 +5302,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'missing_family',
-      '$kuid': '8f16bf513c',
+      '$kuid': '4fce0ea84a',
       'label': [
         'Missing family members',
         'Зниклі члени сім’ї',
@@ -5332,7 +5311,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'lack_basic_services',
-      '$kuid': 'e53cec5fe9',
+      '$kuid': '890f57f44b',
       'label': [
         'Lack of access to basic services',
         'Відсутність доступу до базових послуг',
@@ -5341,7 +5320,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'lack_employment',
-      '$kuid': '0604e2c243',
+      '$kuid': 'c0cc1622ff',
       'label': [
         'Lack of employment opportunities',
         'Відсутність можливостей працевлаштування',
@@ -5350,7 +5329,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'worries_children',
-      '$kuid': '2f26afe36b',
+      '$kuid': '7423b1f53e',
       'label': [
         'Worries about children',
         'Стурбованість про дітей',
@@ -5359,7 +5338,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'worries_future',
-      '$kuid': '238db5a4b5',
+      '$kuid': '161e184df4',
       'label': [
         'Worries about the future',
         'Стурбованість про майбутнє',
@@ -5368,7 +5347,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'unable_unwilling_to_answer',
-      '$kuid': '42eb5a2d4e',
+      '$kuid': '56df7167c6',
       'label': [
         'Unable/unwilling to answer',
         'Не можу/не хочу відповідати',
@@ -5377,7 +5356,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'none',
-      '$kuid': '500eb1284e',
+      '$kuid': '5186795596',
       'label': [
         'None',
         'Немає',
@@ -5386,7 +5365,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'other_specify',
-      '$kuid': '0a368e47b9',
+      '$kuid': '75220bf863',
       'label': [
         'Other (specify)',
         'Інше (вказати)',
@@ -5395,7 +5374,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'salary_formal',
-      '$kuid': 'f2657a0ed6',
+      '$kuid': '57c49ef491',
       'label': [
         'Salary – formal employment',
         'Зарплата – офіційне працевлаштування',
@@ -5404,7 +5383,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'casual',
-      '$kuid': 'c17b14b73c',
+      '$kuid': 'd09f624b41',
       'label': [
         'Casual / temporary labour',
         'Випадкова (тимчасова) праця',
@@ -5413,7 +5392,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'remittances',
-      '$kuid': '94e9c82226',
+      '$kuid': 'b2abe61078',
       'label': [
         'Remittances',
         'Грошові перекази',
@@ -5422,7 +5401,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'family_support',
-      '$kuid': '10bcb70c65',
+      '$kuid': '3cdf390218',
       'label': [
         'Assistance from family / friends',
         'Підтримка з боку родини / друзів',
@@ -5431,7 +5410,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'debt',
-      '$kuid': '366c8eb781',
+      '$kuid': '4c207f52cb',
       'label': [
         'Debt',
         'Борг',
@@ -5440,7 +5419,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'savings',
-      '$kuid': '3cc27c4574',
+      '$kuid': 'f4a5c9cfe6',
       'label': [
         'Savings',
         'Заощадження',
@@ -5449,7 +5428,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'humanitarian',
-      '$kuid': '1e16cccbc4',
+      '$kuid': '082e1749de',
       'label': [
         'Humanitarian assistance (cash or in-kind)',
         'Гуманітарна допомога (готівкою або в натуральній формі)',
@@ -5458,7 +5437,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'business',
-      '$kuid': 'e21ba8850a',
+      '$kuid': 'a6147205aa',
       'label': [
         'Business / self-employment',
         'Бізнес / самозайнятість',
@@ -5467,7 +5446,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'social_protection',
-      '$kuid': 'fec7555519',
+      '$kuid': 'e940bbd80d',
       'label': [
         'Social protection payments',
         'Виплати соціального захисту',
@@ -5476,7 +5455,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'none',
-      '$kuid': '08ec55e216',
+      '$kuid': 'a43d183001',
       'label': [
         'None',
         'Немає',
@@ -5485,7 +5464,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'unable',
-      '$kuid': 'f74f6f331c',
+      '$kuid': '603b964e11',
       'label': [
         'Unable / unwilling to answer',
         'Не можу / не хочу відповідати',
@@ -5494,7 +5473,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'idp_allowance',
-      '$kuid': '9c16833676',
+      '$kuid': '8854394c8b',
       'label': [
         'IDP allowance',
         'Допомога ВПО',
@@ -5503,7 +5482,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'pension_elderly',
-      '$kuid': '7de6c90f0c',
+      '$kuid': '6e297bab25',
       'label': [
         'Pension for elderly people',
         'Пенсія для людей похилого віку',
@@ -5512,7 +5491,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'pension_disability',
-      '$kuid': 'd03ea32437',
+      '$kuid': '4c8e67857b',
       'label': [
         'Pension for persons with disability',
         'Пенсія для людей з інвалідністю',
@@ -5521,7 +5500,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'pension_children',
-      '$kuid': 'e4c4ba3587',
+      '$kuid': '2f3d6c5559',
       'label': [
         'Pension for 3 or more children',
         'Пенсія на 3 або більше дітей',
@@ -5530,7 +5509,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'none',
-      '$kuid': '8d0e3609d6',
+      '$kuid': '401b3dd897',
       'label': [
         'None',
         'Немає',
@@ -5539,7 +5518,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'unable',
-      '$kuid': '84158853aa',
+      '$kuid': '368519d79b',
       'label': [
         'Unable / unwilling to answer',
         'Не можу / не хочу відповідати',
@@ -5548,7 +5527,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'no_income',
-      '$kuid': '87c642e902',
+      '$kuid': 'b178c44eff',
       'label': [
         'No income',
         'Доходи відсутні',
@@ -5557,7 +5536,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'up_to_3000',
-      '$kuid': '7d448590b6',
+      '$kuid': '0e9d41f89b',
       'label': [
         'Up to 3,000 UAH',
         'До 3000 грн',
@@ -5566,7 +5545,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': '3001_6000',
-      '$kuid': '3d9e2b8a38',
+      '$kuid': '7fc7e38d60',
       'label': [
         '3,001–6,000 UAH',
         'Від 3001 до 6000 грн',
@@ -5575,7 +5554,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': '6001_9000',
-      '$kuid': 'a73733602a',
+      '$kuid': 'a1ee995bff',
       'label': [
         '6,001–9,000 UAH',
         'Від 6001 до 9000 грн',
@@ -5584,7 +5563,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': '9001_12000',
-      '$kuid': '8630a8f758',
+      '$kuid': 'c9e495fcec',
       'label': [
         '9,001–12,000 UAH',
         'Від 9001 до 12000 грн',
@@ -5593,7 +5572,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': '12001_15000',
-      '$kuid': 'abd28d26ac',
+      '$kuid': '3af2fed6be',
       'label': [
         '12,001–15,000 UAH',
         'Від 12 001 до 15 000 грн',
@@ -5602,7 +5581,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'over_15000',
-      '$kuid': '2744f04151',
+      '$kuid': '0f604840c8',
       'label': [
         'More than 15,000 UAH',
         'Більше 15 000 грн',
@@ -5611,7 +5590,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'unable',
-      '$kuid': '73a96cad0a',
+      '$kuid': 'dbc1abdde3',
       'label': [
         'Unable / unwilling to answer',
         'Не можу / не хочу відповідати',
@@ -5620,7 +5599,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'no_jobs',
-      '$kuid': '1eb8b4de95',
+      '$kuid': 'dee99f1d2f',
       'label': [
         'Lack of available jobs',
         'Відсутність робочих місць',
@@ -5629,7 +5608,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'low_season',
-      '$kuid': 'a26995b0f9',
+      '$kuid': '713da3fab2',
       'label': [
         'Low or off season',
         'Низький або позасезонний період',
@@ -5638,7 +5617,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'skill_mismatch',
-      '$kuid': 'c4f3abd2bf',
+      '$kuid': 'a0d239cbce',
       'label': [
         'Skills do not match demand',
         'Навички не відповідають попиту',
@@ -5647,7 +5626,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'caregiving',
-      '$kuid': '33eae16b54',
+      '$kuid': '374e5eb1a5',
       'label': [
         'Housework / caring for children',
         'Робота по дому / догляд за дітьми',
@@ -5656,7 +5635,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'no_info',
-      '$kuid': 'ce86f25db9',
+      '$kuid': '23b2357e4b',
       'label': [
         'Lack of job market information',
         'Відсутність інформації про ринок праці',
@@ -5665,7 +5644,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'no_experience',
-      '$kuid': '1f9cf88661',
+      '$kuid': '7895f4c358',
       'label': [
         'Lack of experience',
         'Відсутність досвіду',
@@ -5674,7 +5653,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'disability',
-      '$kuid': '3ef3730f0a',
+      '$kuid': '8c33827151',
       'label': [
         'Physical limitations / disability',
         'Фізичні обмеження / інвалідність',
@@ -5683,7 +5662,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'age_discrimination',
-      '$kuid': '7084f33336',
+      '$kuid': '3d01c1cb60',
       'label': [
         'Age discrimination',
         'Дискримінація за віком',
@@ -5692,7 +5671,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'mines',
-      '$kuid': 'e25deba888',
+      '$kuid': '154e695847',
       'label': [
         'Mine contamination',
         'Мінне забруднення',
@@ -5701,7 +5680,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'none',
-      '$kuid': '6d40b32413',
+      '$kuid': 'f408196ef1',
       'label': [
         'None',
         'Немає',
@@ -5710,7 +5689,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'unable',
-      '$kuid': 'a54ab29671',
+      '$kuid': '79a8cfff6a',
       'label': [
         'Unable / unwilling to answer',
         'Не можу / не хочу відповідати',
@@ -5719,7 +5698,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'savings',
-      '$kuid': '3d0cd17a5d',
+      '$kuid': 'abdd948bef',
       'label': [
         'Spending savings',
         'Використання заощаджень',
@@ -5728,7 +5707,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'sell_assets',
-      '$kuid': 'd640c45f68',
+      '$kuid': '2bcf6b2b43',
       'label': [
         'Selling household assets',
         'Продаж майна домогосподарства',
@@ -5737,7 +5716,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'sell_aid',
-      '$kuid': 'fe848c3a76',
+      '$kuid': '9368f32ecc',
       'label': [
         'Selling humanitarian assistance',
         'Продаж гуманітарної допомоги',
@@ -5746,7 +5725,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'sell_house',
-      '$kuid': '133aa69cbf',
+      '$kuid': 'be3270d084',
       'label': [
         'Selling housing or land',
         'Продаж житла або землі',
@@ -5755,7 +5734,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'borrow',
-      '$kuid': '7ec19bfc55',
+      '$kuid': 'c006294cd1',
       'label': [
         'Borrowing money',
         'Позика грошей',
@@ -5764,7 +5743,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'family_support',
-      '$kuid': 'fc9709095c',
+      '$kuid': '30fb20b7bd',
       'label': [
         'Relying on family / external support',
         'Залежність від підтримки родини',
@@ -5773,7 +5752,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'begging',
-      '$kuid': 'd86430ea4c',
+      '$kuid': 'fc55911d70',
       'label': [
         'Begging',
         'Жебракування',
@@ -5782,7 +5761,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'dangerous_work',
-      '$kuid': 'ef1aca504b',
+      '$kuid': '0368580330',
       'label': [
         'Dangerous or exploitative work',
         'Небезпечна або експлуатаційна робота',
@@ -5791,7 +5770,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'less_food',
-      '$kuid': '555742fad4',
+      '$kuid': '61c98115c1',
       'label': [
         'Reducing food consumption',
         'Зменшення споживання їжі',
@@ -5800,7 +5779,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'less_health',
-      '$kuid': '46ce38bfd3',
+      '$kuid': '04daa6b5f6',
       'label': [
         'Reducing healthcare or medicines',
         'Зменшення медичних послуг або ліків',
@@ -5809,7 +5788,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'child_labour',
-      '$kuid': 'ce88465fe6',
+      '$kuid': '3df2b1416c',
       'label': [
         'Sending children to work',
         'Направлення дітей на роботу',
@@ -5818,7 +5797,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'no_school',
-      '$kuid': 'cc023a56aa',
+      '$kuid': 'ffd4288267',
       'label': [
         'Removing children from education',
         'Відсторонення дітей від навчання',
@@ -5827,7 +5806,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'relocate',
-      '$kuid': '8b965af3f6',
+      '$kuid': 'fe4197eb0e',
       'label': [
         'Sending members elsewhere',
         'Відправлення членів ДГ жити в інше місце',
@@ -5836,7 +5815,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'poor_housing',
-      '$kuid': '0a588e6856',
+      '$kuid': 'cac8d65655',
       'label': [
         'Choosing worse accommodation',
         'Вибір менш придатного житла',
@@ -5845,7 +5824,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'none',
-      '$kuid': '9caa75da7f',
+      '$kuid': '2f549aa81e',
       'label': [
         'None',
         'Немає',
@@ -5854,7 +5833,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'unable',
-      '$kuid': '8f85653c28',
+      '$kuid': 'fa30d45300',
       'label': [
         'Unable / unwilling to answer',
         'Не можу / не хочу відповідати',
@@ -5863,7 +5842,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'all',
-      '$kuid': '41540431fb',
+      '$kuid': '1b84082224',
       'label': [
         'All children attend',
         'Усі діти відвідують',
@@ -5872,7 +5851,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'partial',
-      '$kuid': '090a602034',
+      '$kuid': '1c35ab3a66',
       'label': [
         'Some children attend',
         'Деякі діти відвідують',
@@ -5881,7 +5860,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'none',
-      '$kuid': '7edd713576',
+      '$kuid': '928edc57a7',
       'label': [
         'None attend',
         'Жодна дитина не відвідує',
@@ -5890,7 +5869,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'unable',
-      '$kuid': 'fde7681099',
+      '$kuid': '333fbc645a',
       'label': [
         'Unable / unwilling to answer',
         'Не можу / не хочу відповідати',
@@ -5899,7 +5878,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'newly_displaced',
-      '$kuid': 'b5cea8e498',
+      '$kuid': '550035bcb3',
       'label': [
         'Newly displaced',
         'Нещодавно переміщені',
@@ -5908,7 +5887,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'no_school',
-      '$kuid': '1302c16fa6',
+      '$kuid': 'c43f87b418',
       'label': [
         'Lack of available school',
         'Відсутність школи',
@@ -5917,7 +5896,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'no_internet',
-      '$kuid': '7d54ba1626',
+      '$kuid': '01e5bea1df',
       'label': [
         'No internet for online school',
         'Відсутність Інтернету',
@@ -5926,7 +5905,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'safety',
-      '$kuid': '1f00f4352f',
+      '$kuid': 'd51c4e9b6b',
       'label': [
         'Safety risks',
         'Ризики для безпеки',
@@ -5935,7 +5914,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'distance',
-      '$kuid': '5139e6fa86',
+      '$kuid': '7a0deb37ee',
       'label': [
         'Distance / transport barrier',
         'Відстань / транспорт',
@@ -5944,7 +5923,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'transport_cost',
-      '$kuid': '9bfdfaaf0c',
+      '$kuid': 'cb7a1d97d4',
       'label': [
         'Transportation cost',
         'Вартість транспорту',
@@ -5953,7 +5932,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'online_cost',
-      '$kuid': '36069bbefc',
+      '$kuid': '04fa7a0320',
       'label': [
         'Online education cost',
         'Вартість онлайн-навчання',
@@ -5962,7 +5941,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'no_docs',
-      '$kuid': 'd9a95efbfe',
+      '$kuid': '46ff237f99',
       'label': [
         'Lack of documentation',
         'Відсутність документів',
@@ -5971,7 +5950,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'no_cert',
-      '$kuid': '90b60dde68',
+      '$kuid': '8bc3e49b3c',
       'label': [
         'Lack of recognized certificates',
         'Відсутність визнаних довідок',
@@ -5980,7 +5959,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'discrimination',
-      '$kuid': '1312790794',
+      '$kuid': '5c0cb912a0',
       'label': [
         'Discrimination / restriction',
         'Дискримінація / обмеження',
@@ -5989,7 +5968,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'special_needs',
-      '$kuid': '560a1437b3',
+      '$kuid': '320cb7110d',
       'label': [
         'No specialized services',
         'Відсутність спецпослуг',
@@ -5998,7 +5977,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'materials_cost',
-      '$kuid': 'd9e6ceda4d',
+      '$kuid': 'cec865361a',
       'label': [
         'Cost of materials',
         'Вартість матеріалів',
@@ -6007,7 +5986,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'language',
-      '$kuid': '4c6c9c3b04',
+      '$kuid': '12e759e709',
       'label': [
         'Language barriers',
         'Мовні бар’єри',
@@ -6016,7 +5995,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'none',
-      '$kuid': '2de0824f36',
+      '$kuid': 'f01304099c',
       'label': [
         'None',
         'Немає',
@@ -6025,7 +6004,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'unable',
-      '$kuid': '003b89fabe',
+      '$kuid': 'be1b8a4372',
       'label': [
         'Unable / unwilling to answer',
         'Не можу / не хочу відповідати',
@@ -6034,7 +6013,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'house',
-      '$kuid': 'a87e2cc859',
+      '$kuid': 'ccf988d97c',
       'label': [
         'House / apartment',
         'Будинок / квартира',
@@ -6043,7 +6022,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'room',
-      '$kuid': '556fae035b',
+      '$kuid': 'faddab816c',
       'label': [
         'Room in private house',
         'Кімната в приватному будинку',
@@ -6052,7 +6031,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'shelter',
-      '$kuid': '55d508977a',
+      '$kuid': '5315fae122',
       'label': [
         'Collective shelter',
         'Колективний притулок',
@@ -6061,7 +6040,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'private_shelter',
-      '$kuid': 'da8c0bf189',
+      '$kuid': '61d206a699',
       'label': [
         'Private collective shelter',
         'Приватний колективний притулок',
@@ -6070,7 +6049,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'none',
-      '$kuid': '9165f0fcef',
+      '$kuid': 'da09d9c748',
       'label': [
         'No shelter',
         'Немає притулку',
@@ -6079,7 +6058,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'unable',
-      '$kuid': '6d04f81e5b',
+      '$kuid': 'af7ad61604',
       'label': [
         'Unable / unwilling to answer',
         'Не можу / не хочу відповідати',
@@ -6088,7 +6067,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'host_family',
-      '$kuid': '2d67d91b30',
+      '$kuid': 'ce073e0c6e',
       'label': [
         'Host family (no rent)',
         'Проживання в сім’ї',
@@ -6097,7 +6076,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'rent',
-      '$kuid': '0b523b7abb',
+      '$kuid': '28402bd2c2',
       'label': [
         'Renting accommodation',
         'Оренда житла',
@@ -6106,7 +6085,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'own',
-      '$kuid': '0648e3bc01',
+      '$kuid': '46ca9376b9',
       'label': [
         'Owning accommodation',
         'Власне житло',
@@ -6116,7 +6095,7 @@ export const formHhsSchema: Api.Form.Schema = {
     {
       'tag': 'відповідати',
       'name': 'squat',
-      '$kuid': '8d9f9cd56b',
+      '$kuid': '5b274f26ce',
       'label': [
         'Squatting without permission',
         'Самовільне проживання',
@@ -6125,7 +6104,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'none',
-      '$kuid': '428cd7e780',
+      '$kuid': 'e05e7d6a2b',
       'label': [
         'None',
         'Немає',
@@ -6134,7 +6113,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'unable',
-      '$kuid': '8398409c60',
+      '$kuid': 'ae81365ac1',
       'label': [
         'Unable / unwilling to answer',
         'Не можу / не хочу відповідати',
@@ -6143,7 +6122,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'good',
-      '$kuid': 'ba20386ffc',
+      '$kuid': 'ad209927a0',
       'label': [
         'Sound condition',
         'Непошкоджений стан',
@@ -6152,7 +6131,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'partial',
-      '$kuid': '48c3c58b2f',
+      '$kuid': 'a4a94185c7',
       'label': [
         'Partially damaged',
         'Частково пошкоджене',
@@ -6161,7 +6140,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'severe',
-      '$kuid': '059dd0355f',
+      '$kuid': '4d0a856856',
       'label': [
         'Severely damaged',
         'Сильно пошкоджене',
@@ -6170,7 +6149,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'destroyed',
-      '$kuid': '5eacbe4624',
+      '$kuid': '0c3731ef5b',
       'label': [
         'Destroyed',
         'Зруйноване',
@@ -6179,7 +6158,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'unfinished',
-      '$kuid': '40473338d8',
+      '$kuid': '641278fc42',
       'label': [
         'Unfinished',
         'Незакінчене',
@@ -6188,7 +6167,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'unable',
-      '$kuid': 'be90edc591',
+      '$kuid': 'e009e4b85a',
       'label': [
         'Unable / unwilling to answer',
         'Не можу / не хочу відповідати',
@@ -6197,7 +6176,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'none',
-      '$kuid': '02f0b41f6a',
+      '$kuid': '75316b2d4d',
       'label': [
         'None',
         'Жодного',
@@ -6206,7 +6185,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'eviction',
-      '$kuid': 'b0be37e346',
+      '$kuid': 'b365850a6d',
       'label': [
         'Risk of eviction',
         'Ризик виселення',
@@ -6215,7 +6194,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'damage',
-      '$kuid': '01e622ff5b',
+      '$kuid': 'e037f21039',
       'label': [
         'Housing condition issues',
         'Пошкодження житла',
@@ -6224,7 +6203,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'overcrowded',
-      '$kuid': '176fbc6be6',
+      '$kuid': '820b6870fb',
       'label': [
         'Overcrowding / lack of privacy',
         'Переповнення / відсутність приватності',
@@ -6233,7 +6212,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'utilities',
-      '$kuid': 'c9750985a2',
+      '$kuid': '4fa894c6f4',
       'label': [
         'Lack of utilities',
         'Відсутність комунальних послуг',
@@ -6242,7 +6221,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'connectivity',
-      '$kuid': '8b7c932e73',
+      '$kuid': '1dfb5afbf6',
       'label': [
         'Lack of connectivity',
         'Відсутність зв’язку',
@@ -6251,7 +6230,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'safety',
-      '$kuid': 'dc3b06a002',
+      '$kuid': 'b7b78afa39',
       'label': [
         'Security risks',
         'Ризики безпеки',
@@ -6260,7 +6239,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'compensation',
-      '$kuid': '556f2a4606',
+      '$kuid': '7273fe05d1',
       'label': [
         'No compensation for damage',
         'Відсутність компенсації',
@@ -6269,7 +6248,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'documents',
-      '$kuid': '60d40965c9',
+      '$kuid': 'f1f0b89306',
       'label': [
         'Missing ownership documents',
         'Відсутність документів',
@@ -6278,7 +6257,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'disability',
-      '$kuid': '0137a9b24f',
+      '$kuid': 'f79ef18d6a',
       'label': [
         'Not disability inclusive',
         'Не пристосоване для людей з інвалідністю',
@@ -6287,7 +6266,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'unable',
-      '$kuid': '4ea19b3024',
+      '$kuid': '48f79dd1d6',
       'label': [
         'Unable / unwilling to answer',
         'Не можу / не хочу відповідати',
@@ -6296,7 +6275,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'uhf',
-      '$kuid': 'ccebb3de2d',
+      '$kuid': 'a6e29cf861',
       'label': [
         'UHF',
         'UHF',
@@ -6305,7 +6284,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'echo',
-      '$kuid': 'e4232adf4b',
+      '$kuid': 'a4d50fd84b',
       'label': [
         'ECHO',
         'ECHO',
@@ -6314,7 +6293,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'sumy',
-      '$kuid': '66da9d34f7',
+      '$kuid': '46eef348ee',
       'label': [
         'Sumy (UMY)',
         'Суми (UMY)',
@@ -6323,7 +6302,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'chernihiv',
-      '$kuid': '7e0a9672f0',
+      '$kuid': '5ab33e8d5b',
       'label': [
         'Chernihiv (CEJ)',
         'Чернігів (CEJ)',
@@ -6332,7 +6311,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'dnipro',
-      '$kuid': '0e97926a9d',
+      '$kuid': 'e31f06287f',
       'label': [
         'Dnipro (DNK)',
         'Дніпро (DNK)',
@@ -6341,7 +6320,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'kharkiv',
-      '$kuid': '1c09e70e55',
+      '$kuid': 'c4f0b6893b',
       'label': [
         'Kharkiv (HRK)',
         'Харків (HRK)',
@@ -6350,7 +6329,7 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'mykolaiv',
-      '$kuid': '03dc098fb5',
+      '$kuid': 'b7e9110a18',
       'label': [
         'Mykolaiv (NLV)',
         'Миколаїв (NLV)',
@@ -6359,12 +6338,183 @@ export const formHhsSchema: Api.Form.Schema = {
     },
     {
       'name': 'sloviansk',
-      '$kuid': 'f1ce18ca79',
+      '$kuid': '33bdc4cabe',
       'label': [
         'Sloviansk (SLO)',
         'Слов\'янськ (SLO)',
       ],
       'list_name': 'office',
+    },
+    {
+      'name': 'elder__headed_household',
+      '$kuid': '220932c788',
+      'label': [
+        'Elder (≥ 60) headed household',
+        'Домогосподарство очолюване особою похилого віку (≥ 60)',
+      ],
+      'list_name': 'specfic_needs',
+    },
+    {
+      'name': 'person_with_disability_headed_household',
+      '$kuid': '94ce69e313',
+      'label': [
+        'Person with disability headed household',
+        'Домогосподарство очолюване особою з інвалідністю',
+      ],
+      'list_name': 'specfic_needs',
+    },
+    {
+      'name': 'chronicallyill_headed_household',
+      '$kuid': '4304eea1b9',
+      'label': [
+        'Household headed by a person with serious medical condition',
+        'Домогосподарство очолюване особою з хронічною хворобою',
+      ],
+      'list_name': 'specfic_needs',
+    },
+    {
+      'name': 'no_specific_needs',
+      '$kuid': 'f0adec8af7',
+      'label': [
+        'No specific needs',
+        'Без особливих потреб',
+      ],
+      'list_name': 'specfic_needs',
+    },
+    {
+      'name': 'unable_unwilling_to_answer',
+      '$kuid': 'c428135940',
+      'label': [
+        'Unable/unwilling to answer',
+        'Не можу/не хочу відповідати',
+      ],
+      'list_name': 'specfic_needs',
+    },
+    {
+      'name': 'other_specify',
+      '$kuid': '6d5ff6c3d3',
+      'label': [
+        'Other (specify)',
+        'Інше (вказати)',
+      ],
+      'list_name': 'specfic_needs',
+    },
+    {
+      'name': 'none',
+      '$kuid': '5931ead217',
+      'label': [
+        'None',
+        'Жодного',
+      ],
+      'list_name': 'security_concerns_during_displacement',
+    },
+    {
+      'name': 'looting_robbery',
+      '$kuid': '2f847926aa',
+      'label': [
+        'Looting/robbery',
+        'Грабунок/пограбування',
+      ],
+      'list_name': 'security_concerns_during_displacement',
+    },
+    {
+      'name': 'physical_assault',
+      '$kuid': '59ff7e1b5d',
+      'label': [
+        'Physical assault',
+        'Фізичний напад',
+      ],
+      'list_name': 'security_concerns_during_displacement',
+    },
+    {
+      'name': 'abduction',
+      '$kuid': '2e38727dee',
+      'label': [
+        'Abduction',
+        'Викрадення',
+      ],
+      'list_name': 'security_concerns_during_displacement',
+    },
+    {
+      'name': 'arbitrary_detention',
+      '$kuid': 'e970e899c0',
+      'label': [
+        'Arbitrary detention',
+        'Безпідставне затримання',
+      ],
+      'list_name': 'security_concerns_during_displacement',
+    },
+    {
+      'name': 'shelling_or_missile_attacks',
+      '$kuid': '6f35af6504',
+      'label': [
+        'Shelling or missile attacks',
+        'Обстріли або ракетні атаки',
+      ],
+      'list_name': 'security_concerns_during_displacement',
+    },
+    {
+      'name': 'harassment_at_checkpoints',
+      '$kuid': 'a02c780a56',
+      'label': [
+        'Harassment at checkpoints',
+        'Знущання на блокпостах',
+      ],
+      'list_name': 'security_concerns_during_displacement',
+    },
+    {
+      'name': 'movement_restrictions',
+      '$kuid': 'd0f9b96b27',
+      'label': [
+        'Movement restrictions',
+        'Обмеження руху',
+      ],
+      'list_name': 'security_concerns_during_displacement',
+    },
+    {
+      'name': 'gbv_incident',
+      '$kuid': 'b4a78d3df6',
+      'label': [
+        'GBV incident',
+        'Інцидент ГН',
+      ],
+      'list_name': 'security_concerns_during_displacement',
+    },
+    {
+      'name': 'extortion',
+      '$kuid': 'ca60a816cb',
+      'label': [
+        'Extortion',
+        'Вимагання',
+      ],
+      'list_name': 'security_concerns_during_displacement',
+    },
+    {
+      'name': 'hate_speech',
+      '$kuid': '0d7229f77b',
+      'label': [
+        'Hate speech',
+        'Мова ненависті',
+      ],
+      'list_name': 'security_concerns_during_displacement',
+    },
+    {
+      'name': 'unable_unwilling_to_answer',
+      '$kuid': 'a3f0653f6b',
+      'label': [
+        'Unable/unwilling to answer',
+        'Не можу/не хочу відповідати',
+      ],
+      'list_name': 'security_concerns_during_displacement',
+    },
+    {
+      'name': 'other',
+      '$kuid': '2c620cfc88',
+      'label': [
+        'Other',
+        'Інше',
+      ],
+      'list_name': 'security_concerns_during_displacement',
     },
   ],
   'translated': [

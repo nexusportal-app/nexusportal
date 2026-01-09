@@ -14,9 +14,20 @@ export const formGlobal: Prisma.FormCreateManyInput = {
 export const formGlobalSchema = {
   'survey': [
     {
+      'name': 'survey',
+      'type': 'text',
+      '$kuid': '89b695457c',
+      'label': [
+        'Survey',
+        'Опитування',
+      ],
+      '$xpath': 'survey',
+      'required': false,
+    },
+    {
       'name': 'office',
       'type': 'select_one',
-      '$kuid': '73c54b93b4',
+      '$kuid': '702eb78a8a',
       'label': [
         'Office',
         'Офіс',
@@ -28,7 +39,7 @@ export const formGlobalSchema = {
     {
       'name': 'donor',
       'type': 'select_one',
-      '$kuid': 'd74658231d',
+      '$kuid': '70138d3c0b',
       'label': [
         'Donor',
         'Донор',
@@ -40,7 +51,7 @@ export const formGlobalSchema = {
     {
       'name': 'sector',
       'type': 'select_one',
-      '$kuid': 'e3d1bf6af4',
+      '$kuid': '0529f6b95d',
       'label': [
         'Sector',
         'Сектор',
@@ -52,7 +63,7 @@ export const formGlobalSchema = {
     {
       'name': 'program',
       'type': 'select_one',
-      '$kuid': 'bd355a3563',
+      '$kuid': 'e2bd98ff6f',
       'label': [
         'Program',
         'Програма',
@@ -64,7 +75,7 @@ export const formGlobalSchema = {
     {
       'name': 'oblast',
       'type': 'select_one',
-      '$kuid': 'deebab6b79',
+      '$kuid': '56fe9f4873',
       'label': [
         'Oblast',
         'Область',
@@ -74,19 +85,31 @@ export const formGlobalSchema = {
       'select_from_list_name': 'oblast',
     },
     {
+      'name': 'persons_count',
+      'type': 'integer',
+      '$kuid': '23f6f00439',
+      'label': [
+        'Individuals count',
+        'Кількість осіб',
+      ],
+      '$xpath': 'persons_count',
+      'required': false,
+    },
+    {
       'name': 'persons',
       'type': 'begin_repeat',
-      '$kuid': '6e9c472f40',
+      '$kuid': 'b2f8474df0',
       'label': [
         'Individuals',
         'Фізичні особи',
       ],
       '$xpath': 'persons',
+      'required': false,
     },
     {
       'name': 'age',
       'type': 'integer',
-      '$kuid': '4d81867d6e',
+      '$kuid': '6ba9d1e875',
       'label': [
         'Age',
         'Вік',
@@ -97,7 +120,7 @@ export const formGlobalSchema = {
     {
       'name': 'gender',
       'type': 'select_one',
-      '$kuid': 'f133eb5764',
+      '$kuid': '95e5b70b6e',
       'label': [
         'Gender',
         'Стать',
@@ -109,7 +132,7 @@ export const formGlobalSchema = {
     {
       'name': 'disability',
       'type': 'select_multiple',
-      '$kuid': '6b701aaf02',
+      '$kuid': 'f7fcd92fe1',
       'label': [
         'Disability',
         'Інвалідність',
@@ -121,7 +144,7 @@ export const formGlobalSchema = {
     {
       'name': 'displacement_status',
       'type': 'select_one',
-      '$kuid': '652c0f4dc5',
+      '$kuid': '787cf97c1e',
       'label': [
         'Displacement Status',
         'Статус переміщеної особи',
@@ -133,7 +156,7 @@ export const formGlobalSchema = {
     {
       'name': 'tax_id',
       'type': 'text',
-      '$kuid': '0e33d2b50b',
+      '$kuid': '8cc23deabe',
       'label': [
         'Tax ID',
         'Ідентифікаційний номер платника податків',
@@ -142,9 +165,20 @@ export const formGlobalSchema = {
       'required': false,
     },
     {
+      'name': 'uniq_id',
+      'type': 'text',
+      '$kuid': '8cc23deabc',
+      'label': [
+        'Unique ID',
+        'Унікальний ідентифікатор',
+      ],
+      '$xpath': 'persons/uniq_id',
+      'required': false,
+    },
+    {
       'name': 'phone',
       'type': 'text',
-      '$kuid': '7055a44cf8',
+      '$kuid': '1092c5f8d7',
       'label': [
         'Phone Number',
         'Номер телефону',
@@ -154,13 +188,13 @@ export const formGlobalSchema = {
     },
     {
       'type': 'end_repeat',
-      '$kuid': '83e064c731',
+      '$kuid': '4aed356676',
     },
   ],
   'choices': [
     {
       'name': 'bha',
-      '$kuid': '83e213cb5c',
+      '$kuid': '53fce0d435',
       'label': [
         'BHA',
         'BHA',
@@ -169,7 +203,7 @@ export const formGlobalSchema = {
     },
     {
       'name': 'echo',
-      '$kuid': 'a131fe6fb7',
+      '$kuid': '6b20f33d75',
       'label': [
         'ECHO',
         'ECHO',
@@ -178,7 +212,7 @@ export const formGlobalSchema = {
     },
     {
       'name': 'unhcr',
-      '$kuid': 'f78cb5464e',
+      '$kuid': '2a764775bc',
       'label': [
         'UNHCR',
         'UNHCR',
@@ -186,17 +220,17 @@ export const formGlobalSchema = {
       'list_name': 'donor',
     },
     {
-      'name': 'ufr',
-      '$kuid': 'a6c7216d1e',
+      'name': 'uhf',
+      '$kuid': 'f5282aa9f0',
       'label': [
-        'UFR',
-        'UFR',
+        'UHF',
+        'UHF',
       ],
       'list_name': 'donor',
     },
     {
       'name': 'sumy',
-      '$kuid': '3996715285',
+      '$kuid': 'badad55ff0',
       'label': [
         'Sumy',
         'Суми',
@@ -205,7 +239,7 @@ export const formGlobalSchema = {
     },
     {
       'name': 'chernihiv',
-      '$kuid': '5f5e95d4d4',
+      '$kuid': '4be34c1c00',
       'label': [
         'Chernihiv',
         'Чернігів',
@@ -214,7 +248,7 @@ export const formGlobalSchema = {
     },
     {
       'name': 'dnipro',
-      '$kuid': '6faa83acf2',
+      '$kuid': 'ab03ccb9b5',
       'label': [
         'Dnipro',
         'Дніпро',
@@ -223,7 +257,7 @@ export const formGlobalSchema = {
     },
     {
       'name': 'kharkiv',
-      '$kuid': '66d58c857e',
+      '$kuid': 'd933a3eedb',
       'label': [
         'Kharkiv',
         'Харків',
@@ -232,7 +266,7 @@ export const formGlobalSchema = {
     },
     {
       'name': 'mykolaiv',
-      '$kuid': '63cb8da437',
+      '$kuid': '8935836d76',
       'label': [
         'Mykolaiv',
         'Миколаїв',
@@ -241,7 +275,7 @@ export const formGlobalSchema = {
     },
     {
       'name': 'sloviansk',
-      '$kuid': 'afc19f1551',
+      '$kuid': 'f4a7bfaad5',
       'label': [
         'Sloviansk',
         'Слов\'янськ ',
@@ -250,7 +284,7 @@ export const formGlobalSchema = {
     },
     {
       'name': 'basic_needs',
-      '$kuid': 'dbfa5be391',
+      '$kuid': 'd2898dca9c',
       'label': [
         'Basic Needs',
         'Базові потреби',
@@ -259,7 +293,7 @@ export const formGlobalSchema = {
     },
     {
       'name': 'protection',
-      '$kuid': '96d58fe908',
+      '$kuid': '8c2254aee8',
       'label': [
         'Protection',
         'Захист',
@@ -268,7 +302,7 @@ export const formGlobalSchema = {
     },
     {
       'name': 'shelter',
-      '$kuid': '053344cc94',
+      '$kuid': 'a0c6dea2e9',
       'label': [
         'Shelter',
         'Житло',
@@ -277,7 +311,7 @@ export const formGlobalSchema = {
     },
     {
       'name': 'shelter_repair',
-      '$kuid': '61bdab6111',
+      '$kuid': '15059286cf',
       'label': [
         'Shelter Repair',
         'Ремонт житла',
@@ -286,7 +320,7 @@ export const formGlobalSchema = {
     },
     {
       'name': 'esk',
-      '$kuid': 'caf01c74c0',
+      '$kuid': 'ca4bbec09d',
       'label': [
         'Emergency Shelter Kits',
         'Аварійні комплекти для житла',
@@ -295,7 +329,7 @@ export const formGlobalSchema = {
     },
     {
       'name': 'nfi',
-      '$kuid': '6493a979ce',
+      '$kuid': '4fccf32ca7',
       'label': [
         'Non-Food Items',
         'Нехарчові товари',
@@ -304,16 +338,16 @@ export const formGlobalSchema = {
     },
     {
       'name': 'mpca',
-      '$kuid': '2db0d765dd',
+      '$kuid': 'b92ec5f452',
       'label': [
-        'Multipurpose cash assistance',
-        'Багатоцільова грошова допомога',
+        'Multipurpose Cash Assistance',
+        'Багатоцільова Грошова Допомога',
       ],
       'list_name': 'program',
     },
     {
       'name': 'protection_monito',
-      '$kuid': '0d9f37f82d',
+      '$kuid': '6b610d7705',
       'label': [
         'Protection Monitoring',
         'Моніторинг захисту',
@@ -322,7 +356,7 @@ export const formGlobalSchema = {
     },
     {
       'name': 'other',
-      '$kuid': '9107d2b509',
+      '$kuid': '8a97af8279',
       'label': [
         'Other',
         'Інше',
@@ -331,7 +365,7 @@ export const formGlobalSchema = {
     },
     {
       'name': 'female',
-      '$kuid': '2f0a32f2b9',
+      '$kuid': '5b4be838b4',
       'label': [
         'Female',
         'Жінка',
@@ -340,7 +374,7 @@ export const formGlobalSchema = {
     },
     {
       'name': 'male',
-      '$kuid': '2224676c3c',
+      '$kuid': 'fbc7375407',
       'label': [
         'Male',
         'Чоловік',
@@ -349,7 +383,7 @@ export const formGlobalSchema = {
     },
     {
       'name': 'UA01',
-      '$kuid': 'aef3e69b03',
+      '$kuid': 'c171da8585',
       'label': [
         'Autonomous Republic of Crimea',
         'Автономна Республіка Крим',
@@ -358,7 +392,7 @@ export const formGlobalSchema = {
     },
     {
       'name': 'UA71',
-      '$kuid': '737e747de5',
+      '$kuid': 'abef9e258a',
       'label': [
         'Cherkaska',
         'Черкаська',
@@ -367,7 +401,7 @@ export const formGlobalSchema = {
     },
     {
       'name': 'UA74',
-      '$kuid': 'a151c7e8dc',
+      '$kuid': '6826c7a694',
       'label': [
         'Chernihivska',
         'Чернігівська',
@@ -376,7 +410,7 @@ export const formGlobalSchema = {
     },
     {
       'name': 'UA73',
-      '$kuid': '812575a59a',
+      '$kuid': '679534b102',
       'label': [
         'Chernivetska',
         'Чернівецька',
@@ -385,7 +419,7 @@ export const formGlobalSchema = {
     },
     {
       'name': 'UA12',
-      '$kuid': '454abbfca0',
+      '$kuid': 'aa75a66dca',
       'label': [
         'Dnipropetrovska',
         'Дніпропетровська',
@@ -394,7 +428,7 @@ export const formGlobalSchema = {
     },
     {
       'name': 'UA14',
-      '$kuid': '6811c71c43',
+      '$kuid': 'b52e7bedf2',
       'label': [
         'Donetska',
         'Донецька',
@@ -403,7 +437,7 @@ export const formGlobalSchema = {
     },
     {
       'name': 'UA26',
-      '$kuid': '0cc5fbf6a6',
+      '$kuid': '80e711c3f1',
       'label': [
         'Ivano-Frankivska',
         'Івано-Франківська',
@@ -412,7 +446,7 @@ export const formGlobalSchema = {
     },
     {
       'name': 'UA63',
-      '$kuid': '9e0a06f24c',
+      '$kuid': '3589d0e752',
       'label': [
         'Kharkivska',
         'Харківська',
@@ -421,7 +455,7 @@ export const formGlobalSchema = {
     },
     {
       'name': 'UA65',
-      '$kuid': '30988ab34f',
+      '$kuid': '5bfe97d0a6',
       'label': [
         'Khersonska',
         'Херсонська',
@@ -430,7 +464,7 @@ export const formGlobalSchema = {
     },
     {
       'name': 'UA68',
-      '$kuid': '356115b5c9',
+      '$kuid': 'a24a4de00a',
       'label': [
         'Khmelnytska',
         'Хмельницька',
@@ -439,7 +473,7 @@ export const formGlobalSchema = {
     },
     {
       'name': 'UA35',
-      '$kuid': '50447ac66d',
+      '$kuid': 'fcf82377a7',
       'label': [
         'Kirovohradska',
         'Кіровоградська',
@@ -448,7 +482,7 @@ export const formGlobalSchema = {
     },
     {
       'name': 'UA80',
-      '$kuid': '888d1c8580',
+      '$kuid': '7ec21578c9',
       'label': [
         'Kyiv',
         'Київ',
@@ -457,7 +491,7 @@ export const formGlobalSchema = {
     },
     {
       'name': 'UA32',
-      '$kuid': '9a5651cf59',
+      '$kuid': 'fdb76cd822',
       'label': [
         'Kyivska',
         'Київська',
@@ -466,7 +500,7 @@ export const formGlobalSchema = {
     },
     {
       'name': 'UA44',
-      '$kuid': '909d9ce612',
+      '$kuid': '52c44b5856',
       'label': [
         'Luhanska',
         'Луганська',
@@ -475,7 +509,7 @@ export const formGlobalSchema = {
     },
     {
       'name': 'UA46',
-      '$kuid': 'e50b8334c6',
+      '$kuid': '7d702a7694',
       'label': [
         'Lvivska',
         'Львівська',
@@ -484,7 +518,7 @@ export const formGlobalSchema = {
     },
     {
       'name': 'UA48',
-      '$kuid': 'f6f49ea777',
+      '$kuid': '7068db61e9',
       'label': [
         'Mykolaivska',
         'Миколаївська',
@@ -493,7 +527,7 @@ export const formGlobalSchema = {
     },
     {
       'name': 'UA51',
-      '$kuid': '63405f79b2',
+      '$kuid': '8055170379',
       'label': [
         'Odeska',
         'Одеська',
@@ -502,7 +536,7 @@ export const formGlobalSchema = {
     },
     {
       'name': 'UA53',
-      '$kuid': 'e0a2cf7f67',
+      '$kuid': '352239ef5e',
       'label': [
         'Poltavska',
         'Полтавська',
@@ -511,7 +545,7 @@ export const formGlobalSchema = {
     },
     {
       'name': 'UA56',
-      '$kuid': 'a2da8b3d80',
+      '$kuid': 'ceee7f7d34',
       'label': [
         'Rivnenska',
         'Рівненська',
@@ -520,7 +554,7 @@ export const formGlobalSchema = {
     },
     {
       'name': 'UA85',
-      '$kuid': '9256c9a158',
+      '$kuid': 'ecb0d4e41a',
       'label': [
         'Sevastopol',
         'Севастополь',
@@ -529,7 +563,7 @@ export const formGlobalSchema = {
     },
     {
       'name': 'UA59',
-      '$kuid': '9d1314d044',
+      '$kuid': 'a633410ff3',
       'label': [
         'Sumska',
         'Сумська',
@@ -538,7 +572,7 @@ export const formGlobalSchema = {
     },
     {
       'name': 'UA61',
-      '$kuid': 'b0751c0d2e',
+      '$kuid': '57614d7c73',
       'label': [
         'Ternopilska',
         'Тернопільська',
@@ -547,7 +581,7 @@ export const formGlobalSchema = {
     },
     {
       'name': 'UA05',
-      '$kuid': '6ee1ce50f8',
+      '$kuid': '97fffb1097',
       'label': [
         'Vinnytska',
         'Вінницька',
@@ -556,7 +590,7 @@ export const formGlobalSchema = {
     },
     {
       'name': 'UA07',
-      '$kuid': 'c9904471f6',
+      '$kuid': '2f6ec01e89',
       'label': [
         'Volynska',
         'Волинська',
@@ -565,7 +599,7 @@ export const formGlobalSchema = {
     },
     {
       'name': 'UA21',
-      '$kuid': '79eaa8a51b',
+      '$kuid': '1bcd9fcc45',
       'label': [
         'Zakarpatska',
         'Закарпатська',
@@ -574,7 +608,7 @@ export const formGlobalSchema = {
     },
     {
       'name': 'UA23',
-      '$kuid': '5fac260c38',
+      '$kuid': 'd786b25c26',
       'label': [
         'Zaporizka',
         'Запорізька',
@@ -583,7 +617,7 @@ export const formGlobalSchema = {
     },
     {
       'name': 'UA18',
-      '$kuid': '106dc60e7b',
+      '$kuid': '8551310601',
       'label': [
         'Zhytomyrska',
         'Житомирська',
@@ -592,7 +626,7 @@ export const formGlobalSchema = {
     },
     {
       'name': 'diff_see',
-      '$kuid': '4af126394d',
+      '$kuid': '501df6a60b',
       'label': [
         'Have difficulty seeing, even if wearing glasses',
         'Маєте труднощі із зором, навіть якщо носите окуляри',
@@ -601,7 +635,7 @@ export const formGlobalSchema = {
     },
     {
       'name': 'diff_hear',
-      '$kuid': '8979c874a1',
+      '$kuid': '4d3555cd36',
       'label': [
         'Have difficulty hearing, even if using a hearing aid',
         'Маєте проблеми зі слухом, навіть якщо користуєтеся слуховим апаратом',
@@ -610,7 +644,7 @@ export const formGlobalSchema = {
     },
     {
       'name': 'diff_walk',
-      '$kuid': '40122e081c',
+      '$kuid': 'c6b5957db9',
       'label': [
         'Have difficulty walking or climbing steps',
         'Маєте труднощі з ходьбою або підйомом по сходах',
@@ -619,7 +653,7 @@ export const formGlobalSchema = {
     },
     {
       'name': 'diff_rem',
-      '$kuid': '039fc21cf2',
+      '$kuid': 'e6cc1df2ae',
       'label': [
         'Have difficulty remembering or concentrating',
         'Маєте труднощі з запам\'ятовуванням або концентрацією уваги',
@@ -628,7 +662,7 @@ export const formGlobalSchema = {
     },
     {
       'name': 'diff_care',
-      '$kuid': '3acf4b0e8c',
+      '$kuid': '5ed5b9ada8',
       'label': [
         'Have difficulty with self-care such as washing all over or dressing',
         'Мають труднощі з самообслуговуванням, наприклад, з миттям або одяганням',
@@ -637,7 +671,7 @@ export const formGlobalSchema = {
     },
     {
       'name': 'diff_comm',
-      '$kuid': '26a95af6ce',
+      '$kuid': '4058637e39',
       'label': [
         'Have difficulty communicating, for example understanding or being understood',
         'Маєте труднощі у спілкуванні, наприклад, у розумінні чи розумінні інших людей',
@@ -646,7 +680,7 @@ export const formGlobalSchema = {
     },
     {
       'name': 'diff_none',
-      '$kuid': '393ec91da0',
+      '$kuid': '5553da3a20',
       'label': [
         'None of the above apply',
         'Ніщо з перерахованого вище не стосується',
@@ -655,7 +689,7 @@ export const formGlobalSchema = {
     },
     {
       'name': 'idp',
-      '$kuid': '9590e9f9fc',
+      '$kuid': 'd9e7e64251',
       'label': [
         'Internally Displaced Person (IDP)',
         'Внутрішньо-переміщена особа (ВПО)',
@@ -664,7 +698,7 @@ export const formGlobalSchema = {
     },
     {
       'name': 'long_res',
-      '$kuid': '2ef9f81638',
+      '$kuid': 'a5e00e63e1',
       'label': [
         'Long - Term Resident',
         'Довгостроковий мешканець',
@@ -673,7 +707,7 @@ export const formGlobalSchema = {
     },
     {
       'name': 'ret',
-      '$kuid': '5023a9ff42',
+      '$kuid': '20bd7ecd48',
       'label': [
         'Returnee',
         'Особа, яка повернулася',
@@ -682,7 +716,7 @@ export const formGlobalSchema = {
     },
     {
       'name': 'ref_asy',
-      '$kuid': '303b9cc3f8',
+      '$kuid': 'e4a699709a',
       'label': [
         'Refugee/asylum seeker',
         'Біженець/особа, що потребує прихистку',
@@ -691,7 +725,7 @@ export const formGlobalSchema = {
     },
     {
       'name': 'other',
-      '$kuid': '93c02b3d28',
+      '$kuid': 'b968562496',
       'label': [
         'Other',
         'інше',
@@ -718,39 +752,33 @@ export const formGlobalVersion: Prisma.FormVersionCreateManyInput = {
 
 export const formGlobalAction: Prisma.FormActionCreateManyInput[] = [
   {
-    'createdBy': 'visitor.12@nexusportal.app',
+    'createdBy': 'visitor.8@nexusportal.app',
+    'type': 'insert',
+    'name': 'Pull all data from HHS',
+    'body': 'import { Input } from \'input\'\nimport { Output } from \'output\'\nimport { Submission } from \'meta\'\n\nasync function transform(submission: Submission<Input.Type>): Promise<Output.Type | Output.Type[]> {\n  return {\n    survey: \'Household Survey\',\n    office: submission.answers.back_office,\n    sector: \'protection\',\n    program: \'protection_monito\',\n    donor: submission.answers.donor,\n    oblast: submission.answers.current_oblast,\n    persons_count: submission.answers.persons?.length ?? 0,\n    persons: submission.answers.persons?.map(_ => {\n      return {\n        uniq_id: \'\' + Math.random(), // We don\'t have Tax ID in HHS -> assume all individuals are unique.\n        age: _.age,\n        disability: _.disability.includes(\'no\') ? undefined : _.disability as any,\n        gender: _.gender === \'unable_unwilling_to_answer\' ? undefined : _.gender,\n        displacement_status: mapDisplacementStatus(submission.answers.disp_status),\n      }\n    })\n  }\n}\n\nconst mapDisplacementStatus = (status: Input.Choice<\'disp_status\'>): Output.Choice<\'displacement_status\'> | undefined => {\n  switch (status) {\n    case \'idp\':\n      return \'idp\'\n    case \'non_displaced\':\n      return \'long_res\'\n    case \'returnee\':\n      return \'ret\'\n  }\n}',
+    'bodyErrors': 0,
+    'bodyWarnings': 0,
+    'formId': 'id_form_global',
+    'targetFormId': 'id_form_hhs',
+  },
+  {
+    'createdBy': 'visitor.8@nexusportal.app',
     'type': 'insert',
     'name': 'Pull all data from NTA',
-    'disabled': false,
-    'description': null,
-    'body': 'import {Input} from \'input\'\nimport {Output} from \'output\'\nimport {Submission} from \'meta\'\n\nexport async function transform(\n  submission: Submission<Input.Type>\n): Promise<Output.Type | Output.Type[]> {\n  return {\n    oblast: submission.answers.ben_det_oblast,\n    office: submission.answers.back_office,\n    sector: \'shelter\',\n    program: \'shelter_repair\',\n    persons: submission.answers.hh_char_hh_det?.map(person => {\n      return {\n        age: person.hh_char_hh_det_age,\n        gender: person.hh_char_hh_det_gender,\n        disability: person.hh_char_hh_det_dis_level !== \'zero\' ? person.hh_char_hh_det_dis_select : undefined,\n        displacement_status: submission.answers.res_stat,\n        phone: submission.answers.ben_det_phone + \'\',\n        tax_id: submission.answers.ben_det_tax_id,\n      }\n    })\n  }\n}',
+    'body': 'import {Input} from \'input\'\nimport {Output} from \'output\'\nimport {Submission} from \'meta\'\n\nexport async function transform(\n  submission: Submission<Input.Type>\n): Promise<Output.Type | Output.Type[]> {\n  return {\n    survey: \'Shelter No-Technical Assessment\',\n    oblast: submission.answers.ben_det_oblast,\n    office: submission.answers.back_office,\n    donor: submission.answers.back_donor,\n    sector: \'shelter\',\n    program: \'shelter_repair\',\n    persons_count: submission.answers.hh_char_hh_det?.length ?? 0,\n    persons: submission.answers.hh_char_hh_det?.map(person => {\n      return {\n        age: person.hh_char_hh_det_age,\n        gender: person.hh_char_hh_det_gender,\n        disability: person.hh_char_hh_det_dis_level !== \'zero\' ? person.hh_char_hh_det_dis_select : undefined,\n        displacement_status: submission.answers.res_stat,\n        phone: submission.answers.ben_det_phone + \'\',\n        tax_id: submission.answers.ben_det_tax_id,\n        uniq_id: submission.answers.ben_det_tax_id,\n      }\n    })\n  }\n}',
     'bodyErrors': 0,
     'bodyWarnings': 0,
     'formId': 'id_form_global',
     'targetFormId': 'id_form_nta',
   },
   {
-    'createdBy': 'SYSTEM',
+    'createdBy': 'visitor.8@nexusportal.app',
     'type': 'insert',
     'name': 'Pull all data from RRM',
-    'disabled': false,
-    'description': null,
-    'body': 'import { Input } from \'input\'\nimport { Output } from \'output\'\nimport { Submission } from \'meta\'\n\nexport async function transform(submission: Submission<Input.Type>): Promise<Output.Type | Output.Type[]> {\n  return {\n    oblast: submission.answers.oblast,\n    office: getOffice(submission.answers.oblast),\n    sector: getSector(submission.answers.program),\n    program: submission.answers.program,\n    persons: submission.answers.person?.map((person, index) => {\n      return {\n        age: person.age,\n        disability: person.disability?.filter(dis => dis !== \'diff_none\'),\n        gender: person.gender,\n        tax_id: index === 0 ? submission.answers.taxid : undefined,\n      }\n    })\n  }\n}\n\nfunction getSector(program: Input.Choice<\'program\'>): Output.Choice<\'sector\'> {\n  switch (program) {\n    case \'esk\':\n      return \'shelter\'\n    case \'mpca\':\n    case \'nfi\':\n      return \'basic_needs\'\n  }\n}\n\nfunction getOffice(oblast: Input.Choice<\'oblast\'>): Output.Choice<\'office\'> | undefined {\n  switch (oblast) {\n    case \'UA74\':\n      return \'chernihiv\'\n    case \'UA59\':\n      return \'sumy\'\n    case \'UA12\':\n    case \'UA23\':\n      return \'dnipro\'\n    case \'UA48\':\n    case \'UA65\':\n      return \'mykolaiv\'\n    case \'UA63\':\n    case \'UA53\':\n      return \'kharkiv\'\n  }\n}',
+    'body': 'import { Input } from \'input\'\nimport { Output } from \'output\'\nimport { Submission } from \'meta\'\n\nexport async function transform(submission: Submission<Input.Type>): Promise<Output.Type | Output.Type[]> {\n  return {\n    survey: \'Rapid Response\',\n    oblast: submission.answers.oblast,\n    donor: submission.answers.donor === \'bhab\' ? \'bha\' : submission.answers.donor,\n    office: getOffice(submission.answers.oblast),\n    sector: getSector(submission.answers.program),\n    program: submission.answers.program,\n    persons_count: submission.answers.person?.length ?? 0,\n    persons: submission.answers.person?.map((person, index) => {\n      return {\n        age: person.age,\n        disability: person.disability?.filter(dis => dis !== \'diff_none\'),\n        gender: person.gender,\n        tax_id: index === 0 ? submission.answers.taxid : undefined,\n        uniq_id: submission.answers.taxid + index,\n      }\n    })\n  }\n}\n\nfunction getSector(program: Input.Choice<\'program\'>): Output.Choice<\'sector\'> {\n  switch (program) {\n    case \'esk\':\n      return \'shelter\'\n    case \'mpca\':\n    case \'nfi\':\n      return \'basic_needs\'\n  }\n}\n\nfunction getOffice(oblast: Input.Choice<\'oblast\'>): Output.Choice<\'office\'> | undefined {\n  switch (oblast) {\n    case \'UA74\':\n      return \'chernihiv\'\n    case \'UA59\':\n      return \'sumy\'\n    case \'UA12\':\n    case \'UA23\':\n      return \'dnipro\'\n    case \'UA48\':\n    case \'UA65\':\n      return \'mykolaiv\'\n    case \'UA63\':\n    case \'UA53\':\n      return \'kharkiv\'\n  }\n}',
     'bodyErrors': 0,
     'bodyWarnings': 0,
     'formId': 'id_form_global',
     'targetFormId': 'id_form_rrm',
-  },
-  {
-    'createdBy': 'visitor.12@nexusportal.app',
-    'type': 'insert',
-    'name': 'Pull all data from HHS',
-    'disabled': false,
-    'description': null,
-    'body': 'import { Input } from \'input\'\nimport { Output } from \'output\'\nimport { Submission } from \'meta\'\n\nasync function transform(submission: Submission<Input.Type>): Promise<Output.Type | Output.Type[]> {\n  return {\n    office: submission.answers.back_office,\n    sector: \'protection\',\n    program: \'protection_monito\',\n    oblast: submission.answers.current_oblast,\n    persons: submission.answers.persons?.map(_ => {\n      return {\n        age: _.age,\n        disability: _.disability.includes(\'no\') ? undefined : _.disability as any,\n        gender: _.gender === \'unable_unwilling_to_answer\' ? undefined : _.gender,\n        displacement_status: mapDisplacementStatus(submission.answers.disp_status),\n      }\n    })\n  }\n}\n\nconst mapDisplacementStatus = (status: Input.Choice<\'disp_status\'>): Output.Choice<\'displacement_status\'> | undefined => {\n  switch (status) {\n    case \'idp\':\n      return \'idp\'\n    case \'non_displaced\':\n      return \'long_res\'\n    case \'returnee\':\n      return \'ret\'\n  }\n}',
-    'bodyErrors': 0,
-    'bodyWarnings': 0,
-    'formId': 'id_form_global',
-    'targetFormId': 'id_form_hhs',
   },
 ]

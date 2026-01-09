@@ -9,6 +9,7 @@ import {formHhs, formHhsSchema, formHssVersion} from './fixture/form-hhs.js'
 import {dashboardPm, dashboardPmPublished, dashboardPmSection, dashboardPmWidgets} from './fixture/dashboard-pm.js'
 import {formNta, formNtaSchema, formNtaVersion} from './fixture/form-shelter-nta.js'
 import {formGlobal, formGlobalAction, formGlobalVersion} from './fixture/form-global.js'
+import {dashboardGlobal, dashboardGlobalPublished, dashboardGlobalSection, dashboardGlobalWidgets} from './fixture/dashboard-global.js'
 
 const forms = [fromRrm, formHhs, formNta, formGlobal]
 const formsVersion = [formRrmVersion, formHssVersion, formNtaVersion, formGlobalVersion]
@@ -57,8 +58,8 @@ export class DemoWorkspaceInit {
           }),
           ...generateRandomSubmissions({
             numericRanges: {
-              age: [0, 90],
-              household_size: [1, 8],
+              hh_char_hh_det_age: [0, 90],
+              ben_det_hh_size: [1, 8],
             },
             version: formNtaVersion.version,
             formId: formNta.id as Api.FormId,
@@ -70,23 +71,25 @@ export class DemoWorkspaceInit {
         ],
       }),
       this.prisma.dashboard.createMany({
-        data: [dashboardPm],
+        data: [dashboardPm, dashboardGlobal],
       }),
       this.prisma.formAction.createMany({
         data: [...formGlobalAction],
       }),
     ])
     await this.prisma.dashboardPublished.createMany({
-      data: [dashboardPmPublished],
+      data: [dashboardPmPublished, dashboardGlobalPublished],
     })
     await this.prisma.dashboardSection.createMany({
       data: [
         ...dashboardPmSection,
+        ...dashboardGlobalSection,
       ],
     })
     await this.prisma.dashboardWidget.createMany({
       data: [
         ...dashboardPmWidgets,
+        ...dashboardGlobalWidgets,
       ],
     })
   }
