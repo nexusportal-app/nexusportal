@@ -8,17 +8,16 @@
     "moduleResolution": "bundler",
     "outDir": "./dist",
     "paths": {
-      "infoportal-common/*": [
-        "../common/src/*"
-      ],
-      "*": [
-        "./*"
-      ]
+      "infoportal-common/*": ["../common/src/*"],
+      "*": ["./*"]
     }
   },
   "references": [
     {
       "path": "../form-helper"
+    },
+    {
+      "path": "../demo-workspace-init"
     },
     {
       "path": "../form-action-runner"
@@ -36,7 +35,5 @@
   "ts-node": {
     "files": true
   },
-  "include": [
-    "src"
-  ]
+  "include": ["src"]
 }

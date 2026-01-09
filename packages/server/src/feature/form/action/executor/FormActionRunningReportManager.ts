@@ -7,7 +7,8 @@ type LiveReport = Omit<Api.Form.Action.Report, 'id'>
 export class FormActionRunningReportManager {
   private liveReportMap = new Map<Api.FormId, LiveReport>()
 
-  private constructor(private prisma: PrismaClient) {}
+  private constructor(private prisma: PrismaClient) {
+  }
 
   private static instance: FormActionRunningReportManager
   static readonly getInstance = (prisma: PrismaClient) => {
@@ -43,11 +44,13 @@ export class FormActionRunningReportManager {
     const report = this.liveReportMap.get(formId)
     if (!report) throw new HttpError.InternalServerError(`Failed to fetch execution report.`)
     this.liveReportMap.delete(formId)
-    return this.prisma.formActionReport
-      .create({
-        data: {...report, endedAt: new Date(), failed: failed ?? null},
-      })
-      .then(prismaMapper.form.mapFormActionReport)
+    return this.prisma.formActionReport.create({
+      data: {
+        ...report,
+        endedAt: new Date(),
+        failed: failed ?? report.failed ?? null,
+      },
+    }).then(prismaMapper.form.mapFormActionReport)
   }
 
   get(formId: Api.FormId): Api.Form.Action.Report | undefined {

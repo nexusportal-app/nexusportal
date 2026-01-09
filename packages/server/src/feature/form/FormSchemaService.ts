@@ -6,6 +6,7 @@ import {KoboSdkGenerator} from '../kobo/KoboSdkGenerator.js'
 import {PyxFormClient} from '../../core/PyxFormClient.js'
 import {SchemaToXlsForm} from '@infoportal/form-helper'
 import {Readable} from 'stream'
+import {seq} from '@axanc/ts-utils'
 
 export class FormSchemaService {
   constructor(
@@ -21,6 +22,12 @@ export class FormSchemaService {
     return Api.Form.isConnectedToKobo(form)
       ? this.koboSchemaCache.get({refreshCacheIfMissing: true, formId}).then(_ => (_ ? _.content : undefined))
       : this.getBy({formId, status: 'active'})
+  }
+
+  readonly getOrThrowIndexedSchema = async (formId: Api.FormId) => {
+    const schema = await this.get({formId: formId})
+    if (!schema) throw new HttpError.NotFound(`[FormSchemaService] Schema not found for ${formId}.`)
+    return seq(schema.survey).groupByFirst(_ => _.name)
   }
 
   readonly downloadXls = async ({workspaceId, formId}: {workspaceId: Api.WorkspaceId; formId: Api.FormId}) => {

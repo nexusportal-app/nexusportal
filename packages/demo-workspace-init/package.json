@@ -1,0 +1,28 @@
+{
+  "name": "@infoportal/demo-workspace-init",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.js",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./utils": {
+      "types": "./dist/utils.d.ts",
+      "default": "./dist/utils.js"
+    }
+  },
+  "dependencies": {
+    "@axanc/ts-utils": "3.1.0",
+    "@infoportal/api-sdk": "1.0.0",
+    "@infoportal/common": "1.0.0",
+    "@infoportal/prisma": "1.0.0",
+    "nanoid": "^5.1.6"
+  },
+  "scripts": {
+    "build": "tsc"
+  }
+}

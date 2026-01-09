@@ -19,6 +19,7 @@
     "@infoportal/api-sdk": "1.0.0",
     "@infoportal/client-core": "1.0.0",
     "@infoportal/client-datatable": "1.0.0",
+    "@infoportal/demo-workspace-init": "1.0.0",
     "@infoportal/client-i18n": "1.0.0",
     "@infoportal/common": "1.0.0",
     "@infoportal/database-column": "1.0.0",

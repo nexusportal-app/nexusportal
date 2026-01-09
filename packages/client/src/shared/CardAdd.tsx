@@ -24,7 +24,7 @@ export const CardAdd = ({icon, title, sx, ...props}: CardAddProps) => {
         justifyContent: 'center',
         flexDirection: 'column',
         background: 'none',
-        border: `1px dashed ${t.vars.palette.divider}`,
+        border: `2px dashed ${t.vars.palette.divider}`,
         // transition: t.transitions.create(''),
         // '&:hover': {
         //   boxShadow: t.vars.shadows[2],

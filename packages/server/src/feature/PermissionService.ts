@@ -59,12 +59,12 @@ export class PermissionService {
     if (!permissions || Object.keys(permissions).length === 0) return true
     if (permissions.global && (await this.canGlobal(user, permissions.global))) return true
     if (permissions.workspace) {
-      if (!workspaceId) throw new HttpError.BadRequest('Missing workspaceId')
+      if (!workspaceId) throw new HttpError.BadRequest('#1 Missing workspaceId')
       if (await this.canWorkspace({user, workspaceId, required: permissions.workspace})) return true
     }
     if (permissions.form) {
-      if (!workspaceId) throw new HttpError.BadRequest('Missing workspaceId')
-      if (!formId) throw new HttpError.BadRequest('Missing formId')
+      if (!workspaceId) throw new HttpError.BadRequest('#2 Missing workspaceId')
+      if (!formId) throw new HttpError.BadRequest('#3 Missing formId')
       if (await this.canForm({user, workspaceId, formId, required: permissions.form})) return true
     }
     return false

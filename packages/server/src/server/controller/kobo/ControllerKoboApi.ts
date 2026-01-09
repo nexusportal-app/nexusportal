@@ -35,7 +35,7 @@ export class ControllerKoboApi {
 
   readonly handleWebhookNewAnswers = async (req: Request, res: Response, next: NextFunction) => {
     const formId = req.body._xform_id_string
-    await this.syncService.handleWebhookNewAnswers({koboFormId: formId, answer: req.body})
+    await this.syncService.handleWebhookNewAnswers({koboFormId: formId, submission: req.body})
     res.send({})
   }
 

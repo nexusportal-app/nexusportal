@@ -7,6 +7,4 @@ export type AppSession = {
 
 export type UserProfile = {
   user: Api.User
-  /** @deprecated ? */
-  workspaces: Api.Workspace[]
 }

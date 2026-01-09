@@ -1,5 +1,5 @@
 import {Api} from '@infoportal/api-sdk'
-import {CircularProgress, Icon, useTheme} from '@mui/material'
+import {CircularProgress, Icon, Tooltip, useTheme} from '@mui/material'
 import {AppAvatar, Core, Datatable} from '@/shared'
 import {useI18n} from '@infoportal/client-i18n'
 import {UseQueryFormActionReport} from '@/core/query/form/useQueryFormActionReport.js'
@@ -109,9 +109,9 @@ export function FormActionReports() {
                 return {
                   tooltip: duration,
                   value: duration,
-                  label: duration && (
+                  label: (
                     <>
-                      {_.running ? <Duration start={_.startedAt} /> : duration}
+                      {_.running ? <Duration start={_.startedAt} /> : duration || m.bellowNsecond(1)}
                       <Icon fontSize="small" color="action" children="schedule" sx={{ml: 1}} />
                     </>
                   ),
@@ -159,9 +159,9 @@ export function FormActionReports() {
                 return {
                   value: _.failed,
                   label: (
-                    <>
+                    <Tooltip title={_.failed}>
                       <Code>{_.failed}</Code>
-                    </>
+                    </Tooltip>
                   ),
                 }
               },

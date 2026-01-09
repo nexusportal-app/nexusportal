@@ -375,7 +375,7 @@ model FormAction {
   createdAt    DateTime        @default(now())
   createdBy    String?
   type         FormActionType
-  name         String
+  name         String?
   disabled     Boolean         @default(false)
   description  String?
   body         String?

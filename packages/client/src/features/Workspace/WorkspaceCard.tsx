@@ -1,12 +1,16 @@
-import {Box, ButtonBase, ButtonBaseProps, Icon, useTheme} from '@mui/material'
-import {AppAvatar, Core} from '@/shared'
+import {Box, Icon, LinearProgress, useTheme} from '@mui/material'
+import {AppAvatar, Core, visitorGradient} from '@/shared'
 import {useI18n} from '@infoportal/client-i18n'
-import {Link} from '@tanstack/react-router'
+import {Link, useNavigate} from '@tanstack/react-router'
 import {Api} from '@infoportal/api-sdk'
 import {UseQueryWorkspaceInvitation} from '@/core/query/workspace/useQueryWorkspaceInvitation.js'
-import {appConfig} from '@/conf/AppConfig.js'
 import {AccessLevelRow} from '@/core/layout/AppHeaderMenu.js'
-import {CardAdd} from '@/shared/CardAdd'
+import {useQuerySession} from '@/core/query/useQuerySession'
+import {demoWorkspaceId, isVisitorAccount, isVisitorEmail} from '@infoportal/demo-workspace-init/utils'
+import {useSession} from '@/core/Session/SessionContext'
+import {UseQueryWorkspace} from '@/core/query/workspace/useQueryWorkspace'
+
+const height = 240
 
 export const WorkspaceCard = ({workspace}: {workspace: Api.Workspace}) => {
   const {m, formatDate} = useI18n()
@@ -17,7 +21,7 @@ export const WorkspaceCard = ({workspace}: {workspace: Api.Workspace}) => {
       <Core.Panel
         sx={{
           mb: 0,
-          minHeight: 200,
+          minHeight: height,
           p: 2,
           display: 'flex',
           flexDirection: 'column',
@@ -66,7 +70,7 @@ export const WorkspaceCardInvitation = ({
         display: 'flex',
         flexDirection: 'column',
         mb: 0,
-        minHeight: 200,
+        minHeight: height,
         ...sx,
       }}
     >
@@ -101,6 +105,59 @@ export const WorkspaceCardInvitation = ({
           {m.accept}
         </Core.Btn>
       </Core.PanelFoot>
+    </Core.Panel>
+  )
+}
+
+export const WorkspaceCardDemo = () => {
+  const {m} = useI18n()
+  const t = useTheme()
+  const navigate = useNavigate()
+  const {user} = useSession()
+  const queryConnectAs = useQuerySession().connectAs
+
+  return (
+    <Core.Panel
+      onClick={async () => {
+        if (!isVisitorAccount(user)) {
+          const visitorIndex = Math.floor(Math.random() * 15)
+          await queryConnectAs.mutateAsync(`visitor.${visitorIndex}@nexusportal.app` as Api.User.Email)
+        }
+        navigate({to: '/$workspaceId/overview', params: {workspaceId: demoWorkspaceId}})
+      }}
+      sx={{
+        mb: 0,
+        minHeight: height,
+        p: 2,
+        position: 'relative',
+        alignItems: 'center',
+        display: 'flex',
+        justifyContent: 'center',
+        cursor: 'pointer',
+        flexDirection: 'column',
+        transition: t.transitions.create(''),
+        textAlign: 'center',
+        '&:hover': {
+          boxShadow: t.vars.shadows[2],
+        },
+      }}
+    >
+      {queryConnectAs.isPending && <LinearProgress sx={{position: 'absolute', top: 0, right: 0, left: 0}} />}
+      <Icon
+        sx={{
+          fontSize: 60,
+          fontWeight: 'bold',
+          mb: 1,
+          background: `linear-gradient(90deg, ${visitorGradient[0]}, ${visitorGradient[1]}, ${visitorGradient[2]})`,
+          WebkitBackgroundClip: 'text',
+          WebkitTextFillColor: 'transparent',
+        }}
+        color="primary"
+      >
+        explore
+      </Icon>
+      <Core.Txt size="big" sx={{fontWeight: '700', mb: .5}} color="primary">{m.exploreDemoWorkspace}</Core.Txt>
+      <Core.Txt color="hint">{m.exploreDemoWorkspaceDesc}</Core.Txt>
     </Core.Panel>
   )
 }

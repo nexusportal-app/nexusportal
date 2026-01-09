@@ -1,16 +1,12 @@
 import {PrismaClient} from '@infoportal/prisma'
-import {slugify, genShortid, UUID} from '@infoportal/common'
-import {GroupService} from '../group/GroupService.js'
-import {FormAccessService} from '../form/access/FormAccessService.js'
+import {genShortid, slugify, UUID} from '@infoportal/common'
 import {Api} from '@infoportal/api-sdk'
 import {prismaMapper} from '../../core/prismaMapper/PrismaMapper.js'
+import {demoWorkspaceId} from '@infoportal/demo-workspace-init/utils'
 
 export class WorkspaceService {
-  constructor(
-    private prisma: PrismaClient,
-    private group = new GroupService(prisma),
-    private access = new FormAccessService(prisma),
-  ) {}
+  constructor(private prisma: PrismaClient) {
+  }
 
   readonly checkSlug = async (name: string) => {
     const suggestedSlug = await this.getUniqSlug(name)
@@ -30,7 +26,8 @@ export class WorkspaceService {
         },
       })
       .then(_ => _.map(_ => _.slug))
-
+    const blockedValue = demoWorkspaceId
+    existingSlugs.push(blockedValue)
     let slug = baseSlug
     while (existingSlugs.includes(slug)) {
       slug = `${baseSlug}-${genShortid()}`
@@ -39,27 +36,61 @@ export class WorkspaceService {
   }
 
   readonly getByUser = async (email: Api.User.Email) => {
-    return this.prisma.workspaceAccess
+    return this.prisma.workspace
       .findMany({
         where: {
-          user: {
-            email,
+          access: {
+            some: {
+              user: {email},
+            },
           },
         },
         select: {
-          level: true,
-          workspace: true,
+          id: true,
+          createdAt: true,
+          createdBy: true,
+          name: true,
+          slug: true,
+          sector: true,
+          access: {
+            where: {
+              user: {email},
+            },
+            select: {
+              level: true,
+            },
+          },
         },
       })
-      .then(_ => {
-        return _.map(_ => {
-          return {
-            ..._.workspace,
-            level: _.level,
-          }
-        })
-      })
-      .then(_ => _.map(prismaMapper.workspace.mapWorkspace))
+      .then(workspaces =>
+        workspaces.map(w =>
+          prismaMapper.workspace.mapWorkspace({
+            ...w,
+            level: w.access[0]?.level ?? null,
+          }),
+        ),
+      )
+    // return this.prisma.workspaceAccess
+    //   .findMany({
+    //     where: {
+    //       user: {
+    //         email,
+    //       },
+    //     },
+    //     select: {
+    //       level: true,
+    //       workspace: true,
+    //     },
+    //   })
+    //   .then(_ => {
+    //     return _.map(_ => {
+    //       return {
+    //         ..._.workspace,
+    //         level: _.level,
+    //       }
+    //     })
+    //   })
+    //   .then(_ => _.map(prismaMapper.workspace.mapWorkspace))
   }
 
   readonly create = async (data: Api.Workspace.Payload.Create, user: Api.User) => {

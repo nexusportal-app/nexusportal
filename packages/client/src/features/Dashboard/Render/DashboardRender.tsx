@@ -1,5 +1,4 @@
 import {UseQueryDashboard} from '@/core/query/dashboard/useQueryDashboard'
-import {KoboMapper} from '@/core/sdk/server/kobo/KoboMapper'
 import {muiTheme} from '@/core/theme'
 import {DashboardProvider, useDashboardContext} from '@/features/Dashboard/Context/DashboardContext'
 import {Widget} from '@/features/Dashboard/Widget/Widget'
@@ -12,7 +11,7 @@ import {useI18n} from '@infoportal/client-i18n'
 import {Badge, GlobalStyles, Theme, ThemeProvider} from '@mui/material'
 import {createRoute} from '@tanstack/react-router'
 import {Api} from '@infoportal/api-sdk'
-import {SchemaInspector} from '@infoportal/form-helper'
+import {SchemaInspector, SubmissionMapperRuntime} from '@infoportal/form-helper'
 import {useMemo} from 'react'
 import {Responsive, WidthProvider} from 'react-grid-layout'
 import {DashboardRenderFilterChips} from './DashboardRenderFilterChips'
@@ -38,7 +37,7 @@ export function DashboardRender() {
     if (!querySubmissions.data || !querySchema.data) return
     const schemaInspector = new SchemaInspector(querySchema.data)
     return querySubmissions.data.map(_ => {
-      return KoboMapper.mapSubmissionBySchema(schemaInspector.lookup.questionIndex, _)
+      return SubmissionMapperRuntime.map(schemaInspector.lookup.questionIndex, _)
     })
   }, [querySubmissions.data, querySchema.data])
 

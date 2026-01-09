@@ -14,10 +14,15 @@
       }
     ],
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": [
+        "./src/*"
+      ]
     }
   },
   "references": [
+    {
+      "path": "../demo-workspace-init"
+    },
     {
       "path": "../form-helper"
     },
@@ -46,6 +51,11 @@
       "path": "../common"
     }
   ],
-  "include": ["**/*.ts", "**/*.tsx"],
-  "exclude": ["node_modules"]
+  "include": [
+    "**/*.ts",
+    "**/*.tsx"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }

@@ -48,7 +48,7 @@ export const Txt = forwardRef(
                 fontSize: '1.30em',
               },
               big: {
-                fontSize: '1.10em',
+                fontSize: '1.15em',
               },
               small: {
                 fontSize: '0.90em',
