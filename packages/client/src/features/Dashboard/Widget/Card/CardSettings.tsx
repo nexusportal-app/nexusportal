@@ -73,7 +73,7 @@ export function CardSettings() {
             />
           )}
         />
-        {values.operation && values.operation !== 'count' && (
+        {values.operation && (
           <Controller
             name="questionName"
             control={form.control}
@@ -86,7 +86,10 @@ export function CardSettings() {
                 sx={{mb: 1.5}}
                 onChange={(e, _) => field.onChange(_)}
                 inspector={schema}
-                questionTypeFilter={getQuestionTypeByWidget(widget.type)}
+                questionTypeFilter={['sum', 'avg', 'min', 'max'].includes(values.operation!)
+                  ? ['integer', 'decimal', 'calculate']
+                  : ['integer', 'select_multiple', 'text', 'select_one', 'decimal', 'calculate']
+                }
                 InputProps={{
                   label: m.question,
                   error: !!fieldState.error,

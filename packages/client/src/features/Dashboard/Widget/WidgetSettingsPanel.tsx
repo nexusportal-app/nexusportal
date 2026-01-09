@@ -51,7 +51,9 @@ export const getQuestionTypeByWidget = (type: Api.Dashboard.Widget.Type): Kobo.F
       return ['select_one', 'integer', 'decimal']
     }
     case 'Card': {
-      return ['integer', 'decimal', 'calculate']
+      return [
+        // 'integer', 'select_multiple', 'select_one', 'decimal', 'calculate'
+      ]
     }
     default: {
       return []

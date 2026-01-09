@@ -5,11 +5,13 @@ import {useI18n} from '@infoportal/client-i18n'
 import {Api} from '@infoportal/api-sdk'
 import {toInt} from '@infoportal/common'
 import {useMemo} from 'react'
+import {seq} from '@axanc/ts-utils'
 
 export function CardWidget({widget}: {widget: Api.Dashboard.Widget}) {
   const {formatLargeNumber} = useI18n()
   const config = widget.config as Api.Dashboard.Widget.Config['Card']
 
+  const schemaInspector = useDashboardContext(_ => _.schemaInspector)
   const getFilteredData = useDashboardContext(_ => _.data.getFilteredData)
   const filterFns = useDashboardContext(_ => _.data.filterFns)
   const langIndex = useDashboardContext(_ => _.langIndex)
@@ -32,7 +34,15 @@ export function CardWidget({widget}: {widget: Api.Dashboard.Widget}) {
   ])
 
   const value = useMemo(() => {
-    if (config.operation === 'count') return data.length
+    if (config.operation === 'count') {
+      if (config.questionName) {
+        const question = schemaInspector.lookup.questionIndex[config.questionName]
+        if (question?.type === 'select_one' || 'select_multiple') {
+          return seq(data).compact().distinct(_ => _[config.questionName!]).length
+        }
+      }
+      return data.length
+    }
     if (!config.questionName) return
     const mapped: number[] = data.map(_ => toInt(_[config.questionName!])).filter(_ => _ !== undefined)
     try {
