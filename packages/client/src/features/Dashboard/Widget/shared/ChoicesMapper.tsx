@@ -1,13 +1,12 @@
-import {ReactNode} from 'react'
-import {Box, BoxProps, Icon, useTheme} from '@mui/material'
+import {forwardRef, ReactNode} from 'react'
+import {Box, BoxProps, Icon, SxProps, useTheme} from '@mui/material'
 import {styleUtils, Txt} from '@infoportal/client-core'
-import {Kobo} from 'kobo-sdk'
-import {useDashboardContext} from '@/features/Dashboard/Context/DashboardContext'
 
-export function ChoicesMapperPanel({children, sx, ...props}: BoxProps) {
+export const ChoicesMapperPanel = forwardRef(({children, sx, ...props}: BoxProps, ref: any) => {
   const t = useTheme()
   return (
     <Box
+      ref={ref}
       sx={{
         border: '1px solid',
         borderColor: t.vars.palette.divider,
@@ -19,20 +18,23 @@ export function ChoicesMapperPanel({children, sx, ...props}: BoxProps) {
       {children}
     </Box>
   )
-}
+})
 
 export function ChoiceMapper({
   before,
   question,
   choiceName,
   children,
+  label,
+  sx,
 }: {
+  label: string
   before?: ReactNode
   children: ReactNode
   question: string
   choiceName: string
+  sx?: SxProps
 }) {
-  const schema = useDashboardContext(_ => _.schemaInspector)
   const t = useTheme()
   return (
     <Box
@@ -45,12 +47,13 @@ export function ChoiceMapper({
         alignItems: 'center',
         gap: 1,
         px: 0.5,
+        ...sx,
         // mb: 0.5,
       }}
     >
       {before}
       <Txt truncate title={choiceName} color="hint" sx={{flex: 1}}>
-        {schema.translate.choice(question, choiceName)}
+        {label}
       </Txt>
       <Icon color="disabled">arrow_forward</Icon>
       <Box sx={{flex: 1}}>{children}</Box>

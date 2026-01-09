@@ -87,7 +87,7 @@ export const GeoChartSettings = () => {
               render={({field}) => (
                 <ChoicesMapperPanel {...field}>
                   {choices?.map(_ => _.name).map((choiceName, i) => (
-                    <ChoiceMapper choiceName={choiceName} question={config.questionName!} key={choiceName}>
+                    <ChoiceMapper label={schema.translate.choice(config.questionName!, choiceName)} choiceName={choiceName} question={config.questionName!} key={choiceName}>
                       <Controller
                         name={`mapping.${choiceName}`}
                         control={form.control}

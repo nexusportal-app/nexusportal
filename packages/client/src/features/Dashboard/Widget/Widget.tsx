@@ -28,6 +28,7 @@ export const Widget = memo(
     onClick?: (_: Api.Dashboard.WidgetId) => void
   }) => {
     const t = useTheme()
+    const inEditor = status === 'editing' || status === 'selected'
     const content = (
       <Core.Panel
         className="WidgetCard"
@@ -49,7 +50,7 @@ export const Widget = memo(
               widget.type,
               {
                 Table: <TableWidget widget={widget} />,
-                BarChart: <BarChartWidget widget={widget} />,
+                BarChart: <BarChartWidget widget={widget} inEditor={inEditor} />,
                 PieChart: <PieChartWidget widget={widget} />,
                 LineChart: <LineChartWidget widget={widget} />,
                 GeoPoint: (
@@ -61,7 +62,7 @@ export const Widget = memo(
                 ),
                 GeoChart: <GeoChartWidget key={JSON.stringify(widget.position)} widget={widget} />,
                 Card: <CardWidget widget={widget} />,
-                Alert: <AlertWidget isEditing={status === 'editing' || status === 'selected'} widget={widget} />,
+                Alert: <AlertWidget inEditor={inEditor} widget={widget} />,
               },
               () => (
                 <></>

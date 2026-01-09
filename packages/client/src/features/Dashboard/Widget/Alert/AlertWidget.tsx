@@ -4,7 +4,7 @@ import {Core} from '@/shared'
 import {Icon} from '@mui/material'
 import {useDashboardContext} from '@/features/Dashboard/Context/DashboardContext'
 
-export function AlertWidget({widget, isEditing}: {isEditing?: boolean; widget: Api.Dashboard.Widget}) {
+export function AlertWidget({widget, inEditor}: {inEditor?: boolean; widget: Api.Dashboard.Widget}) {
   const config = widget.config as Api.Dashboard.Widget.Config['Alert']
   const langIndex = useDashboardContext(_ => _.langIndex)
 
@@ -14,7 +14,7 @@ export function AlertWidget({widget, isEditing}: {isEditing?: boolean; widget: A
       severity={config.type}
       title={widget.i18n_title?.[langIndex]}
       children={config.i18n_content?.[langIndex]}
-      deletable={!isEditing && config.canHide ? 'transient' : undefined}
+      deletable={!inEditor && config.canHide ? 'transient' : undefined}
       icon={config.iconName ? <Icon>{config.iconName}</Icon> : undefined}
     />
   )

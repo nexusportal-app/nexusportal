@@ -1,28 +1,28 @@
 import {useI18n} from '@infoportal/client-i18n'
 import {Controller, useForm, useWatch} from 'react-hook-form'
 import {Api} from '@infoportal/api-sdk'
-import React, {useEffect} from 'react'
-import {Box, Checkbox, InputBase, Slider} from '@mui/material'
-import {
-  getQuestionTypeByWidget,
-  useQuestionInfo,
-  useWidgetSettingsContext,
-} from '@/features/Dashboard/Widget/WidgetSettingsPanel'
+import React, {useEffect, useMemo} from 'react'
+import {Box} from '@mui/material'
+import {getQuestionTypeByWidget, useQuestionInfo, useWidgetSettingsContext} from '@/features/Dashboard/Widget/WidgetSettingsPanel'
 import {SelectQuestionInput} from '@/shared/customInput/SelectQuestionInput'
 import {WidgetSettingsFilterQuestion} from '@/features/Dashboard/Widget/shared/WidgetSettingsFilter'
 import {WidgetSettingsSection} from '@/features/Dashboard/Widget/shared/WidgetSettingsSection'
 import {useDashboardContext} from '@/features/Dashboard/Context/DashboardContext'
 import {SwitchBox} from '@/shared/customInput/SwitchBox'
-import {WidgetLabel} from '@/features/Dashboard/Widget/shared/WidgetLabel'
 import {useEffectSetTitle} from '@/features/Dashboard/Widget/shared/useEffectSetTitle'
-import {ChoiceMapper, ChoicesMapperPanel} from '@/features/Dashboard/Widget/shared/ChoicesMapper'
-import {Core, Datatable} from '@/shared'
 import {SliderNumberInput} from '@/shared/customInput/SliderNumberInput'
+import {BarChartSettingsMapping} from '@/features/Dashboard/Widget/BarChart/BarChartSettingsMapping'
+import {seq} from '@axanc/ts-utils'
+import {Datatable} from '@/shared'
+
+export const encodeStringName = (_?: string) => _ !== undefined && _ !== '' ? '_' + encodeURIComponent(_) : Datatable.Utils.blank
 
 export function BarChartSettings() {
   const {m} = useI18n()
   const langIndex = useDashboardContext(_ => _.langIndex)
   const schema = useDashboardContext(_ => _.schemaInspector)
+  const data = useDashboardContext(_ => _.data.source)
+  const flattenRepeatGroupData = useDashboardContext(_ => _.flattenRepeatGroupData)
   const {widget, onChange} = useWidgetSettingsContext()
   const config = widget.config as Api.Dashboard.Widget.Config['BarChart']
   const {choices} = useQuestionInfo(config.questionName)
@@ -35,6 +35,33 @@ export function BarChartSettings() {
   })
 
   useEffectSetTitle(config.questionName)
+
+  const options: Api.Form.Choice[] | undefined = useMemo(() => {
+    const qName = config.questionName
+    if (!qName) return
+    if (choices && choices.length > 0) {
+      const empty: Api.Form.Choice = {
+        list_name: choices[0].list_name,
+        label: new Array(schema.schema.translations.length).fill(''),
+        $kuid: 'empty_',
+        name: '',
+      }
+      return [empty, ...choices]
+    }
+    const question = schema.lookup.questionIndex[qName]
+    if (!question) return
+    if (question.type === 'text') {
+      const flattenData = flattenRepeatGroupData.flattenIfRepeatGroup(data, qName)
+      return seq(flattenData).map(_ => _[qName]).distinct(_ => _).map(value => {
+        return {
+          list_name: qName,
+          $kuid: value,
+          name: encodeStringName(value),
+          label: new Array(schema.schema.translations.length).fill(value),
+        } as Api.Form.Choice
+      })
+    }
+  }, [choices, schema, config.minValue, config.questionName, flattenRepeatGroupData, data])
 
   const values = useWatch({control: form.control})
 
@@ -100,7 +127,7 @@ export function BarChartSettings() {
                 else field.onChange(value)
               }}
               defaultValue={choices?.length ?? 2}
-              min={1}
+              min={0}
               sx={{mb: 1}}
             />
           )}
@@ -121,7 +148,7 @@ export function BarChartSettings() {
         <Controller
           name="showValue"
           control={form.control}
-          render={({field, fieldState}) => (
+          render={({field}) => (
             <SwitchBox
               checked={field.value}
               onChange={(e, checked) => field.onChange(checked)}
@@ -132,53 +159,8 @@ export function BarChartSettings() {
           )}
         />
       </WidgetSettingsSection>
-      {config.questionName && choices && (
-        <WidgetSettingsSection title={m.mapping}>
-          <ChoicesMapperPanel>
-            {[...choices.map(_ => _.name), Datatable.Utils.blank]?.map((choiceName, i) => (
-              <ChoiceMapper
-                key={choiceName + langIndex}
-                question={config.questionName!}
-                choiceName={choiceName}
-                before={
-                  <Controller
-                    control={form.control}
-                    name={`hiddenChoices`}
-                    render={({field}) => {
-                      const selected = field.value ?? []
-                      const toggle = (name: string, checked: boolean) => {
-                        const next = checked ? [...selected, name] : selected.filter(v => v !== name)
-                        field.onChange(next)
-                      }
-                      return (
-                        <Checkbox
-                          size="small"
-                          checked={!selected.includes(choiceName)}
-                          onChange={e => toggle(choiceName, !e.target.checked)}
-                        />
-                      )
-                    }}
-                  />
-                }
-              >
-                <Controller
-                  control={form.control}
-                  name={`mapping.${choiceName}.${langIndex}`}
-                  render={({field}) => (
-                    <InputBase
-                      {...field}
-                      onChange={e => {
-                        field.onChange(e.target.value)
-                      }}
-                      value={field.value ?? ''}
-                      endAdornment={<Core.IconBtn children="clear" size="small" onClick={() => field.onChange(null)} />}
-                    />
-                  )}
-                />
-              </ChoiceMapper>
-            ))}
-          </ChoicesMapperPanel>
-        </WidgetSettingsSection>
+      {options && (
+        <BarChartSettingsMapping langIndex={langIndex} options={options} form={form} config={config} />
       )}
     </Box>
   )
